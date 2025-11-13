@@ -11,17 +11,16 @@ My work revolves around **microservices architecture**, **domain-driven design**
 - **Architect end-to-end** e-commerce platforms with advanced payments, promotions, tax, shipping, and inventory systems
 - **Build resilient microservices** for checkout, payment orchestration, real-time event processing, and order fulfillment
 - **Engineer high-performance systems** with multi-tier caching, query optimization, and sub-100ms response times at scale
-- **Integrate complex business logic** including payment providers (Stripe, Braintree, Paypal), intelligent promotions, tax calculations, and multi-currency support
 - **Lead technical initiatives** with focus on domain-driven design, event sourcing, and enterprise-grade engineering practices
+- **Previously** I've managed teams of up to 40 people in international SaaS and Consulting companies.
 
 ---
 
 ## 🛠️ Technologies & Tools
 
-**Core:** TypeScript · Node.js · NestJS · MongoDB · Redis · PostgreSQL  
-**Cloud & Infra:** AWS · Kubernetes · Docker · Event-driven systems · Microservices  
+**Core:** TypeScript · Node.js · NestJS · MongoDB · Redis · MySQL · PostgreSQL · Java  
+**Cloud & Infra:** AWS · Kubernetes · Docker · Event-driven systems · Microservices
 **Architecture Patterns:** Domain-Driven Design (DDD) · Event Sourcing · Multi-tier Caching  
-**Payments & Commerce:** Stripe · Braintree · Custom voucher systems · Order Orchestration  
 **Frontend:** React · Next.js  
 **Quality & DevOps:** Jest · CI/CD Pipelines · Load Testing · Observability (logs, metrics, tracing)
 
@@ -44,13 +43,8 @@ Led the end-to-end design and implementation of a production-ready enterprise e-
 - 🔒 **Enterprise-Grade Practices** — Enforced strict type safety, functional error handling, automated CI/CD pipelines, and comprehensive Jest testing for long-term maintainability
 - 🤖 **AI Integration** — Built AI capabilities to expose API and data analytics functionality
 
-**Technical Approach:**  
-Applied **domain-driven design** and **event sourcing** patterns to deliver a scalable, maintainable solution capable of handling millions of transactions in production.
-
 ---
 
 ## Connect
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ncornag/)
-
-💬 _Bridging deep technical craftsmanship with real-world business scalability—turning complex e-commerce requirements into resilient, high-performance systems._
