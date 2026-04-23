@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Nicolás Cornaglia</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="markdown-body" style="max-width:800px;margin:2rem auto;padding:2rem;">
+  <div id="content">Loading…</div>
+  <script>
+    fetch('https://raw.githubusercontent.com/ncornag/ncornag/main/README.md')
+      .then(r => r.text())
+      .then(md => document.getElementById('content').innerHTML = marked.parse(md));
+  </script>
+</body>
+</html>
