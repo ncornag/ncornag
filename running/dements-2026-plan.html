@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dements 2026 — Race Plan</title>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}})()</script>
+<link rel="stylesheet" href="theme.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    /* Bridge theme.css tokens → local aliases */
+    --bg:      var(--bg-page);
+    --surface: var(--bg-card);
+    --surface2: var(--bg-sunken);
+    --border:  var(--border-soft);
+    --text:    var(--text-strong);
+    --muted:   var(--text-muted);
+    /* Sport accent colours — same in both modes */
+    --z2: #1a9e63; --z4: #c85a10; --z5: #b02040;
+    --recovery: #2a5fb5; --rest: #e8e6df;
+    --strides: #b8920a; --gym: #7040d0; --trail: #2a9a6a; --hike: #1e8050;
+    --race: #b02040;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; padding: 2rem 1.2rem 4rem; font-size: 112%; }
+
+  /* Hero */
+  .race-hero {
+    background: linear-gradient(135deg, #1a1a1f 0%, #2a1a25 100%);
+    color: #f5f4f0;
+    border-radius: 12px;
+    padding: 1.8rem 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .race-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 60%; height: 200%;
+    background: radial-gradient(circle, #b0204022 0%, transparent 60%);
+  }
+  .race-label { font-size: .68rem; letter-spacing: .25em; color: #b02040; text-transform: uppercase; margin-bottom: .5rem; }
+  .race-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 9vw, 4.5rem); letter-spacing: .04em; line-height: .9; color: #fff; }
+  .race-stats { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; font-size: .72rem; color: #d4d2cc; position: relative; }
+  .race-stat strong { color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; display: block; line-height: 1; margin-bottom: .15rem; }
+
+  .countdown { margin-top: 1rem; font-size: .7rem; color: #f5f4f0; padding-top: 1rem; border-top: 1px solid #ffffff15; }
+  .countdown strong { color: #b02040; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
+
+  /* Macro structure */
+  .macro { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .macro-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .12em; color: var(--text); margin-bottom: .8rem; }
+  .blocks { display: flex; flex-direction: column; gap: .5rem; }
+  .block { display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; padding: .7rem .8rem; border-radius: 6px; border-left: 4px solid var(--bc); background: var(--surface2); }
+  .block-weeks { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--bc); line-height: 1; min-width: 4rem; }
+  .block-info { display: flex; flex-direction: column; gap: .15rem; }
+  .block-name { font-size: .78rem; font-weight: 500; }
+  .block-desc { font-size: .65rem; color: var(--muted); line-height: 1.4; }
+  .block-peak { font-size: .65rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: .1em; color: var(--bc); }
+
+  /* Legend */
+  .legend { display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 1.5rem; }
+  .leg { display:flex; align-items:center; gap:.4rem; font-size:.66rem; letter-spacing:.05em; color:var(--muted); }
+  .leg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* Rules */
+  .principles { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .principles-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: .15em; margin-bottom: .6rem; }
+  .principle { display: flex; gap: .6rem; align-items: flex-start; font-size: .7rem; color: var(--muted); line-height: 1.5; margin-bottom: .35rem; }
+  .principle strong { color: var(--text); }
+
+  /* Phase headers */
+  .phase { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:.18em; color:var(--text); margin:2.5rem 0 .8rem; display:flex; align-items:center; gap:.8rem; }
+  .phase::after { content:''; flex:1; height:1px; background:var(--border); }
+  .phase-sub { font-size: .6rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+
+  /* Week card */
+  .week { background:var(--surface); border:1px solid var(--border); border-radius:8px; margin-bottom:.5rem; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .week.current { border-color:#1a9e6366; box-shadow:0 2px 8px rgba(26,158,99,.1); }
+  .week.recovery-week { border-color:#2a5fb533; }
+  .week.race-week { border-color:#b0204055; background: linear-gradient(135deg, #fff 0%, #fdf0f2 100%); }
+  .week.qualifier-week { border-color:#b8920a55; background: linear-gradient(135deg, #fff 0%, #fdf8e8 100%); }
+  .week-header { display:grid; grid-template-columns:auto 1fr auto auto; align-items:center; gap:.8rem; padding:.8rem 1rem; cursor:pointer; user-select:none; }
+  .week-num { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; color:var(--muted); line-height:1; min-width:2.4rem; text-align:center; }
+  .week.current .week-num { color:var(--z2); }
+  .week.recovery-week .week-num { color:var(--recovery); }
+  .week.race-week .week-num { color:var(--race); }
+  .week.qualifier-week .week-num { color:#b8920a; }
+  .week-summary { display:flex; flex-direction:column; gap:.15rem; min-width:0; }
+  .week-title { font-size:.78rem; font-weight:500; color:var(--text); letter-spacing:.04em; display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; }
+  .week-date { font-size:.58rem; color:var(--muted); }
+  .week-meta { font-size:.62rem; color:var(--muted); }
+  .week-stats { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:.1rem; }
+  .week-km { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:var(--text); line-height:1; }
+  .week-elev { font-size:.62rem; color:var(--muted); }
+  .chevron { font-size:.7rem; color:var(--muted); transition:transform .2s; width:1rem; text-align:center; }
+  .week.open .chevron { transform:rotate(180deg); }
+
+  .week-body { display:none; padding:0 1rem .8rem; border-top:1px solid var(--border); }
+  .week.open .week-body { display:block; }
+
+  /* Day grid */
+  .days { display:grid; grid-template-columns:repeat(7,1fr); gap:.3rem; margin-top:.7rem; }
+  .day { border-radius:5px; padding:.4rem .2rem; text-align:center; min-height:5rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.18rem; border:1px solid transparent; }
+  .day-label { font-size:.52rem; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
+  .day-icon { font-size:.95rem; line-height:1; }
+  .day-km { font-family:'Bebas Neue',sans-serif; font-size:.92rem; line-height:1; }
+  .day-elev { font-size:.5rem; color:var(--muted); }
+  .day-type { font-size:.46rem; letter-spacing:.04em; text-transform:uppercase; }
+
+  .day.z2 { background:#edf8f3; border-color:#1a9e6322; }
+  .day.z2 .day-km { color:var(--z2); } .day.z2 .day-type { color:#1a9e6388; }
+  .day.trail-z2 { background:#e8f5f0; border-color:#2a9a6a33; }
+  .day.trail-z2 .day-km { color:#2a9a6a; } .day.trail-z2 .day-type { color:#2a9a6a88; }
+  .day.trail-hike { background:#e4f3ec; border-color:#1e805033; }
+  .day.trail-hike .day-km { color:#1e8050; } .day.trail-hike .day-type { color:#1e805088; }
+  .day.z4 { background:#fdf0e8; border-color:#c85a1022; }
+  .day.z4 .day-km { color:var(--z4); } .day.z4 .day-type { color:#c85a1088; }
+  .day.strides { background:#fdf8e8; border-color:#b8920a22; }
+  .day.strides .day-km { color:var(--strides); } .day.strides .day-type { color:#b8920a88; }
+  .day.gym { background:#f3eeff; border-color:#7040d033; }
+  .day.gym .day-km { color:var(--gym); font-size:.72rem; } .day.gym .day-type { color:#7040d088; }
+  .day.rest { background:#f0ede6; border-color:#dddbd3; }
+  .day.rest .day-km { color:#aaa; } .day.rest .day-type { color:#bbb; }
+  .day.rec { background:#eaf0fb; border-color:#2a5fb522; }
+  .day.rec .day-km { color:var(--recovery); } .day.rec .day-type { color:#2a5fb588; }
+  .day.race { background: linear-gradient(135deg, #fdf0f2, #f9e2e8); border-color:#b0204055; }
+  .day.race .day-km { color:var(--race); font-size: 1.1rem; } .day.race .day-type { color:#b02040cc; font-weight: 500; }
+
+  .week-notes { margin-top:.7rem; font-size:.66rem; color:var(--muted); line-height:1.6; padding:.5rem .6rem; background:var(--surface2); border-radius:4px; border-left:2px solid var(--border); }
+  .week-notes strong { color: var(--text); }
+
+  .current-badge { display:inline-block; background:var(--z2); color:#fff; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; padding:.12rem .35rem; border-radius:2px; font-style:normal; }
+  .race-badge { display:inline-block; background:var(--race); color:#fff; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; padding:.12rem .4rem; border-radius:2px; }
+  .qualifier-badge { display:inline-block; background:#b8920a; color:#fff; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; padding:.12rem .4rem; border-radius:2px; }
+  .done-badge { display:inline-block; background:#1a9e63; color:#fff; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; padding:.12rem .35rem; border-radius:2px; opacity:.7; }
+
+  /* Section labels */
+  .section-label { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:.8rem; padding-bottom:.4rem; border-bottom:1px solid var(--border); }
+
+  /* Volume chart */
+  .chart-section { margin:2.5rem 0; }
+  .vol-chart { display:flex; align-items:flex-end; gap:.18rem; height:120px; margin-top:.8rem; padding: 0 .3rem; }
+  .vol-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:.15rem; height:100%; justify-content:flex-end; min-width:0; }
+  .vol-bar { width:100%; border-radius:2px 2px 0 0; min-height:3px; }
+  .vol-elev-bar { width:100%; border-radius:2px 2px 0 0; min-height:2px; opacity:.6; margin-top:1px; }
+  .vol-num { font-size:.5rem; color:var(--muted); white-space:nowrap; }
+  .vol-wk { font-size:.46rem; color:var(--muted); letter-spacing:.02em; }
+  .vol-elev-num { font-size:.42rem; color:#7040d099; }
+
+  /* Race week emphasis */
+  .race-day {
+    text-align: center;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, #b02040 0%, #8b1830 100%);
+    color: #fff;
+    border-radius: 8px;
+    margin-top: .7rem;
+  }
+  .race-day-label { font-size: .65rem; letter-spacing: .2em; opacity: .8; }
+  .race-day-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .04em; margin: .3rem 0; }
+  .race-day-stats { font-size: .7rem; opacity: .9; }
+
+  /* Theme toggle position */
+  .theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 100; font-family: 'DM Mono', monospace; }
+
+  /* Dark-mode overrides for day-type tinted backgrounds */
+  [data-theme="dark"] .day.z2        { background: #0d1f17; border-color: #1a9e6330; }
+  [data-theme="dark"] .day.trail-z2  { background: #0c1e15; border-color: #2a9a6a30; }
+  [data-theme="dark"] .day.trail-hike { background: #0a1a12; border-color: #1e805030; }
+  [data-theme="dark"] .day.z4        { background: #1f1008; border-color: #c85a1030; }
+  [data-theme="dark"] .day.strides   { background: #1a1505; border-color: #b8920a30; }
+  [data-theme="dark"] .day.gym       { background: #150e25; border-color: #7040d030; }
+  [data-theme="dark"] .day.rest      { background: var(--bg-sunken); border-color: var(--border-soft); }
+  [data-theme="dark"] .day.rec       { background: #0a1220; border-color: #2a5fb530; }
+  [data-theme="dark"] .day.race      { background: linear-gradient(135deg, #2a0810, #1f0510); }
+  [data-theme="dark"] .week.race-week      { background: linear-gradient(135deg, #1a0810 0%, #200d14 100%); }
+  [data-theme="dark"] .week.qualifier-week { background: linear-gradient(135deg, #1a1505 0%, #201a08 100%); }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()"><span class="sun">☀</span><span class="moon">☾</span></button>
+
+<!-- Race Hero -->
+<div class="race-hero">
+  <div class="race-label">Target Race · Skyrunner World Series Final</div>
+  <div class="race-name">MARATÓ DELS<br>DEMENTS</div>
+  <div class="race-stats">
+    <div class="race-stat"><strong>42.5</strong>km</div>
+    <div class="race-stat"><strong>3,808</strong>m D+</div>
+    <div class="race-stat"><strong>Nov 7</strong>2026</div>
+    <div class="race-stat"><strong>07:30</strong>Eslida/Aín</div>
+  </div>
+  <div class="countdown">
+    <strong id="days-to-race">…</strong> days to race day · 24 weeks of preparation
+  </div>
+</div>
+
+<!-- Macro structure -->
+<div class="macro">
+  <div class="macro-title">Periodization</div>
+  <div class="blocks">
+    <div class="block" style="--bc:#1a9e63">
+      <div class="block-weeks">W1–6</div>
+      <div class="block-info">
+        <div class="block-name">Rebuild</div>
+        <div class="block-desc">Return-to-run base + gym foundation, gentle trail intro</div>
+      </div>
+      <div class="block-peak">~25km/wk</div>
+    </div>
+    <div class="block" style="--bc:#2a9a6a">
+      <div class="block-weeks">W7–12</div>
+      <div class="block-info">
+        <div class="block-name">Aerobic Base</div>
+        <div class="block-desc">Volume + elevation, all Z1-Z2, weekly vert builds</div>
+      </div>
+      <div class="block-peak">~50km/wk · 1200m D+</div>
+    </div>
+    <div class="block" style="--bc:#c85a10">
+      <div class="block-weeks">W13–18</div>
+      <div class="block-info">
+        <div class="block-name">Specific Build</div>
+        <div class="block-desc">Long mountain days, threshold intervals, qualifier race</div>
+      </div>
+      <div class="block-peak">~65km/wk · 2000m D+</div>
+    </div>
+    <div class="block" style="--bc:#b02040">
+      <div class="block-weeks">W19–22</div>
+      <div class="block-info">
+        <div class="block-name">Peak</div>
+        <div class="block-desc">Race-specific long runs up to 30K/2500m D+, hike intensity</div>
+      </div>
+      <div class="block-peak">~75km/wk · 2800m D+</div>
+    </div>
+    <div class="block" style="--bc:#2a5fb5">
+      <div class="block-weeks">W23–24</div>
+      <div class="block-info">
+        <div class="block-name">Taper</div>
+        <div class="block-desc">Sharpen + recover. Volume drops, intensity stays. Race week.</div>
+      </div>
+      <div class="block-peak">40km → race</div>
+    </div>
+  </div>
+</div>
+
+<!-- Principles -->
+<div class="principles">
+  <div class="principles-title">Plan Principles</div>
+  <div class="principle"><span>🎯</span><div><strong>Vert specificity</strong> — Dements is 90m/km. By W18 your long run needs to match that ratio.</div></div>
+  <div class="principle"><span>🥾</span><div><strong>Power hike training</strong> — uphill hiking is a skill. Practice it deliberately on every climb. Most race time spent hiking, not running.</div></div>
+  <div class="principle"><span>⬇️</span><div><strong>Eccentric descent training</strong> — quads will determine your race. Long downhills in training are non-negotiable.</div></div>
+  <div class="principle"><span>🪨</span><div><strong>Technical terrain</strong> — practice on rocky, ridgy ground. Serra d'Espadà is technical, not just steep.</div></div>
+  <div class="principle"><span>🏔</span><div><strong>Back-to-back long days</strong> — Sat long + Sun shorter trail simulates accumulated fatigue better than one massive day.</div></div>
+  <div class="principle"><span>⛽</span><div><strong>Fueling practice</strong> — train your race nutrition during long runs starting W13. Gut training is mandatory for 8+ hour efforts.</div></div>
+  <div class="principle"><span>🛑</span><div><strong>Listen to the body</strong> — at 57 with injury history, smart beats heroic. Skip a session before forcing one.</div></div>
+</div>
+
+<!-- Legend -->
+<div class="section-label">Day Type Legend</div>
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:#1a9e63"></div>Z2 Flat</div>
+  <div class="leg"><div class="leg-dot" style="background:#2a9a6a"></div>Trail Z2</div>
+  <div class="leg"><div class="leg-dot" style="background:#1e8050"></div>Trail + Hike</div>
+  <div class="leg"><div class="leg-dot" style="background:#b8920a"></div>Z2 + Strides</div>
+  <div class="leg"><div class="leg-dot" style="background:#c85a10"></div>Z4 Threshold</div>
+  <div class="leg"><div class="leg-dot" style="background:#7040d0"></div>Gym</div>
+  <div class="leg"><div class="leg-dot" style="background:#2a5fb5"></div>Recovery</div>
+  <div class="leg"><div class="leg-dot" style="background:#b02040"></div>Race</div>
+  <div class="leg"><div class="leg-dot" style="background:#e8e6df"></div>Rest</div>
+</div>
+
+<!-- PHASE 1: REBUILD -->
+<div class="phase">REBUILD <span class="phase-sub">W1–6 · May–Jun</span></div>
+
+<div class="week" id="w1">
+  <div class="week-header" onclick="toggle('w1')">
+    <div class="week-num">1</div>
+    <div class="week-summary">
+      <div class="week-title">Base Week 1 <span class="done-badge">Done ✓</span></div>
+      <div class="week-date">May 11–17 · 5 runs Z2 flat</div>
+    </div>
+    <div class="week-stats"><div class="week-km">25km</div><div class="week-elev">0m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="week-notes">Completed: 5×5km flat Z2. Solid base established.</div>
+  </div>
+</div>
+
+<div class="week" id="w2">
+  <div class="week-header" onclick="toggle('w2')">
+    <div class="week-num">2</div>
+    <div class="week-summary">
+      <div class="week-title">Base Week 2 <span class="done-badge">In progress</span></div>
+      <div class="week-date">May 18–24 · 5 runs Z2 flat</div>
+    </div>
+    <div class="week-stats"><div class="week-km">25km</div><div class="week-elev">0m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="week-notes">In progress. 5×5km this week, same as W1.</div>
+  </div>
+</div>
+
+<div class="week current open" id="w3">
+  <div class="week-header" onclick="toggle('w3')">
+    <div class="week-num">3</div>
+    <div class="week-summary">
+      <div class="week-title">Introduce Gym <span class="current-badge">Next Monday</span></div>
+      <div class="week-date">May 25–31 · 4 runs · 2 gym</div>
+    </div>
+    <div class="week-stats"><div class="week-km">21km</div><div class="week-elev">0m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day z2"><div class="day-label">Sat</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Long Z2</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes"><strong>Introduce gym (Tue/Thu)</strong> + first proper long run on Saturday (6km). Foundation gym: Bulgarian split squats, single-leg calf raises, glute bridges, dead bugs, Copenhagen planks.</div>
+  </div>
+</div>
+
+<div class="week" id="w4">
+  <div class="week-header" onclick="toggle('w4')">
+    <div class="week-num">4</div>
+    <div class="week-summary">
+      <div class="week-title">Extend Long Run</div>
+      <div class="week-date">Jun 1–7 · 4 runs · 2 gym</div>
+    </div>
+    <div class="week-stats"><div class="week-km">22km</div><div class="week-elev">0m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day z2"><div class="day-label">Sat</div><div class="day-icon">🏃</div><div class="day-km">7km</div><div class="day-type">Long Z2</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes">Long run nudges to 7km. Everything else holds. Slight gym load increase if form is solid.</div>
+  </div>
+</div>
+
+<div class="week" id="w5">
+  <div class="week-header" onclick="toggle('w5')">
+    <div class="week-num">5</div>
+    <div class="week-summary">
+      <div class="week-title">First Gentle Trail</div>
+      <div class="week-date">Jun 8–14 · 4 runs · 2 gym · trail debut</div>
+    </div>
+    <div class="week-stats"><div class="week-km">23km</div><div class="week-elev">80m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day trail-z2"><div class="day-label">Wed</div><div class="day-icon">⛰</div><div class="day-km">5km</div><div class="day-elev">50m</div><div class="day-type">Trail</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day trail-z2"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">8km</div><div class="day-elev">30m</div><div class="day-type">Long trail</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes">First trails — rolling paths only. No real climbs yet. Add step-ups to gym for trail specificity.</div>
+  </div>
+</div>
+
+<div class="week recovery-week" id="w6">
+  <div class="week-header" onclick="toggle('w6')">
+    <div class="week-num">6</div>
+    <div class="week-summary">
+      <div class="week-title">Recovery Week 🔽</div>
+      <div class="week-date">Jun 15–21 · 3 runs · 1 gym</div>
+    </div>
+    <div class="week-stats"><div class="week-km">17km</div><div class="week-elev">30m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rec"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day rest"><div class="day-label">Tue</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day gym"><div class="day-label">Wed</div><div class="day-icon">💪</div><div class="day-km">Light</div><div class="day-type">60% load</div></div>
+      <div class="day rest"><div class="day-label">Thu</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day rec"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day trail-z2"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-elev">30m</div><div class="day-type">Easy</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes">First recovery week. Real reduction — this is where adaptation locks in.</div>
+  </div>
+</div>
+
+<!-- PHASE 2: AEROBIC BASE -->
+<div class="phase">AEROBIC BASE <span class="phase-sub">W7–12 · Jun–Aug</span></div>
+
+<div class="week" id="w7">
+  <div class="week-header" onclick="toggle('w7')">
+    <div class="week-num">7</div>
+    <div class="week-summary">
+      <div class="week-title">Real Elevation Begins</div>
+      <div class="week-date">Jun 22–28 · 5 sessions · 2 gym</div>
+    </div>
+    <div class="week-stats"><div class="week-km">28km</div><div class="week-elev">300m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Wed</div><div class="day-icon">⛰</div><div class="day-km">6km</div><div class="day-elev">150m</div><div class="day-type">Hill</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">12km</div><div class="day-elev">150m</div><div class="day-type">Long trail</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes"><strong>Wed = hill session.</strong> Find a 100–150m climb. Power-hike up, jog down, repeat. Saturday extends to 12km with rolling elevation. Practice hiking technique — this is a SKILL session.</div>
+  </div>
+</div>
+
+<div class="week" id="w8">
+  <div class="week-header" onclick="toggle('w8')">
+    <div class="week-num">8</div>
+    <div class="week-summary">
+      <div class="week-title">Add Sunday Easy</div>
+      <div class="week-date">Jun 29–Jul 5 · Back-to-back debut</div>
+    </div>
+    <div class="week-stats"><div class="week-km">33km</div><div class="week-elev">500m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Wed</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-elev">250m</div><div class="day-type">Hill</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">12km</div><div class="day-elev">250m</div><div class="day-type">Long</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">4km</div><div class="day-elev">—</div><div class="day-type">Easy</div></div>
+    </div>
+    <div class="week-notes">First <strong>back-to-back weekend</strong> — Sat long, Sun shoreline easy trail. Sun is short and very easy (Z1), just to teach your body to run on tired legs. This is critical for ultra prep.</div>
+  </div>
+</div>
+
+<div class="week" id="w9">
+  <div class="week-header" onclick="toggle('w9')">
+    <div class="week-num">9</div>
+    <div class="week-summary">
+      <div class="week-title">Build Long Run</div>
+      <div class="week-date">Jul 6–12 · Sat 15km</div>
+    </div>
+    <div class="week-stats"><div class="week-km">38km</div><div class="week-elev">700m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Wed</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-elev">300m</div><div class="day-type">Hill</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">15km</div><div class="day-elev">400m</div><div class="day-type">Long</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">5km</div><div class="day-type">Recovery</div></div>
+    </div>
+    <div class="week-notes">Long run jumps to 15km. Vert ratio ~27m/km — gentle compared to race but appropriate for now. Practice fueling: gels/food every 30min on Sat.</div>
+  </div>
+</div>
+
+<div class="week recovery-week" id="w10">
+  <div class="week-header" onclick="toggle('w10')">
+    <div class="week-num">10</div>
+    <div class="week-summary">
+      <div class="week-title">Recovery Week 🔽</div>
+      <div class="week-date">Jul 13–19</div>
+    </div>
+    <div class="week-stats"><div class="week-km">25km</div><div class="week-elev">350m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rec"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day rest"><div class="day-label">Tue</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day gym"><div class="day-label">Wed</div><div class="day-icon">💪</div><div class="day-km">Light</div><div class="day-type">60%</div></div>
+      <div class="day trail-z2"><div class="day-label">Thu</div><div class="day-icon">⛰</div><div class="day-km">5km</div><div class="day-elev">100m</div><div class="day-type">Easy</div></div>
+      <div class="day rest"><div class="day-label">Fri</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day trail-z2"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">10km</div><div class="day-elev">250m</div><div class="day-type">Easy</div></div>
+      <div class="day rec"><div class="day-label">Sun</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+    </div>
+    <div class="week-notes">Recovery. Saturday stays trail but easy — keep the trail feet adapting even on rest weeks.</div>
+  </div>
+</div>
+
+<div class="week" id="w11">
+  <div class="week-header" onclick="toggle('w11')">
+    <div class="week-num">11</div>
+    <div class="week-summary">
+      <div class="week-title">Vert Specificity Starts</div>
+      <div class="week-date">Jul 20–26 · 18km long with 600m D+</div>
+    </div>
+    <div class="week-stats"><div class="week-km">45km</div><div class="week-elev">1000m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Wed</div><div class="day-icon">⛰</div><div class="day-km">8km</div><div class="day-elev">400m</div><div class="day-type">Hill reps</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">18km</div><div class="day-elev">600m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-type">Recovery</div></div>
+    </div>
+    <div class="week-notes"><strong>1000m D+ milestone.</strong> Vert ratio approaching ~33m/km. Wed = hill reps: 6×3min uphill at sustained Z2-Z3 effort, easy down. Saturday long with real climbs.</div>
+  </div>
+</div>
+
+<div class="week" id="w12">
+  <div class="week-header" onclick="toggle('w12')">
+    <div class="week-num">12</div>
+    <div class="week-summary">
+      <div class="week-title">Consolidate Base</div>
+      <div class="week-date">Jul 27–Aug 2 · 20km long with 800m D+</div>
+    </div>
+    <div class="week-stats"><div class="week-km">50km</div><div class="week-elev">1200m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day gym"><div class="day-label">Tue</div><div class="day-icon">💪</div><div class="day-km">Gym A</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Wed</div><div class="day-icon">⛰</div><div class="day-km">10km</div><div class="day-elev">500m</div><div class="day-type">Hill</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym B</div><div class="day-type">Strength</div></div>
+      <div class="day z2"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">20km</div><div class="day-elev">800m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">8km</div><div class="day-type">Recovery</div></div>
+    </div>
+    <div class="week-notes">First 20km mountain long. Vert ratio 40m/km. Heat will be brutal in August — start very early or move to evenings. Hydration strategy matters now.</div>
+  </div>
+</div>
+
+<!-- PHASE 3: SPECIFIC BUILD -->
+<div class="phase">SPECIFIC BUILD <span class="phase-sub">W13–18 · Aug–Sep</span></div>
+
+<div class="week" id="w13">
+  <div class="week-header" onclick="toggle('w13')">
+    <div class="week-num">13</div>
+    <div class="week-summary">
+      <div class="week-title">Add Z4 Intervals</div>
+      <div class="week-date">Aug 3–9 · Threshold work begins</div>
+    </div>
+    <div class="week-stats"><div class="week-km">52km</div><div class="week-elev">1400m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">9km</div><div class="day-type">Z4 intervals</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Fri</div><div class="day-icon">⛰</div><div class="day-km">8km</div><div class="day-elev">400m</div><div class="day-type">Hill</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">18km</div><div class="day-elev">800m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">6km</div><div class="day-elev">200m</div><div class="day-type">B2B easy</div></div>
+    </div>
+    <div class="week-notes"><strong>Z4 debut:</strong> 2km WU → 4×6min @ 162–173 bpm w/ 2min Z1 → 2km CD. Only 1 gym now to manage load — strength becomes maintenance.</div>
+  </div>
+</div>
+
+<div class="week" id="w14">
+  <div class="week-header" onclick="toggle('w14')">
+    <div class="week-num">14</div>
+    <div class="week-summary">
+      <div class="week-title">Big Vert Day</div>
+      <div class="week-date">Aug 10–16 · 22km/1000m on Sat</div>
+    </div>
+    <div class="week-stats"><div class="week-km">56km</div><div class="week-elev">1600m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">7km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">9km</div><div class="day-type">Z4</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym</div><div class="day-type">Strength</div></div>
+      <div class="day strides"><div class="day-label">Fri</div><div class="day-icon">⚡</div><div class="day-km">6km</div><div class="day-type">Z2+strides</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">22km</div><div class="day-elev">1000m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-elev">200m</div><div class="day-type">B2B easy</div></div>
+    </div>
+    <div class="week-notes">Vert ratio 45m/km — getting closer. Take poles on Sat if you'll use them in the race.</div>
+  </div>
+</div>
+
+<div class="week recovery-week" id="w15">
+  <div class="week-header" onclick="toggle('w15')">
+    <div class="week-num">15</div>
+    <div class="week-summary">
+      <div class="week-title">Recovery Week 🔽</div>
+      <div class="week-date">Aug 17–23 · Before qualifier prep</div>
+    </div>
+    <div class="week-stats"><div class="week-km">32km</div><div class="week-elev">500m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rec"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day rest"><div class="day-label">Tue</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day gym"><div class="day-label">Wed</div><div class="day-icon">💪</div><div class="day-km">Light</div><div class="day-type">60%</div></div>
+      <div class="day trail-z2"><div class="day-label">Thu</div><div class="day-icon">⛰</div><div class="day-km">6km</div><div class="day-elev">150m</div><div class="day-type">Easy</div></div>
+      <div class="day rest"><div class="day-label">Fri</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">15km</div><div class="day-elev">350m</div><div class="day-type">Easy</div></div>
+      <div class="day rec"><div class="day-label">Sun</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Recovery</div></div>
+    </div>
+    <div class="week-notes">Strategic recovery before qualifier window. Aim to feel fresh and hungry for week 16.</div>
+  </div>
+</div>
+
+<div class="week qualifier-week" id="w16">
+  <div class="week-header" onclick="toggle('w16')">
+    <div class="week-num">16</div>
+    <div class="week-summary">
+      <div class="week-title">Qualifier Race Week <span class="qualifier-badge">Tune-up</span></div>
+      <div class="week-date">Aug 24–30 · Find a 21K+ trail race</div>
+    </div>
+    <div class="week-stats"><div class="week-km">45km</div><div class="week-elev">1500m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day strides"><div class="day-label">Tue</div><div class="day-icon">⚡</div><div class="day-km">6km</div><div class="day-type">Z2+strides</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Easy</div></div>
+      <div class="day rest"><div class="day-label">Thu</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Pre-race</div></div>
+      <div class="day rec"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">3km</div><div class="day-type">Shakeout</div></div>
+      <div class="day race"><div class="day-label">Sat</div><div class="day-icon">🏁</div><div class="day-km">~25km</div><div class="day-elev">1500m</div><div class="day-type">RACE</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes"><strong>QUALIFIER RACE</strong> — needed for Dements registration. Find a 21K+ trail race with significant D+ (look at Runática's calendar, races in Castellón/Valencia/Teruel). Goal: finish strong, dial in nutrition, test gear. Not a peak performance.</div>
+  </div>
+</div>
+
+<div class="week" id="w17">
+  <div class="week-header" onclick="toggle('w17')">
+    <div class="week-num">17</div>
+    <div class="week-summary">
+      <div class="week-title">Post-Race Recovery + Rebuild</div>
+      <div class="week-date">Aug 31–Sep 6</div>
+    </div>
+    <div class="week-stats"><div class="week-km">35km</div><div class="week-elev">700m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rest"><div class="day-label">Mon</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day rec"><div class="day-label">Tue</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day gym"><div class="day-label">Wed</div><div class="day-icon">💪</div><div class="day-km">Light</div><div class="day-type">60%</div></div>
+      <div class="day rec"><div class="day-label">Thu</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day rest"><div class="day-label">Fri</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">18km</div><div class="day-elev">600m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-type">Recovery</div></div>
+    </div>
+    <div class="week-notes">Recovery from race effort. Mon full rest mandatory. Saturday returns to long mountain training.</div>
+  </div>
+</div>
+
+<div class="week" id="w18">
+  <div class="week-header" onclick="toggle('w18')">
+    <div class="week-num">18</div>
+    <div class="week-summary">
+      <div class="week-title">Push Vert Higher</div>
+      <div class="week-date">Sep 7–13 · 25km/1400m</div>
+    </div>
+    <div class="week-stats"><div class="week-km">60km</div><div class="week-elev">2000m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">7km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">10km</div><div class="day-type">Z4</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Fri</div><div class="day-icon">⛰</div><div class="day-km">8km</div><div class="day-elev">400m</div><div class="day-type">Hill</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">25km</div><div class="day-elev">1400m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">5km</div><div class="day-elev">200m</div><div class="day-type">B2B easy</div></div>
+    </div>
+    <div class="week-notes">Vert ratio 56m/km — getting Dements-realistic. 25km/1400m is a serious day. Bring race nutrition, test poles, simulate race conditions.</div>
+  </div>
+</div>
+
+<!-- PHASE 4: PEAK -->
+<div class="phase">PEAK <span class="phase-sub">W19–22 · Sep–Oct</span></div>
+
+<div class="week recovery-week" id="w19">
+  <div class="week-header" onclick="toggle('w19')">
+    <div class="week-num">19</div>
+    <div class="week-summary">
+      <div class="week-title">Recovery Before Peak 🔽</div>
+      <div class="week-date">Sep 14–20</div>
+    </div>
+    <div class="week-stats"><div class="week-km">38km</div><div class="week-elev">800m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rec"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1</div></div>
+      <div class="day rest"><div class="day-label">Tue</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day gym"><div class="day-label">Wed</div><div class="day-icon">💪</div><div class="day-km">Light</div><div class="day-type">60%</div></div>
+      <div class="day strides"><div class="day-label">Thu</div><div class="day-icon">⚡</div><div class="day-km">6km</div><div class="day-type">Z2+strides</div></div>
+      <div class="day rest"><div class="day-label">Fri</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">18km</div><div class="day-elev">700m</div><div class="day-type">Easy</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">9km</div><div class="day-elev">100m</div><div class="day-type">Easy</div></div>
+    </div>
+    <div class="week-notes">Critical recovery before 3 hardest weeks. Don't skip — peak weeks demand absorption.</div>
+  </div>
+</div>
+
+<div class="week" id="w20">
+  <div class="week-header" onclick="toggle('w20')">
+    <div class="week-num">20</div>
+    <div class="week-summary">
+      <div class="week-title">Race Simulation</div>
+      <div class="week-date">Sep 21–27 · 28km/2000m</div>
+    </div>
+    <div class="week-stats"><div class="week-km">68km</div><div class="week-elev">2600m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">7km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">10km</div><div class="day-type">Z4</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Gym</div><div class="day-type">Strength</div></div>
+      <div class="day trail-hike"><div class="day-label">Fri</div><div class="day-icon">⛰</div><div class="day-km">7km</div><div class="day-elev">400m</div><div class="day-type">Hill</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">28km</div><div class="day-elev">2000m</div><div class="day-type">RACE SIM</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">10km</div><div class="day-elev">200m</div><div class="day-type">B2B</div></div>
+    </div>
+    <div class="week-notes"><strong>Race simulation day.</strong> 28km/2000m at 71m/km — matches Dements vert ratio. Full race kit, race nutrition, poles, vest. This is the biggest training day of the cycle.</div>
+  </div>
+</div>
+
+<div class="week" id="w21">
+  <div class="week-header" onclick="toggle('w21')">
+    <div class="week-num">21</div>
+    <div class="week-summary">
+      <div class="week-title">PEAK WEEK 🏔</div>
+      <div class="week-date">Sep 28–Oct 4 · 30km/2500m</div>
+    </div>
+    <div class="week-stats"><div class="week-km">75km</div><div class="week-elev">2900m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">7km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">10km</div><div class="day-type">Z4</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Maint</div><div class="day-type">Light</div></div>
+      <div class="day trail-hike"><div class="day-label">Fri</div><div class="day-icon">⛰</div><div class="day-km">10km</div><div class="day-elev">400m</div><div class="day-type">Easy</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">30km</div><div class="day-elev">2500m</div><div class="day-type">PEAK LONG</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">12km</div><div class="day-elev">—</div><div class="day-type">B2B</div></div>
+    </div>
+    <div class="week-notes"><strong>Biggest training week.</strong> 30km/2500m = 83m/km — within 8% of race ratio. If possible, do this on Serra d'Espadà itself. Full race rehearsal: gear, fuel, pacing, mental approach.</div>
+  </div>
+</div>
+
+<div class="week" id="w22">
+  <div class="week-header" onclick="toggle('w22')">
+    <div class="week-num">22</div>
+    <div class="week-summary">
+      <div class="week-title">Hold Peak, Sharpen</div>
+      <div class="week-date">Oct 5–11 · Maintain fitness, no new stress</div>
+    </div>
+    <div class="week-stats"><div class="week-km">65km</div><div class="week-elev">2200m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">7km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">9km</div><div class="day-type">Z4 short</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Maint</div><div class="day-type">Light</div></div>
+      <div class="day strides"><div class="day-label">Fri</div><div class="day-icon">⚡</div><div class="day-km">6km</div><div class="day-type">Strides</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">25km</div><div class="day-elev">1800m</div><div class="day-type">Long mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">12km</div><div class="day-elev">400m</div><div class="day-type">B2B</div></div>
+    </div>
+    <div class="week-notes">Slight pullback from W21 peak. Fitness is built — now hold it. No more building, no new stresses.</div>
+  </div>
+</div>
+
+<!-- PHASE 5: TAPER -->
+<div class="phase">TAPER + RACE <span class="phase-sub">W23–24 · Oct–Nov</span></div>
+
+<div class="week recovery-week" id="w23">
+  <div class="week-header" onclick="toggle('w23')">
+    <div class="week-num">23</div>
+    <div class="week-summary">
+      <div class="week-title">Taper Week 1 🔽</div>
+      <div class="week-date">Oct 12–18 · -25% volume, keep intensity</div>
+    </div>
+    <div class="week-stats"><div class="week-km">48km</div><div class="week-elev">1400m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">6km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">8km</div><div class="day-type">Z4 sharp</div></div>
+      <div class="day rec"><div class="day-label">Wed</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Recovery</div></div>
+      <div class="day gym"><div class="day-label">Thu</div><div class="day-icon">💪</div><div class="day-km">Maint</div><div class="day-type">Last gym</div></div>
+      <div class="day strides"><div class="day-label">Fri</div><div class="day-icon">⚡</div><div class="day-km">5km</div><div class="day-type">Strides</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">18km</div><div class="day-elev">1200m</div><div class="day-type">Quality mtn</div></div>
+      <div class="day trail-z2"><div class="day-label">Sun</div><div class="day-icon">⛰</div><div class="day-km">6km</div><div class="day-type">Easy</div></div>
+    </div>
+    <div class="week-notes">First taper week. Volume drops, intensity stays sharp. Saturday is shorter but quality — sustained climb effort. Last full gym session.</div>
+  </div>
+</div>
+
+<div class="week recovery-week" id="w24">
+  <div class="week-header" onclick="toggle('w24')">
+    <div class="week-num">24</div>
+    <div class="week-summary">
+      <div class="week-title">Taper Week 2 🔽</div>
+      <div class="week-date">Oct 19–25 · -50% volume</div>
+    </div>
+    <div class="week-stats"><div class="week-km">28km</div><div class="week-elev">600m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day z2"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z2</div></div>
+      <div class="day z4"><div class="day-label">Tue</div><div class="day-icon">🔥</div><div class="day-km">6km</div><div class="day-type">Short Z4</div></div>
+      <div class="day rest"><div class="day-label">Wed</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day rec"><div class="day-label">Thu</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Easy</div></div>
+      <div class="day rest"><div class="day-label">Fri</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day trail-hike"><div class="day-label">Sat</div><div class="day-icon">⛰</div><div class="day-km">12km</div><div class="day-elev">600m</div><div class="day-type">Easy mtn</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+    </div>
+    <div class="week-notes">Resist the urge to "do more". Sleep, eat well, hydrate. Logistics, race kit, drop bags. The fitness is in the bank — now protect it.</div>
+  </div>
+</div>
+
+<div class="week race-week" id="w25">
+  <div class="week-header" onclick="toggle('w25')">
+    <div class="week-num">25</div>
+    <div class="week-summary">
+      <div class="week-title">RACE WEEK <span class="race-badge">🏁 Dements</span></div>
+      <div class="week-date">Oct 26–Nov 1 · taper week 3 (extended for B-week)</div>
+    </div>
+    <div class="week-stats"><div class="week-km">22km</div><div class="week-elev">300m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rec"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Z1 easy</div></div>
+      <div class="day strides"><div class="day-label">Tue</div><div class="day-icon">⚡</div><div class="day-km">5km</div><div class="day-type">2×strides</div></div>
+      <div class="day rest"><div class="day-label">Wed</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day rec"><div class="day-label">Thu</div><div class="day-icon">🏃</div><div class="day-km">4km</div><div class="day-type">Easy</div></div>
+      <div class="day rec"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">3km</div><div class="day-type">Shakeout</div></div>
+      <div class="day rest"><div class="day-label">Sat</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Pre-race</div></div>
+      <div class="day rec"><div class="day-label">Sun</div><div class="day-icon">🏃</div><div class="day-km">5km</div><div class="day-type">Travel/easy</div></div>
+    </div>
+    <div class="week-notes">Race week begins. Short, sharp, mostly rest. Travel to Eslida Fri/Sat. Bib pickup. Final gear check.</div>
+  </div>
+</div>
+
+<div class="week race-week open" id="w26">
+  <div class="week-header" onclick="toggle('w26')">
+    <div class="week-num">26</div>
+    <div class="week-summary">
+      <div class="week-title">RACE DAY <span class="race-badge">🏁 Dements</span></div>
+      <div class="week-date">Nov 2–8</div>
+    </div>
+    <div class="week-stats"><div class="week-km">—</div><div class="week-elev">3808m</div></div>
+    <div class="chevron">▼</div>
+  </div>
+  <div class="week-body">
+    <div class="days">
+      <div class="day rec"><div class="day-label">Mon</div><div class="day-icon">🏃</div><div class="day-km">3km</div><div class="day-type">Shakeout</div></div>
+      <div class="day rest"><div class="day-label">Tue</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day strides"><div class="day-label">Wed</div><div class="day-icon">⚡</div><div class="day-km">3km</div><div class="day-type">2 strides</div></div>
+      <div class="day rest"><div class="day-label">Thu</div><div class="day-icon">💤</div><div class="day-km">—</div><div class="day-type">Rest</div></div>
+      <div class="day rec"><div class="day-label">Fri</div><div class="day-icon">🏃</div><div class="day-km">2km</div><div class="day-type">Shakeout</div></div>
+      <div class="day race"><div class="day-label">Sat</div><div class="day-icon">🏁</div><div class="day-km">42.5km</div><div class="day-elev">3808m</div><div class="day-type">RACE</div></div>
+      <div class="day rest"><div class="day-label">Sun</div><div class="day-icon">🍻</div><div class="day-km">—</div><div class="day-type">Celebrate</div></div>
+    </div>
+    <div class="race-day">
+      <div class="race-day-label">SATURDAY 7 NOV · 07:30</div>
+      <div class="race-day-name">MARATÓ DELS DEMENTS</div>
+      <div class="race-day-stats">42.5km · 3,808m D+ · Eslida → Aín · Serra d'Espadà</div>
+    </div>
+  </div>
+</div>
+
+<!-- Volume chart -->
+<div class="chart-section">
+  <div class="section-label">25-Week Volume + Elevation Build</div>
+  <div class="vol-chart" id="vol-chart"></div>
+</div>
+
+<script>
+function toggle(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// Countdown
+const raceDate = new Date('2026-11-07T07:30:00');
+const today = new Date('2026-05-20');
+const days = Math.round((raceDate - today) / (1000*60*60*24));
+document.getElementById('days-to-race').textContent = days;
+
+const weeks = [
+  { label:'1', km:25, elev:0,    color:'#1a9e63', done:true },
+  { label:'2', km:25, elev:0,    color:'#1a9e63', done:true },
+  { label:'3', km:21, elev:0,    color:'#1a9e63', current:true },
+  { label:'4', km:22, elev:0,    color:'#1a9e63' },
+  { label:'5', km:23, elev:80,   color:'#2a9a6a' },
+  { label:'6', km:17, elev:30,   color:'#2a5fb5', reco:true },
+  { label:'7', km:28, elev:300,  color:'#1e8050' },
+  { label:'8', km:33, elev:500,  color:'#1e8050' },
+  { label:'9', km:38, elev:700,  color:'#1e8050' },
+  { label:'10',km:25, elev:350,  color:'#2a5fb5', reco:true },
+  { label:'11',km:45, elev:1000, color:'#1e8050' },
+  { label:'12',km:50, elev:1200, color:'#1e8050' },
+  { label:'13',km:52, elev:1400, color:'#c85a10' },
+  { label:'14',km:56, elev:1600, color:'#c85a10' },
+  { label:'15',km:32, elev:500,  color:'#2a5fb5', reco:true },
+  { label:'16',km:45, elev:1500, color:'#b8920a', race:true },
+  { label:'17',km:35, elev:700,  color:'#2a5fb5', reco:true },
+  { label:'18',km:60, elev:2000, color:'#c85a10' },
+  { label:'19',km:38, elev:800,  color:'#2a5fb5', reco:true },
+  { label:'20',km:68, elev:2600, color:'#c85a10' },
+  { label:'21',km:75, elev:2900, color:'#b02040', peak:true },
+  { label:'22',km:65, elev:2200, color:'#b02040' },
+  { label:'23',km:48, elev:1400, color:'#2a5fb5', reco:true },
+  { label:'24',km:28, elev:600,  color:'#2a5fb5', reco:true },
+  { label:'25',km:22, elev:300,  color:'#2a5fb5', reco:true },
+  { label:'R', km:42.5, elev:3808, color:'#b02040', race:true },
+];
+
+const maxKm = Math.max(...weeks.map(w => w.km));
+const maxEl = Math.max(...weeks.map(w => w.elev));
+const chart = document.getElementById('vol-chart');
+
+weeks.forEach(w => {
+  const pct = (w.km / maxKm) * 75;
+  const ePct = w.elev > 0 ? Math.max((w.elev / maxEl) * 22, 3) : 0;
+  const wrap = document.createElement('div');
+  wrap.className = 'vol-bar-wrap';
+  const glow = w.current ? `box-shadow:0 0 6px ${w.color}66;` : (w.peak ? `box-shadow:0 0 8px ${w.color}88;` : '');
+  let op = '0.75';
+  if (w.done) op = '0.4';
+  else if (w.reco) op = '0.55';
+  else if (w.current) op = '1';
+  else if (w.peak) op = '1';
+  else if (w.race) op = '1';
+
+  const isRace = w.label === 'R';
+  wrap.innerHTML = `
+    <div class="vol-num" style="color:${w.current||w.peak?w.color:''}">${w.km}</div>
+    <div class="vol-bar" style="height:${pct}%;background:${w.color};opacity:${op};${glow}"></div>
+    ${w.elev > 0 ? `<div class="vol-elev-bar" style="height:${ePct}%;background:#7040d0;"></div>` : '<div style="height:3px"></div>'}
+    <div class="vol-wk" style="color:${w.current||w.peak||isRace?w.color:''};font-weight:${isRace?'500':'400'}">${isRace?'🏁':'W'+w.label}</div>
+    ${w.elev > 0 ? `<div class="vol-elev-num">${w.elev}</div>` : ''}
+  `;
+  chart.appendChild(wrap);
+});
+
+function toggleTheme() {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('theme', html.dataset.theme); } catch(e) {}
+}
+</script>
+</body>
+</html>

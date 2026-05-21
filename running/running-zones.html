@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Running Zones — Nico</title>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}})()</script>
+<link rel="stylesheet" href="theme.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap');
+  :root {
+    /* Bridge theme.css tokens → local aliases */
+    --bg:      var(--bg-page);
+    --surface: var(--bg-card);
+    --border:  var(--border-soft);
+    --text:    var(--text-strong);
+    --muted:   var(--text-muted);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; padding: 2rem 1.2rem 3rem; }
+  header { margin-bottom: 2rem; }
+  .title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem,10vw,5rem); letter-spacing: .04em; line-height: .95; color: #fff; }
+  .title span { color: #f07030; }
+  .subtitle { margin-top: .5rem; font-size: .72rem; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+  .lab-badge { display: inline-block; margin-top: .6rem; background: #1a2a1a; border: 1px solid #2ecc8a44; color: #2ecc8a; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; padding: .25rem .6rem; border-radius: 3px; }
+  .stats-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+  .stat-pill { border: 1px solid var(--border); border-radius: 4px; padding: .35rem .7rem; font-size: .68rem; letter-spacing: .06em; color: var(--muted); }
+  .stat-pill strong { color: var(--text); font-weight: 500; }
+  .stat-pill.hi { border-color: #2ecc8a44; background: #1a2a1a; }
+  .stat-pill.hi strong { color: #2ecc8a; }
+  .section-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: .8rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border); }
+  .zones { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; }
+  .zone-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: .85rem 1rem; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; position: relative; overflow: hidden; }
+  .zone-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--zc); }
+  .zone-card.focus { border-color: #2ecc8a33; background: #141f17; }
+  .zone-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--zc); line-height: 1; width: 1.8rem; text-align: center; }
+  .zone-info { display: flex; flex-direction: column; gap: .2rem; }
+  .zone-name { font-size: .75rem; font-weight: 500; letter-spacing: .06em; color: var(--text); display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .focus-tag { font-size: .55rem; background: #2ecc8a; color: #000; padding: .1rem .4rem; border-radius: 2px; letter-spacing: .08em; }
+  .zone-desc { font-size: .62rem; color: var(--muted); }
+  .zone-right { text-align: right; display: flex; flex-direction: column; gap: .2rem; align-items: flex-end; }
+  .bpm-main { font-size: 1rem; font-weight: 500; color: var(--zc); white-space: nowrap; }
+  .pace-main { font-size: .72rem; color: var(--muted); }
+  .vo2-line { font-size: .6rem; color: var(--muted); }
+  .threshold-row { display: flex; align-items: center; gap: 1rem; padding: .7rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: .5rem; }
+  .tdot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .tinfo { flex: 1; }
+  .tname { font-size: .72rem; font-weight: 500; color: var(--text); }
+  .tsub { font-size: .6rem; color: var(--muted); margin-top: .1rem; }
+  .tvals { text-align: right; }
+  .thr { font-size: .85rem; font-weight: 500; }
+  .tpace { font-size: .62rem; color: var(--muted); margin-top: .1rem; }
+  .vo2-box { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; margin-bottom: 2rem; }
+  .vo2-number { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: #2ecc8a; line-height: 1; }
+  .vo2-unit { font-size: .65rem; color: var(--muted); margin-top: .2rem; }
+  .vo2-row { display: flex; align-items: center; gap: .6rem; font-size: .62rem; color: var(--muted); margin-top: .4rem; }
+  .vo2-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .vo2-fill { height: 100%; border-radius: 3px; }
+  .vo2-lbl { width: 7.5rem; text-align: right; }
+  .vo2-val { width: 4rem; }
+  .bar-track { height: 12px; display: flex; border-radius: 6px; overflow: hidden; margin: .8rem 0 .4rem; }
+  .bar-seg { height: 100%; background: var(--zc); opacity: .85; }
+  .bar-labs { display: flex; justify-content: space-between; }
+  .bar-lab { font-size: .6rem; color: var(--muted); }
+  .note { font-size: .63rem; color: var(--muted); line-height: 1.7; border-left: 2px solid var(--border); padding-left: .8rem; margin-top: 2rem; }
+
+  /* Theme toggle position */
+  .theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 100; font-family: 'DM Mono', monospace; }
+
+  /* Light-mode overrides for elements that were designed dark-only */
+  [data-theme="light"] .zone-card.focus { background: #e8f5f0; border-color: #2ecc8a33; }
+  [data-theme="light"] .lab-badge { background: #e8f5f0; border-color: #2ecc8a44; color: #1a7a50; }
+  [data-theme="light"] .stat-pill.hi { background: #e8f5f0; border-color: #2ecc8a44; }
+  [data-theme="light"] .stat-pill.hi strong { color: #1a7a50; }
+  [data-theme="light"] .vo2-box { background: var(--bg-card); }
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()"><span class="sun">☀</span><span class="moon">☾</span></button>
+<header>
+  <div class="title">RUNNING<br><span>ZONES</span></div>
+  <div class="subtitle">Lab-Calibrated Training Zones · Nico</div>
+  <div class="lab-badge">⚗ Gas Exchange Test · VT1 / VT2 Derived</div>
+</header>
+
+<div class="stats-row">
+  <div class="stat-pill">Max HR <strong>184 bpm</strong></div>
+  <div class="stat-pill">Age <strong>57</strong></div>
+  <div class="stat-pill">Weight <strong>64 kg</strong></div>
+  <div class="stat-pill">Rest HR <strong>50 bpm</strong></div>
+  <div class="stat-pill hi">VO2max <strong>44.4 ml/kg/min</strong></div>
+  <div class="stat-pill hi">VT1 <strong>151 bpm · 6:54/km</strong></div>
+  <div class="stat-pill hi">VT2 <strong>173 bpm · 4:58/km</strong></div>
+</div>
+
+<div class="section-label">Training Zones</div>
+<div class="zones">
+  <div class="zone-card" style="--zc:#3a7bd5">
+    <div class="zone-num">1</div>
+    <div class="zone-info">
+      <div class="zone-name">Recovery</div>
+      <div class="zone-desc">Warm-up, cooldown, active recovery runs</div>
+    </div>
+    <div class="zone-right">
+      <div class="bpm-main">&lt; 135 bpm</div>
+      <div class="pace-main">&gt; 7:30 /km</div>
+    </div>
+  </div>
+
+  <div class="zone-card focus" style="--zc:#2ecc8a">
+    <div class="zone-num">2</div>
+    <div class="zone-info">
+      <div class="zone-name">Base Aerobic <span class="focus-tag">YOUR FOCUS</span></div>
+      <div class="zone-desc">Fat oxidation, mitochondrial base, long easy runs</div>
+    </div>
+    <div class="zone-right">
+      <div class="bpm-main">135–151 bpm</div>
+      <div class="pace-main">6:54–7:30 /km</div>
+      <div class="vo2-line">up to 29.8 ml/kg/min</div>
+    </div>
+  </div>
+
+  <div class="zone-card" style="--zc:#f0c040">
+    <div class="zone-num">3</div>
+    <div class="zone-info">
+      <div class="zone-name">Tempo / No Man's Land</div>
+      <div class="zone-desc">Above VT1, below VT2 — use sparingly in polarized plan</div>
+    </div>
+    <div class="zone-right">
+      <div class="bpm-main">151–162 bpm</div>
+      <div class="pace-main">6:00–6:54 /km</div>
+    </div>
+  </div>
+
+  <div class="zone-card" style="--zc:#f07030">
+    <div class="zone-num">4</div>
+    <div class="zone-info">
+      <div class="zone-name">Lactate Threshold</div>
+      <div class="zone-desc">Race pace 10K–HM, threshold intervals</div>
+    </div>
+    <div class="zone-right">
+      <div class="bpm-main">162–173 bpm</div>
+      <div class="pace-main">4:58–6:00 /km</div>
+      <div class="vo2-line">up to 39.8 ml/kg/min</div>
+    </div>
+  </div>
+
+  <div class="zone-card" style="--zc:#d03050">
+    <div class="zone-num">5</div>
+    <div class="zone-info">
+      <div class="zone-name">VO2max / Speed</div>
+      <div class="zone-desc">Short hard intervals, max effort, sprints</div>
+    </div>
+    <div class="zone-right">
+      <div class="bpm-main">&gt; 173 bpm</div>
+      <div class="pace-main">&lt; 4:58 /km</div>
+      <div class="vo2-line">up to 44.4 ml/kg/min</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Lab Thresholds</div>
+<div style="margin-bottom:2rem">
+  <div class="threshold-row">
+    <div class="tdot" style="background:#2ecc8a"></div>
+    <div class="tinfo">
+      <div class="tname">VT1 — Aerobic Threshold</div>
+      <div class="tsub">Top of Z2 · Pure aerobic metabolism below this point</div>
+    </div>
+    <div class="tvals">
+      <div class="thr" style="color:#2ecc8a">151 bpm</div>
+      <div class="tpace">8.7 km/h · 6:54 /km</div>
+    </div>
+  </div>
+  <div class="threshold-row">
+    <div class="tdot" style="background:#f07030"></div>
+    <div class="tinfo">
+      <div class="tname">VT2 — Anaerobic Threshold</div>
+      <div class="tsub">Top of Z4 · Lactate accumulates rapidly above this</div>
+    </div>
+    <div class="tvals">
+      <div class="thr" style="color:#f07030">173 bpm</div>
+      <div class="tpace">12.1 km/h · 4:58 /km</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">VO2max Context</div>
+<div class="vo2-box">
+  <div style="display:flex;align-items:flex-end;gap:1rem">
+    <div>
+      <div class="vo2-number">44.4</div>
+      <div class="vo2-unit">mL/kg/min · Male age 55–59</div>
+    </div>
+    <div style="flex:1;padding-bottom:.3rem">
+      <div style="font-size:.62rem;color:var(--muted);margin-bottom:.4rem">Your percentile</div>
+      <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:72%;background:linear-gradient(90deg,#2ecc8a,#f0c040);border-radius:4px"></div>
+      </div>
+      <div style="font-size:.6rem;color:#2ecc8a;margin-top:.3rem">~70th percentile · Above average</div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem">
+    <div class="vo2-row"><div class="vo2-lbl">Poor (&lt;30)</div><div class="vo2-track"><div class="vo2-fill" style="width:30%;background:#d03050"></div></div><div class="vo2-val">30</div></div>
+    <div class="vo2-row"><div class="vo2-lbl">Average (34–39)</div><div class="vo2-track"><div class="vo2-fill" style="width:52%;background:#f07030"></div></div><div class="vo2-val">34–39</div></div>
+    <div class="vo2-row"><div class="vo2-lbl">Good (40–47) ✓</div><div class="vo2-track"><div class="vo2-fill" style="width:72%;background:#2ecc8a"></div></div><div class="vo2-val">44.4</div></div>
+    <div class="vo2-row"><div class="vo2-lbl">Excellent (48+)</div><div class="vo2-track"><div class="vo2-fill" style="width:90%;background:#3a7bd5"></div></div><div class="vo2-val">48+</div></div>
+  </div>
+</div>
+
+<div class="section-label">Zone Distribution</div>
+<div class="bar-track">
+  <div class="bar-seg" style="--zc:#3a7bd5;flex:1"></div>
+  <div class="bar-seg" style="--zc:#2ecc8a;flex:1.3;opacity:1"></div>
+  <div class="bar-seg" style="--zc:#f0c040;flex:.9"></div>
+  <div class="bar-seg" style="--zc:#f07030;flex:.9"></div>
+  <div class="bar-seg" style="--zc:#d03050;flex:.6"></div>
+</div>
+<div class="bar-labs">
+  <span class="bar-lab">&lt;135 bpm</span>
+  <span class="bar-lab">184 bpm</span>
+</div>
+
+<p class="note">
+  Zones derived directly from gas exchange test (VT1/VT2) — not formulas.<br>
+  Z2 ceiling at 151 bpm confirmed by your nose-breathing test at 155 bpm.<br><br>
+  Polarized training: ~80% of volume in Z1–Z2 · ~20% in Z4–Z5 · minimize Z3.
+</p>
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('theme', html.dataset.theme); } catch(e) {}
+}
+</script>
+</body>
+</html>

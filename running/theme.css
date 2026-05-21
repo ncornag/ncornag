@@ -1,0 +1,171 @@
+/* ============================================================
+ * superpowers/theme/theme.css
+ * Shared token vocabulary for HTML reports/dossiers.
+ *
+ * Switch palette with:   <html data-theme="dark">  (default)
+ *                        <html data-theme="light">
+ *
+ * Per-document typography/density lives in the consuming file,
+ * NOT here. Only surface, text, border, status and severity
+ * tokens are unified.
+ * ============================================================ */
+
+:root,
+:root[data-theme="dark"] {
+  /* Surfaces */
+  --bg-page:    #0c0e12;
+  --bg-card:    #15191f;
+  --bg-sunken:  #1a1f27;
+  --bg-track:   #1f242c;
+
+  /* Borders */
+  --border-soft:  #2a313b;
+  --border-faint: #1f242c;
+
+  /* Text (strong → faint) */
+  --text-strong: #e6e9ef;
+  --text-body:   #b8bcc4;
+  --text-muted:  #8b929e;
+  --text-dim:    #666e7a;
+  --text-faint:  #4a525c;
+
+  /* Semantic status (success / warn / info / danger / neutral) */
+  --status-success: #97c459;
+  --status-warn:    #ef9f27;
+  --status-info:    #5b8fd9;
+  --status-danger:  #e5484d;
+  --status-neutral: var(--text-muted);
+
+  /* Severity (badge-saturated, identical in both modes) */
+  --sev-critical: #b91c1c;
+  --sev-high:     #ea580c;
+  --sev-medium:   #d97706;
+  --sev-low:      #6b7280;
+
+  /* Misc */
+  --link: var(--status-info);
+}
+
+:root[data-theme="light"] {
+  --bg-page:    #f4f3ee;
+  --bg-card:    #ffffff;
+  --bg-sunken:  #faf9f4;
+  --bg-track:   #ece9df;
+
+  --border-soft:  #d4d2c9;
+  --border-faint: #e8e6dd;
+
+  --text-strong: #1a1d24;
+  --text-body:   #4a4d54;
+  --text-muted:  #6d7079;
+  --text-dim:    #8a8c92;
+  --text-faint:  #b0b1b5;
+
+  --status-success: #639922;
+  --status-warn:    #ba7517;
+  --status-info:    #2563eb;
+  --status-danger:  #b91c1c;
+  --status-neutral: var(--text-muted);
+
+  /* Severity intentionally unchanged — saturated red/orange reads
+     on both modes when used as a badge background. */
+}
+
+/* System-preference fallback if no data-theme is set */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg-page:    #f4f3ee;
+    --bg-card:    #ffffff;
+    --bg-sunken:  #faf9f4;
+    --bg-track:   #ece9df;
+    --border-soft:  #d4d2c9;
+    --border-faint: #e8e6dd;
+    --text-strong: #1a1d24;
+    --text-body:   #4a4d54;
+    --text-muted:  #6d7079;
+    --text-dim:    #8a8c92;
+    --text-faint:  #b0b1b5;
+    --status-success: #639922;
+    --status-warn:    #ba7517;
+    --status-info:    #2563eb;
+    --status-danger:  #b91c1c;
+  }
+}
+
+/* ---------- Document defaults (font-stack/density opt-in) ---------- */
+
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg-page);
+  color: var(--text-body);
+  transition: background .2s ease, color .2s ease;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- Shared utility classes (optional) ---------- */
+
+/* Severity badges — saturated fills */
+.badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700; line-height: 1;
+  padding: 3px 6px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: .02em;
+  white-space: nowrap;
+}
+.badge.sev-critical { background: var(--sev-critical); color: #fff; }
+.badge.sev-high     { background: var(--sev-high);     color: #fff; }
+.badge.sev-medium   { background: var(--sev-medium);   color: #fff; }
+.badge.sev-low      { background: var(--sev-low);      color: #fff; }
+
+/* Status badges — outline */
+.badge.st-success { background: transparent; color: var(--status-success); border: 1px solid var(--status-success); }
+.badge.st-warn    { background: transparent; color: var(--status-warn);    border: 1px solid var(--status-warn); }
+.badge.st-info    { background: transparent; color: var(--status-info);    border: 1px solid var(--status-info); }
+.badge.st-danger  { background: transparent; color: var(--status-danger);  border: 1px solid var(--status-danger); }
+.badge.st-neutral { background: transparent; color: var(--status-neutral); border: 1px solid var(--border-soft); }
+
+/* Left-edge severity indicator on table rows / cards */
+.sev-edge-critical { border-left: 3px solid var(--sev-critical); }
+.sev-edge-high     { border-left: 3px solid var(--sev-high); }
+.sev-edge-medium   { border-left: 3px solid var(--sev-medium); }
+.sev-edge-low      { border-left: 3px solid var(--sev-low); }
+
+/* Color helpers for inline text */
+.text-success { color: var(--status-success); }
+.text-warn    { color: var(--status-warn); }
+.text-info    { color: var(--status-info); }
+.text-danger  { color: var(--status-danger); }
+.text-muted   { color: var(--text-muted); }
+
+/* Generic card panel — both docs can opt in */
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.panel--sunken { background: var(--bg-sunken); border-color: var(--border-faint); }
+
+/* ---------- Theme toggle button (shared affordance) ---------- */
+.theme-toggle {
+  background: var(--bg-card);
+  color: var(--text-body);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  letter-spacing: .05em;
+}
+.theme-toggle:hover { color: var(--text-strong); border-color: var(--text-muted); }
+.theme-toggle .sun  { display: none; }
+.theme-toggle .moon { display: inline; }
+:root[data-theme="dark"] .theme-toggle .sun  { display: inline; }
+:root[data-theme="dark"] .theme-toggle .moon { display: none; }
+@media print {
+  .theme-toggle { display: none !important; }
+}
