@@ -1,17 +1,321 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Nicolás Cornaglia</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nicolás Cornaglia Schlieman</title>
+<meta name="description" content="Nicolás Cornaglia Schlieman — Software Engineer & E-commerce Systems Builder. TypeScript, Node.js, MongoDB.">
+<link rel="icon" href="assets/avatar.png">
+<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<style>
+:root{
+  --bg:#ffffff;--card:#ffffff;--card-header:#f6f8fa;
+  --border:#d1d9e0;--fg:#1f2328;--fg-muted:#59636e;--accent:#0969da;
+  --btn-bg:#f6f8fa;--btn-border:rgba(31,35,40,.15);--btn-hover-bg:#eef1f4;--btn-hover-border:rgba(31,35,40,.15);
+  --avatar-border:rgba(31,35,40,.15);
+  --cal0:#ebedf0;--cal1:#9be9a8;--cal2:#40c463;--cal3:#30a14e;--cal4:#216e39;
+  --cal-inset:rgba(27,31,35,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1117;--card:#0d1117;--card-header:#151b23;
+    --border:#3d444d;--fg:#f0f6fc;--fg-muted:#9198a1;--accent:#4493f8;
+    --btn-bg:#212830;--btn-border:rgba(240,246,252,.1);--btn-hover-bg:#2a313c;--btn-hover-border:rgba(240,246,252,.2);
+    --avatar-border:rgba(240,246,252,.1);
+    --cal0:#151b23;--cal1:#0e4429;--cal2:#006d32;--cal3:#26a641;--cal4:#39d353;
+    --cal-inset:rgba(255,255,255,.05);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1117;--card:#0d1117;--card-header:#151b23;
+  --border:#3d444d;--fg:#f0f6fc;--fg-muted:#9198a1;--accent:#4493f8;
+  --btn-bg:#212830;--btn-border:rgba(240,246,252,.1);--btn-hover-bg:#2a313c;--btn-hover-border:rgba(240,246,252,.2);
+  --avatar-border:rgba(240,246,252,.1);
+  --cal0:#151b23;--cal1:#0e4429;--cal2:#006d32;--cal3:#26a641;--cal4:#39d353;
+  --cal-inset:rgba(255,255,255,.05);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+.page{max-width:1280px;margin:0 auto;padding:24px 16px 80px;display:grid;grid-template-columns:296px minmax(0,1fr);gap:24px;}
+@media (max-width:900px){.page{grid-template-columns:1fr;}}
+
+/* ---- sidebar ---- */
+.avatar{width:100%;max-width:296px;aspect-ratio:1;border-radius:50%;border:1px solid var(--avatar-border);display:block;}
+.names{margin:16px 0;}
+.fullname{font-size:24px;font-weight:600;line-height:1.25;margin:0;}
+.username{font-size:20px;font-weight:300;line-height:24px;color:var(--fg-muted);}
+.btn{display:block;width:100%;text-align:center;padding:5px 16px;margin-bottom:16px;
+  font-size:14px;font-weight:500;color:var(--fg);background:var(--btn-bg);
+  border:1px solid var(--btn-border);border-radius:6px;cursor:pointer;}
+.btn:hover{background:var(--btn-hover-bg);border-color:var(--btn-hover-border);text-decoration:none;}
+.vcard{list-style:none;margin:0;padding:0;}
+.vcard li{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:var(--fg);}
+.vcard li svg{fill:var(--fg-muted);flex-shrink:0;}
+.vcard a{color:inherit;}
+.vcard a:hover{color:var(--accent);}
+.vcard .num{font-weight:600;}
+.vcard .sep{color:var(--fg-muted);}
+.achievements{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.ach-title{font-size:16px;font-weight:600;margin:0 0 8px;}
+.ach-title a{color:var(--fg);}
+.ach-list{display:flex;flex-wrap:wrap;gap:2px;}
+.ach{position:relative;display:inline-block;line-height:0;}
+.ach img{width:64px;height:64px;}
+.ach-tier{position:absolute;bottom:4px;right:4px;background:var(--btn-bg);
+  border:1px solid var(--border);border-radius:2em;font-size:10px;font-weight:500;
+  line-height:15px;padding:0 5px;color:var(--fg-muted);}
+
+/* ---- main ---- */
+.main{min-width:0;}
+.Box{border:1px solid var(--border);border-radius:6px;background:var(--card);}
+.section{margin-top:32px;}
+.section-title{font-size:16px;font-weight:400;margin:0 0 16px;}
+
+/* readme */
+.readme-body{padding:32px;}
+@media (max-width:600px){.readme-body{padding:16px;}}
+.readme-head{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;margin-bottom:16px;}
+.readme-head a{color:var(--fg);}
+.readme-head .muted{color:var(--fg-muted);}
+
+/* markdown */
+.markdown-body{font-size:16px;line-height:1.5;word-wrap:break-word;}
+.markdown-body>:first-child{margin-top:0;}
+.markdown-body>:last-child{margin-bottom:0;}
+.markdown-body h1,.markdown-body h2{padding-bottom:.3em;border-bottom:1px solid var(--border);
+  font-weight:600;line-height:1.25;margin:24px 0 16px;}
+.markdown-body h1{font-size:2em;}
+.markdown-body h2{font-size:1.5em;}
+.markdown-body h3{font-size:1.25em;font-weight:600;margin:24px 0 16px;line-height:1.25;}
+.markdown-body p{margin:0 0 16px;}
+.markdown-body ul{margin:0 0 16px;padding-left:2em;}
+.markdown-body li{margin-top:.25em;}
+.markdown-body li+li{margin-top:.25em;}
+.markdown-body hr{height:.25em;padding:0;margin:24px 0;background:var(--border);border:0;}
+.markdown-body strong{font-weight:600;}
+.markdown-body img{max-width:100%;vertical-align:middle;}
+.markdown-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:85%;
+  padding:.2em .4em;background:var(--card-header);border-radius:6px;}
+.markdown-body .anchor{display:none;}
+
+/* pinned */
+.pinned-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+@media (max-width:600px){.pinned-grid{grid-template-columns:1fr;}}
+.pin-card{border:1px solid var(--border);border-radius:6px;padding:16px;display:flex;flex-direction:column;background:var(--card);}
+.pin-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.pin-head svg{fill:var(--fg-muted);flex-shrink:0;}
+.pin-name{font-weight:600;font-size:14px;}
+.pin-public{margin-left:auto;font-size:12px;font-weight:500;color:var(--fg-muted);
+  border:1px solid var(--border);border-radius:2em;padding:0 7px;line-height:18px;}
+.pin-desc{font-size:12px;color:var(--fg-muted);margin:0 0 16px;flex:1;}
+.pin-meta{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--fg-muted);}
+.lang{display:flex;align-items:center;gap:5px;}
+.lang-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
+.pin-stars{display:flex;align-items:center;gap:4px;color:var(--fg-muted);}
+.pin-stars svg{fill:var(--fg-muted);}
+.pin-stars:hover{color:var(--accent);text-decoration:none;}
+
+/* contributions */
+.cal-card{border:1px solid var(--border);border-radius:6px;padding:16px;background:var(--card);}
+.cal-scroll{overflow-x:auto;}
+.cal{display:inline-block;}
+.cal-months{display:grid;grid-template-columns:repeat(53,14px);margin-left:31px;margin-bottom:4px;
+  font-size:11px;color:var(--fg-muted);}
+.cal-months span{grid-row:1;}
+.cal-body{display:flex;gap:3px;}
+.cal-weekdays{display:grid;grid-template-rows:repeat(7,11px);gap:3px;width:28px;
+  font-size:11px;color:var(--fg-muted);}
+.cal-weekdays span{line-height:11px;height:11px;white-space:nowrap;}
+.cal-days{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);grid-auto-columns:11px;gap:3px;}
+.day{width:11px;height:11px;border-radius:2px;background:var(--cal0);
+  box-shadow:inset 0 0 0 1px var(--cal-inset);}
+.day[data-level="1"]{background:var(--cal1);}
+.day[data-level="2"]{background:var(--cal2);}
+.day[data-level="3"]{background:var(--cal3);}
+.day[data-level="4"]{background:var(--cal4);}
+.day.empty{background:transparent;box-shadow:none;}
+.cal-legend{display:flex;align-items:center;justify-content:flex-end;gap:3px;
+  margin-top:8px;font-size:12px;color:var(--fg-muted);}
+.cal-legend .day{margin:0;}
+.cal-legend span:first-child{margin-right:2px;}
+.cal-legend span:last-child{margin-left:2px;}
+
+/* theme toggle */
+.theme-toggle{position:fixed;top:16px;right:16px;z-index:20;width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--btn-bg);border:1px solid var(--btn-border);border-radius:6px;
+  cursor:pointer;color:var(--fg-muted);}
+.theme-toggle:hover{background:var(--btn-hover-bg);color:var(--fg);}
+.theme-toggle svg{fill:currentColor;}
+</style>
 </head>
-<body class="markdown-body" style="max-width:800px;margin:2rem auto;padding:2rem;">
-  <div id="content">Loading…</div>
-  <script>
-    fetch('https://raw.githubusercontent.com/ncornag/ncornag/main/README.md')
-      .then(r => r.text())
-      .then(md => document.getElementById('content').innerHTML = marked.parse(md));
-  </script>
+<body>
+
+<button class="theme-toggle" type="button" aria-label="Toggle color theme">
+  <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-1.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm5.657-8.157a.75.75 0 0 1 0 1.061l-1.061 1.06a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l1.06-1.06a.75.75 0 0 1 1.06 0Zm-9.193 9.193a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.061a.75.75 0 0 1 1.061 0ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM3 8a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 3 8Zm13 0a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 16 8Zm-8 5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm3.536-1.464a.75.75 0 0 1 1.06 0l1.061 1.06a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-1.06-1.06a.75.75 0 0 1 0-1.06Z"/></svg>
+  <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"/></svg>
+</button>
+
+<div class="page">
+
+  <aside class="sidebar">
+    <img class="avatar" src="assets/avatar.png" alt="Nicolás Cornaglia Schlieman">
+    <div class="names">
+      <h1 class="fullname">Nicolás Cornaglia Schlieman</h1>
+      <span class="username">ncornag</span>
+    </div>
+    <a class="btn" href="https://github.com/ncornag">Follow</a>
+    <ul class="vcard">
+      <li>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.1 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5Z"/></svg>
+        <span><a href="https://github.com/ncornag?tab=followers"><span class="num">9</span> followers</a> <span class="sep">·</span> <a href="https://github.com/ncornag?tab=following"><span class="num">7</span> following</a></span>
+      </li>
+      <li>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m12.596 11.596-3.535 3.536a1.5 1.5 0 0 1-2.122 0l-3.535-3.536a6.5 6.5 0 1 1 9.192-9.193 6.5 6.5 0 0 1 0 9.193Zm-1.06-8.132a5 5 0 1 0-7.072 7.072L8 14.07l3.536-3.534a5 5 0 0 0 0-7.072ZM8 9a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 9Z"/></svg>
+        <span>Valencia, Spain</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/></svg>
+        <a href="https://x.com/ncornag">@ncornag</a>
+      </li>
+    </ul>
+    <div class="achievements">
+      <h2 class="ach-title"><a href="https://github.com/ncornag?tab=achievements">Achievements</a></h2>
+      <div class="ach-list">
+        <a class="ach" href="https://github.com/ncornag?achievement=pair-extraordinaire&amp;tab=achievements" title="Pair Extraordinaire">
+          <img src="assets/achievements/pair-extraordinaire.png" alt="Pair Extraordinaire" width="64" height="64">
+          <span class="ach-tier">x2</span>
+        </a>
+        <a class="ach" href="https://github.com/ncornag?achievement=pull-shark&amp;tab=achievements" title="Pull Shark">
+          <img src="assets/achievements/pull-shark.png" alt="Pull Shark" width="64" height="64">
+          <span class="ach-tier">x3</span>
+        </a>
+        <a class="ach" href="https://github.com/ncornag?achievement=yolo&amp;tab=achievements" title="YOLO">
+          <img src="assets/achievements/yolo.png" alt="YOLO" width="64" height="64">
+        </a>
+        <a class="ach" href="https://github.com/ncornag?achievement=quickdraw&amp;tab=achievements" title="Quickdraw">
+          <img src="assets/achievements/quickdraw.png" alt="Quickdraw" width="64" height="64">
+        </a>
+        <a class="ach" href="https://github.com/ncornag?achievement=arctic-code-vault-contributor&amp;tab=achievements" title="Arctic Code Vault Contributor">
+          <img src="assets/achievements/arctic-code-vault-contributor.png" alt="Arctic Code Vault Contributor" width="64" height="64">
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="Box">
+      <div class="readme-body">
+        <div class="readme-head"><a href="https://github.com/ncornag/ncornag">ncornag</a><span class="muted"> / README.md</span></div>
+        <div class="markdown-body">
+<h1 class="heading-element" dir="auto">👋 Hi, I'm Nico — Software Engineer &amp; E-commerce Systems Builder</h1>
+<p dir="auto">I'm a software engineer with deep expertise in <strong>TypeScript</strong>, <strong>Node.js</strong>, and <strong>MongoDB</strong>, dedicated to building <strong>high-performance systems</strong> that power complex e-commerce ecosystems. Over the years, I've designed and delivered <strong>enterprise-grade architectures</strong> capable of handling <strong>millions of transactions</strong> and dynamic business logic across payments, promotions, tax, shipping, and inventory domains.</p>
+<p dir="auto">My work revolves around <strong>microservices architecture</strong>, <strong>domain-driven design</strong>, and <strong>event sourcing</strong>—engineering principles that ensure scalability, reliability, and maintainability in production at scale. I'm passionate about <strong>elegant, type-safe code</strong> and <strong>precision in system design</strong>, from AI-driven APIs to multi-tier caching layers and CI/CD pipelines built.</p>
+<hr>
+<h2 class="heading-element" dir="auto">💼 What I Do</h2>
+<ul dir="auto">
+<li><strong>Architect end-to-end</strong> e-commerce platforms with advanced payments, promotions, tax, shipping, and inventory systems</li>
+<li><strong>Build resilient microservices</strong> for checkout, payment orchestration, real-time event processing, and order fulfillment</li>
+<li><strong>Engineer high-performance systems</strong> with multi-tier caching, query optimization, and sub-100ms response times at scale</li>
+<li><strong>Lead technical initiatives</strong> with focus on domain-driven design, event sourcing, and enterprise-grade engineering practices</li>
+<li><strong>Previously</strong> I've managed teams of up to 40 people in international SaaS and Consulting companies.</li>
+</ul>
+<hr>
+<h2 class="heading-element" dir="auto">🛠️ Technologies &amp; Tools</h2>
+<p dir="auto"><strong>Core:</strong> TypeScript · Node.js · NestJS · MongoDB · Redis · MySQL · PostgreSQL · Java<br>
+<strong>Cloud &amp; Infra:</strong> AWS · Kubernetes · Docker · Event-driven systems · Microservices
+<strong>Architecture Patterns:</strong> Domain-Driven Design (DDD) · Event Sourcing · Multi-tier Caching<br>
+<strong>Frontend:</strong> React · Next.js<br>
+<strong>Quality &amp; DevOps:</strong> Jest · CI/CD Pipelines · Load Testing · Observability (logs, metrics, tracing)</p>
+<hr>
+<h2 class="heading-element" dir="auto">🚀 Recent Highlights</h2>
+<h3 class="heading-element" dir="auto">🏢 Enterprise E-Commerce Platform</h3>
+<p dir="auto"><strong>Lead Software Developer</strong> | Stone Rooster Inc (Mar 2025 - Present)</p>
+<p dir="auto">Led the end-to-end design and implementation of a production-ready enterprise e-commerce platform, owning architecture and development of a complete microservices ecosystem built with <strong>NestJS</strong>, <strong>TypeScript</strong>, <strong>MongoDB</strong>, <strong>Redis</strong>, and <strong>Kubernetes</strong>.</p>
+<p dir="auto"><strong>Key Achievements:</strong></p>
+<ul dir="auto">
+<li>⚡ <strong>Performance at Scale</strong> — Reduced database load through multi-tier caching and query optimization, enabling <strong>sub-100ms operations</strong> for real-time cart operations and promotion calculations</li>
+<li>🏗️ <strong>Complete Microservices Ecosystem</strong> — Architected and delivered the entire platform (cart, payments, promotions, shipping, tax, inventory, pricing) with enterprise-grade scalability and maintainability</li>
+<li>💳 <strong>Resilient Payment Orchestration</strong> — Designed fault-tolerant payments system integrating <strong>Stripe</strong>, <strong>Braintree</strong>, <strong>Paypal</strong>, and custom voucher processing with built-in failure recovery, refunds, and multi-processor splitting</li>
+<li>🎯 <strong>Intelligent Business Logic</strong> — Built configurable promotions engine, real-time tax/shipping calculations, and complex cart flows with <strong>multi-currency support</strong></li>
+<li>🔒 <strong>Enterprise-Grade Practices</strong> — Enforced strict type safety, functional error handling, automated CI/CD pipelines, and comprehensive Jest testing for long-term maintainability</li>
+<li>🤖 <strong>AI Integration</strong> — Built AI capabilities to expose API and data analytics functionality</li>
+</ul>
+<hr>
+<h2 class="heading-element" dir="auto">Connect</h2>
+<p dir="auto"><a href="https://www.linkedin.com/in/ncornag/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&amp;logo=linkedin&amp;logoColor=white" alt="LinkedIn"></a></p>
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <h2 class="section-title">Pinned</h2>
+      <ol class="pinned-grid">
+<li class="pin-card"><div class="pin-head"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg><a class="pin-name" href="https://github.com/ncornag/ecomm">ecomm</a><span class="pin-public">Public</span></div><p class="pin-desc">Catalog &amp; Promotions ecomm SaaS</p><div class="pin-meta"><span class="lang"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span><a class="pin-stars" href="https://github.com/ncornag/ecomm/stargazers"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"/></svg>1</a></div></li><li class="pin-card"><div class="pin-head"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg><a class="pin-name" href="https://github.com/ncornag/microbase">microbase</a><span class="pin-public">Public</span></div><p class="pin-desc">Microbase docs</p><div class="pin-meta"><span class="lang"><span class="lang-dot" style="background:#e34c26"></span>HTML</span></div></li><li class="pin-card"><div class="pin-head"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg><a class="pin-name" href="https://github.com/ncornag/nestjs-starter">nestjs-starter</a><span class="pin-public">Public</span></div><p class="pin-desc">ecomm in NestJS</p><div class="pin-meta"><span class="lang"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span></div></li><li class="pin-card"><div class="pin-head"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg><a class="pin-name" href="https://github.com/ncornag/catalog">catalog</a><span class="pin-public">Public</span></div><p class="pin-desc">Deprecated, please check the project below</p><div class="pin-meta"><span class="lang"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span><a class="pin-stars" href="https://github.com/ncornag/catalog/stargazers"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"/></svg>1</a></div></li><li class="pin-card"><div class="pin-head"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg><a class="pin-name" href="https://github.com/ncornag/promotions">promotions</a><span class="pin-public">Public</span></div><p class="pin-desc">Deprecated, please check the project below</p><div class="pin-meta"><span class="lang"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span><a class="pin-stars" href="https://github.com/ncornag/promotions/stargazers"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"/></svg>1</a></div></li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">3,095 contributions in the last year</h2>
+      <div class="cal-card">
+        <div class="cal-scroll">
+          <div class="cal">
+            <div class="cal-months"><span style="grid-column-start:1">May</span><span style="grid-column-start:3">Jun</span><span style="grid-column-start:8">Jul</span><span style="grid-column-start:12">Aug</span><span style="grid-column-start:17">Sep</span><span style="grid-column-start:21">Oct</span><span style="grid-column-start:25">Nov</span><span style="grid-column-start:30">Dec</span><span style="grid-column-start:34">Jan</span><span style="grid-column-start:38">Feb</span><span style="grid-column-start:42">Mar</span><span style="grid-column-start:47">Apr</span><span style="grid-column-start:51">May</span></div>
+            <div class="cal-body">
+              <div class="cal-weekdays"><span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span></div>
+              <div class="cal-days"><div class="day" data-level="0" title="No contributions on May 18th."></div><div class="day" data-level="1" title="4 contributions on May 19th."></div><div class="day" data-level="1" title="2 contributions on May 20th."></div><div class="day" data-level="1" title="4 contributions on May 21st."></div><div class="day" data-level="1" title="1 contribution on May 22nd."></div><div class="day" data-level="1" title="1 contribution on May 23rd."></div><div class="day" data-level="1" title="3 contributions on May 24th."></div><div class="day" data-level="0" title="No contributions on May 25th."></div><div class="day" data-level="1" title="1 contribution on May 26th."></div><div class="day" data-level="1" title="5 contributions on May 27th."></div><div class="day" data-level="1" title="4 contributions on May 28th."></div><div class="day" data-level="1" title="6 contributions on May 29th."></div><div class="day" data-level="1" title="3 contributions on May 30th."></div><div class="day" data-level="0" title="No contributions on May 31st."></div><div class="day" data-level="0" title="No contributions on June 1st."></div><div class="day" data-level="0" title="No contributions on June 2nd."></div><div class="day" data-level="0" title="No contributions on June 3rd."></div><div class="day" data-level="1" title="5 contributions on June 4th."></div><div class="day" data-level="0" title="No contributions on June 5th."></div><div class="day" data-level="1" title="1 contribution on June 6th."></div><div class="day" data-level="0" title="No contributions on June 7th."></div><div class="day" data-level="1" title="4 contributions on June 8th."></div><div class="day" data-level="1" title="3 contributions on June 9th."></div><div class="day" data-level="1" title="2 contributions on June 10th."></div><div class="day" data-level="1" title="2 contributions on June 11th."></div><div class="day" data-level="1" title="1 contribution on June 12th."></div><div class="day" data-level="1" title="2 contributions on June 13th."></div><div class="day" data-level="1" title="2 contributions on June 14th."></div><div class="day" data-level="0" title="No contributions on June 15th."></div><div class="day" data-level="1" title="6 contributions on June 16th."></div><div class="day" data-level="1" title="6 contributions on June 17th."></div><div class="day" data-level="1" title="4 contributions on June 18th."></div><div class="day" data-level="1" title="4 contributions on June 19th."></div><div class="day" data-level="1" title="2 contributions on June 20th."></div><div class="day" data-level="1" title="4 contributions on June 21st."></div><div class="day" data-level="0" title="No contributions on June 22nd."></div><div class="day" data-level="1" title="6 contributions on June 23rd."></div><div class="day" data-level="1" title="4 contributions on June 24th."></div><div class="day" data-level="1" title="4 contributions on June 25th."></div><div class="day" data-level="0" title="No contributions on June 26th."></div><div class="day" data-level="0" title="No contributions on June 27th."></div><div class="day" data-level="0" title="No contributions on June 28th."></div><div class="day" data-level="0" title="No contributions on June 29th."></div><div class="day" data-level="0" title="No contributions on June 30th."></div><div class="day" data-level="1" title="7 contributions on July 1st."></div><div class="day" data-level="1" title="3 contributions on July 2nd."></div><div class="day" data-level="1" title="1 contribution on July 3rd."></div><div class="day" data-level="1" title="6 contributions on July 4th."></div><div class="day" data-level="0" title="No contributions on July 5th."></div><div class="day" data-level="0" title="No contributions on July 6th."></div><div class="day" data-level="0" title="No contributions on July 7th."></div><div class="day" data-level="1" title="3 contributions on July 8th."></div><div class="day" data-level="0" title="No contributions on July 9th."></div><div class="day" data-level="0" title="No contributions on July 10th."></div><div class="day" data-level="0" title="No contributions on July 11th."></div><div class="day" data-level="0" title="No contributions on July 12th."></div><div class="day" data-level="0" title="No contributions on July 13th."></div><div class="day" data-level="1" title="2 contributions on July 14th."></div><div class="day" data-level="1" title="8 contributions on July 15th."></div><div class="day" data-level="1" title="6 contributions on July 16th."></div><div class="day" data-level="1" title="14 contributions on July 17th."></div><div class="day" data-level="1" title="4 contributions on July 18th."></div><div class="day" data-level="0" title="No contributions on July 19th."></div><div class="day" data-level="0" title="No contributions on July 20th."></div><div class="day" data-level="0" title="No contributions on July 21st."></div><div class="day" data-level="1" title="2 contributions on July 22nd."></div><div class="day" data-level="0" title="No contributions on July 23rd."></div><div class="day" data-level="1" title="2 contributions on July 24th."></div><div class="day" data-level="1" title="2 contributions on July 25th."></div><div class="day" data-level="1" title="2 contributions on July 26th."></div><div class="day" data-level="1" title="8 contributions on July 27th."></div><div class="day" data-level="0" title="No contributions on July 28th."></div><div class="day" data-level="1" title="6 contributions on July 29th."></div><div class="day" data-level="1" title="5 contributions on July 30th."></div><div class="day" data-level="0" title="No contributions on July 31st."></div><div class="day" data-level="1" title="2 contributions on August 1st."></div><div class="day" data-level="1" title="4 contributions on August 2nd."></div><div class="day" data-level="1" title="2 contributions on August 3rd."></div><div class="day" data-level="1" title="4 contributions on August 4th."></div><div class="day" data-level="1" title="2 contributions on August 5th."></div><div class="day" data-level="1" title="6 contributions on August 6th."></div><div class="day" data-level="1" title="1 contribution on August 7th."></div><div class="day" data-level="1" title="6 contributions on August 8th."></div><div class="day" data-level="1" title="1 contribution on August 9th."></div><div class="day" data-level="0" title="No contributions on August 10th."></div><div class="day" data-level="1" title="2 contributions on August 11th."></div><div class="day" data-level="1" title="2 contributions on August 12th."></div><div class="day" data-level="1" title="2 contributions on August 13th."></div><div class="day" data-level="1" title="3 contributions on August 14th."></div><div class="day" data-level="0" title="No contributions on August 15th."></div><div class="day" data-level="1" title="7 contributions on August 16th."></div><div class="day" data-level="0" title="No contributions on August 17th."></div><div class="day" data-level="1" title="8 contributions on August 18th."></div><div class="day" data-level="1" title="11 contributions on August 19th."></div><div class="day" data-level="1" title="6 contributions on August 20th."></div><div class="day" data-level="1" title="13 contributions on August 21st."></div><div class="day" data-level="1" title="7 contributions on August 22nd."></div><div class="day" data-level="1" title="2 contributions on August 23rd."></div><div class="day" data-level="1" title="8 contributions on August 24th."></div><div class="day" data-level="1" title="14 contributions on August 25th."></div><div class="day" data-level="1" title="11 contributions on August 26th."></div><div class="day" data-level="1" title="12 contributions on August 27th."></div><div class="day" data-level="1" title="10 contributions on August 28th."></div><div class="day" data-level="1" title="5 contributions on August 29th."></div><div class="day" data-level="1" title="4 contributions on August 30th."></div><div class="day" data-level="0" title="No contributions on August 31st."></div><div class="day" data-level="1" title="10 contributions on September 1st."></div><div class="day" data-level="1" title="9 contributions on September 2nd."></div><div class="day" data-level="1" title="5 contributions on September 3rd."></div><div class="day" data-level="1" title="15 contributions on September 4th."></div><div class="day" data-level="1" title="22 contributions on September 5th."></div><div class="day" data-level="0" title="No contributions on September 6th."></div><div class="day" data-level="1" title="4 contributions on September 7th."></div><div class="day" data-level="1" title="10 contributions on September 8th."></div><div class="day" data-level="2" title="26 contributions on September 9th."></div><div class="day" data-level="1" title="16 contributions on September 10th."></div><div class="day" data-level="1" title="16 contributions on September 11th."></div><div class="day" data-level="1" title="9 contributions on September 12th."></div><div class="day" data-level="0" title="No contributions on September 13th."></div><div class="day" data-level="0" title="No contributions on September 14th."></div><div class="day" data-level="1" title="21 contributions on September 15th."></div><div class="day" data-level="1" title="15 contributions on September 16th."></div><div class="day" data-level="1" title="11 contributions on September 17th."></div><div class="day" data-level="1" title="9 contributions on September 18th."></div><div class="day" data-level="1" title="8 contributions on September 19th."></div><div class="day" data-level="1" title="9 contributions on September 20th."></div><div class="day" data-level="1" title="3 contributions on September 21st."></div><div class="day" data-level="1" title="2 contributions on September 22nd."></div><div class="day" data-level="1" title="10 contributions on September 23rd."></div><div class="day" data-level="1" title="8 contributions on September 24th."></div><div class="day" data-level="1" title="9 contributions on September 25th."></div><div class="day" data-level="2" title="26 contributions on September 26th."></div><div class="day" data-level="0" title="No contributions on September 27th."></div><div class="day" data-level="1" title="4 contributions on September 28th."></div><div class="day" data-level="1" title="14 contributions on September 29th."></div><div class="day" data-level="1" title="14 contributions on September 30th."></div><div class="day" data-level="1" title="2 contributions on October 1st."></div><div class="day" data-level="1" title="10 contributions on October 2nd."></div><div class="day" data-level="1" title="19 contributions on October 3rd."></div><div class="day" data-level="0" title="No contributions on October 4th."></div><div class="day" data-level="0" title="No contributions on October 5th."></div><div class="day" data-level="0" title="No contributions on October 6th."></div><div class="day" data-level="0" title="No contributions on October 7th."></div><div class="day" data-level="0" title="No contributions on October 8th."></div><div class="day" data-level="1" title="20 contributions on October 9th."></div><div class="day" data-level="1" title="16 contributions on October 10th."></div><div class="day" data-level="0" title="No contributions on October 11th."></div><div class="day" data-level="0" title="No contributions on October 12th."></div><div class="day" data-level="1" title="5 contributions on October 13th."></div><div class="day" data-level="0" title="No contributions on October 14th."></div><div class="day" data-level="1" title="2 contributions on October 15th."></div><div class="day" data-level="1" title="5 contributions on October 16th."></div><div class="day" data-level="1" title="5 contributions on October 17th."></div><div class="day" data-level="0" title="No contributions on October 18th."></div><div class="day" data-level="0" title="No contributions on October 19th."></div><div class="day" data-level="1" title="6 contributions on October 20th."></div><div class="day" data-level="1" title="8 contributions on October 21st."></div><div class="day" data-level="1" title="4 contributions on October 22nd."></div><div class="day" data-level="1" title="1 contribution on October 23rd."></div><div class="day" data-level="1" title="2 contributions on October 24th."></div><div class="day" data-level="0" title="No contributions on October 25th."></div><div class="day" data-level="0" title="No contributions on October 26th."></div><div class="day" data-level="0" title="No contributions on October 27th."></div><div class="day" data-level="1" title="2 contributions on October 28th."></div><div class="day" data-level="1" title="2 contributions on October 29th."></div><div class="day" data-level="1" title="9 contributions on October 30th."></div><div class="day" data-level="1" title="8 contributions on October 31st."></div><div class="day" data-level="0" title="No contributions on November 1st."></div><div class="day" data-level="0" title="No contributions on November 2nd."></div><div class="day" data-level="0" title="No contributions on November 3rd."></div><div class="day" data-level="0" title="No contributions on November 4th."></div><div class="day" data-level="1" title="2 contributions on November 5th."></div><div class="day" data-level="1" title="6 contributions on November 6th."></div><div class="day" data-level="1" title="2 contributions on November 7th."></div><div class="day" data-level="0" title="No contributions on November 8th."></div><div class="day" data-level="0" title="No contributions on November 9th."></div><div class="day" data-level="1" title="8 contributions on November 10th."></div><div class="day" data-level="1" title="3 contributions on November 11th."></div><div class="day" data-level="1" title="14 contributions on November 12th."></div><div class="day" data-level="1" title="1 contribution on November 13th."></div><div class="day" data-level="1" title="2 contributions on November 14th."></div><div class="day" data-level="0" title="No contributions on November 15th."></div><div class="day" data-level="0" title="No contributions on November 16th."></div><div class="day" data-level="1" title="4 contributions on November 17th."></div><div class="day" data-level="1" title="2 contributions on November 18th."></div><div class="day" data-level="1" title="8 contributions on November 19th."></div><div class="day" data-level="1" title="2 contributions on November 20th."></div><div class="day" data-level="1" title="7 contributions on November 21st."></div><div class="day" data-level="0" title="No contributions on November 22nd."></div><div class="day" data-level="0" title="No contributions on November 23rd."></div><div class="day" data-level="1" title="14 contributions on November 24th."></div><div class="day" data-level="1" title="2 contributions on November 25th."></div><div class="day" data-level="0" title="No contributions on November 26th."></div><div class="day" data-level="1" title="2 contributions on November 27th."></div><div class="day" data-level="1" title="2 contributions on November 28th."></div><div class="day" data-level="0" title="No contributions on November 29th."></div><div class="day" data-level="0" title="No contributions on November 30th."></div><div class="day" data-level="1" title="9 contributions on December 1st."></div><div class="day" data-level="1" title="10 contributions on December 2nd."></div><div class="day" data-level="1" title="2 contributions on December 3rd."></div><div class="day" data-level="1" title="4 contributions on December 4th."></div><div class="day" data-level="0" title="No contributions on December 5th."></div><div class="day" data-level="0" title="No contributions on December 6th."></div><div class="day" data-level="0" title="No contributions on December 7th."></div><div class="day" data-level="0" title="No contributions on December 8th."></div><div class="day" data-level="1" title="10 contributions on December 9th."></div><div class="day" data-level="1" title="9 contributions on December 10th."></div><div class="day" data-level="1" title="4 contributions on December 11th."></div><div class="day" data-level="1" title="8 contributions on December 12th."></div><div class="day" data-level="0" title="No contributions on December 13th."></div><div class="day" data-level="0" title="No contributions on December 14th."></div><div class="day" data-level="1" title="6 contributions on December 15th."></div><div class="day" data-level="1" title="6 contributions on December 16th."></div><div class="day" data-level="1" title="4 contributions on December 17th."></div><div class="day" data-level="1" title="6 contributions on December 18th."></div><div class="day" data-level="1" title="11 contributions on December 19th."></div><div class="day" data-level="0" title="No contributions on December 20th."></div><div class="day" data-level="0" title="No contributions on December 21st."></div><div class="day" data-level="0" title="No contributions on December 22nd."></div><div class="day" data-level="0" title="No contributions on December 23rd."></div><div class="day" data-level="0" title="No contributions on December 24th."></div><div class="day" data-level="0" title="No contributions on December 25th."></div><div class="day" data-level="0" title="No contributions on December 26th."></div><div class="day" data-level="0" title="No contributions on December 27th."></div><div class="day" data-level="0" title="No contributions on December 28th."></div><div class="day" data-level="0" title="No contributions on December 29th."></div><div class="day" data-level="0" title="No contributions on December 30th."></div><div class="day" data-level="1" title="2 contributions on December 31st."></div><div class="day" data-level="0" title="No contributions on January 1st."></div><div class="day" data-level="1" title="16 contributions on January 2nd."></div><div class="day" data-level="0" title="No contributions on January 3rd."></div><div class="day" data-level="0" title="No contributions on January 4th."></div><div class="day" data-level="1" title="5 contributions on January 5th."></div><div class="day" data-level="0" title="No contributions on January 6th."></div><div class="day" data-level="1" title="2 contributions on January 7th."></div><div class="day" data-level="0" title="No contributions on January 8th."></div><div class="day" data-level="1" title="11 contributions on January 9th."></div><div class="day" data-level="0" title="No contributions on January 10th."></div><div class="day" data-level="0" title="No contributions on January 11th."></div><div class="day" data-level="1" title="12 contributions on January 12th."></div><div class="day" data-level="1" title="11 contributions on January 13th."></div><div class="day" data-level="1" title="5 contributions on January 14th."></div><div class="day" data-level="1" title="4 contributions on January 15th."></div><div class="day" data-level="2" title="30 contributions on January 16th."></div><div class="day" data-level="0" title="No contributions on January 17th."></div><div class="day" data-level="0" title="No contributions on January 18th."></div><div class="day" data-level="1" title="20 contributions on January 19th."></div><div class="day" data-level="1" title="2 contributions on January 20th."></div><div class="day" data-level="1" title="2 contributions on January 21st."></div><div class="day" data-level="1" title="3 contributions on January 22nd."></div><div class="day" data-level="1" title="6 contributions on January 23rd."></div><div class="day" data-level="1" title="3 contributions on January 24th."></div><div class="day" data-level="0" title="No contributions on January 25th."></div><div class="day" data-level="1" title="5 contributions on January 26th."></div><div class="day" data-level="1" title="12 contributions on January 27th."></div><div class="day" data-level="1" title="13 contributions on January 28th."></div><div class="day" data-level="1" title="1 contribution on January 29th."></div><div class="day" data-level="1" title="6 contributions on January 30th."></div><div class="day" data-level="0" title="No contributions on January 31st."></div><div class="day" data-level="1" title="2 contributions on February 1st."></div><div class="day" data-level="0" title="No contributions on February 2nd."></div><div class="day" data-level="1" title="6 contributions on February 3rd."></div><div class="day" data-level="1" title="10 contributions on February 4th."></div><div class="day" data-level="1" title="14 contributions on February 5th."></div><div class="day" data-level="1" title="4 contributions on February 6th."></div><div class="day" data-level="1" title="2 contributions on February 7th."></div><div class="day" data-level="0" title="No contributions on February 8th."></div><div class="day" data-level="1" title="8 contributions on February 9th."></div><div class="day" data-level="1" title="12 contributions on February 10th."></div><div class="day" data-level="1" title="12 contributions on February 11th."></div><div class="day" data-level="1" title="8 contributions on February 12th."></div><div class="day" data-level="1" title="8 contributions on February 13th."></div><div class="day" data-level="1" title="15 contributions on February 14th."></div><div class="day" data-level="1" title="7 contributions on February 15th."></div><div class="day" data-level="1" title="4 contributions on February 16th."></div><div class="day" data-level="1" title="7 contributions on February 17th."></div><div class="day" data-level="1" title="2 contributions on February 18th."></div><div class="day" data-level="1" title="12 contributions on February 19th."></div><div class="day" data-level="1" title="4 contributions on February 20th."></div><div class="day" data-level="1" title="2 contributions on February 21st."></div><div class="day" data-level="0" title="No contributions on February 22nd."></div><div class="day" data-level="1" title="16 contributions on February 23rd."></div><div class="day" data-level="1" title="2 contributions on February 24th."></div><div class="day" data-level="1" title="7 contributions on February 25th."></div><div class="day" data-level="1" title="6 contributions on February 26th."></div><div class="day" data-level="2" title="23 contributions on February 27th."></div><div class="day" data-level="0" title="No contributions on February 28th."></div><div class="day" data-level="0" title="No contributions on March 1st."></div><div class="day" data-level="1" title="21 contributions on March 2nd."></div><div class="day" data-level="1" title="5 contributions on March 3rd."></div><div class="day" data-level="1" title="10 contributions on March 4th."></div><div class="day" data-level="1" title="21 contributions on March 5th."></div><div class="day" data-level="1" title="16 contributions on March 6th."></div><div class="day" data-level="0" title="No contributions on March 7th."></div><div class="day" data-level="1" title="8 contributions on March 8th."></div><div class="day" data-level="4" title="76 contributions on March 9th."></div><div class="day" data-level="3" title="55 contributions on March 10th."></div><div class="day" data-level="2" title="30 contributions on March 11th."></div><div class="day" data-level="0" title="No contributions on March 12th."></div><div class="day" data-level="1" title="4 contributions on March 13th."></div><div class="day" data-level="1" title="6 contributions on March 14th."></div><div class="day" data-level="1" title="9 contributions on March 15th."></div><div class="day" data-level="1" title="4 contributions on March 16th."></div><div class="day" data-level="2" title="31 contributions on March 17th."></div><div class="day" data-level="1" title="12 contributions on March 18th."></div><div class="day" data-level="2" title="26 contributions on March 19th."></div><div class="day" data-level="2" title="23 contributions on March 20th."></div><div class="day" data-level="1" title="14 contributions on March 21st."></div><div class="day" data-level="1" title="4 contributions on March 22nd."></div><div class="day" data-level="3" title="56 contributions on March 23rd."></div><div class="day" data-level="1" title="19 contributions on March 24th."></div><div class="day" data-level="1" title="1 contribution on March 25th."></div><div class="day" data-level="1" title="17 contributions on March 26th."></div><div class="day" data-level="1" title="15 contributions on March 27th."></div><div class="day" data-level="1" title="17 contributions on March 28th."></div><div class="day" data-level="1" title="3 contributions on March 29th."></div><div class="day" data-level="1" title="8 contributions on March 30th."></div><div class="day" data-level="1" title="3 contributions on March 31st."></div><div class="day" data-level="1" title="10 contributions on April 1st."></div><div class="day" data-level="1" title="15 contributions on April 2nd."></div><div class="day" data-level="1" title="2 contributions on April 3rd."></div><div class="day" data-level="0" title="No contributions on April 4th."></div><div class="day" data-level="0" title="No contributions on April 5th."></div><div class="day" data-level="1" title="4 contributions on April 6th."></div><div class="day" data-level="1" title="5 contributions on April 7th."></div><div class="day" data-level="0" title="No contributions on April 8th."></div><div class="day" data-level="1" title="7 contributions on April 9th."></div><div class="day" data-level="0" title="No contributions on April 10th."></div><div class="day" data-level="0" title="No contributions on April 11th."></div><div class="day" data-level="0" title="No contributions on April 12th."></div><div class="day" data-level="1" title="7 contributions on April 13th."></div><div class="day" data-level="1" title="11 contributions on April 14th."></div><div class="day" data-level="1" title="2 contributions on April 15th."></div><div class="day" data-level="1" title="22 contributions on April 16th."></div><div class="day" data-level="1" title="21 contributions on April 17th."></div><div class="day" data-level="0" title="No contributions on April 18th."></div><div class="day" data-level="1" title="4 contributions on April 19th."></div><div class="day" data-level="3" title="52 contributions on April 20th."></div><div class="day" data-level="2" title="41 contributions on April 21st."></div><div class="day" data-level="4" title="81 contributions on April 22nd."></div><div class="day" data-level="1" title="19 contributions on April 23rd."></div><div class="day" data-level="1" title="12 contributions on April 24th."></div><div class="day" data-level="3" title="58 contributions on April 25th."></div><div class="day" data-level="1" title="8 contributions on April 26th."></div><div class="day" data-level="1" title="11 contributions on April 27th."></div><div class="day" data-level="2" title="27 contributions on April 28th."></div><div class="day" data-level="1" title="20 contributions on April 29th."></div><div class="day" data-level="1" title="13 contributions on April 30th."></div><div class="day" data-level="0" title="No contributions on May 1st."></div><div class="day" data-level="0" title="No contributions on May 2nd."></div><div class="day" data-level="0" title="No contributions on May 3rd."></div><div class="day" data-level="1" title="7 contributions on May 4th."></div><div class="day" data-level="1" title="7 contributions on May 5th."></div><div class="day" data-level="2" title="31 contributions on May 6th."></div><div class="day" data-level="1" title="13 contributions on May 7th."></div><div class="day" data-level="2" title="29 contributions on May 8th."></div><div class="day" data-level="1" title="15 contributions on May 9th."></div><div class="day" data-level="1" title="9 contributions on May 10th."></div><div class="day" data-level="4" title="84 contributions on May 11th."></div><div class="day" data-level="4" title="86 contributions on May 12th."></div><div class="day" data-level="4" title="68 contributions on May 13th."></div><div class="day" data-level="4" title="72 contributions on May 14th."></div><div class="day" data-level="3" title="67 contributions on May 15th."></div><div class="day" data-level="1" title="9 contributions on May 16th."></div><div class="day" data-level="3" title="57 contributions on May 17th."></div><div class="day" data-level="4" title="90 contributions on May 18th."></div><div class="day" data-level="3" title="53 contributions on May 19th."></div><div class="day" data-level="3" title="61 contributions on May 20th."></div><div class="day" data-level="3" title="67 contributions on May 21st."></div><div class="day" data-level="1" title="7 contributions on May 22nd."></div><div class="day empty"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="cal-legend">
+          <span>Less</span>
+          <div class="day" data-level="0"></div>
+          <div class="day" data-level="1"></div>
+          <div class="day" data-level="2"></div>
+          <div class="day" data-level="3"></div>
+          <div class="day" data-level="4"></div>
+          <span>More</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var btn=document.querySelector('.theme-toggle');
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function current(){
+    var t=document.documentElement.dataset.theme;
+    return t || (mq.matches?'dark':'light');
+  }
+  function render(){
+    var dark=current()==='dark';
+    document.querySelector('.icon-sun').hidden=!dark;
+    document.querySelector('.icon-moon').hidden=dark;
+  }
+  btn.addEventListener('click',function(){
+    var next=current()==='dark'?'light':'dark';
+    document.documentElement.dataset.theme=next;
+    try{localStorage.setItem('theme',next);}catch(e){}
+    render();
+  });
+  mq.addEventListener('change',render);
+  render();
+})();
+</script>
 </body>
 </html>
