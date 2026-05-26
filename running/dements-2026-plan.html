@@ -796,6 +796,7 @@
       border-radius: 4px;
       padding: .5rem .65rem;
     }
+
     .actuals-head {
       display: flex;
       justify-content: space-between;
@@ -803,18 +804,21 @@
       gap: .6rem;
       margin-bottom: .35rem;
     }
+
     .actuals-title {
       font-size: .58rem;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--muted);
     }
+
     .actuals-sum {
       font-size: .62rem;
       font-weight: 500;
       color: var(--text);
       text-align: right;
     }
+
     .act-row {
       display: grid;
       grid-template-columns: 3.6rem 1.2rem 1fr 2.8rem 2.2rem 1.6rem 3.6rem;
@@ -824,16 +828,45 @@
       color: var(--muted);
       padding: .14rem 0;
     }
+
     .act-when,
-    .act-km { color: var(--text); }
-    .act-ico { text-align: center; }
-    .act-zone { font-weight: 500; text-align: center; }
-    .act-zone.z1 { color: #3a7bd5; }
-    .act-zone.z2 { color: #2ecc8a; }
-    .act-zone.z3 { color: #f0c040; }
-    .act-zone.z4 { color: #f07030; }
-    .act-zone.z5 { color: #d03050; }
-    .act-pace { text-align: right; }
+    .act-km {
+      color: var(--text);
+    }
+
+    .act-ico {
+      text-align: center;
+    }
+
+    .act-zone {
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .act-zone.z1 {
+      color: #3a7bd5;
+    }
+
+    .act-zone.z2 {
+      color: #2ecc8a;
+    }
+
+    .act-zone.z3 {
+      color: #f0c040;
+    }
+
+    .act-zone.z4 {
+      color: #f07030;
+    }
+
+    .act-zone.z5 {
+      color: #d03050;
+    }
+
+    .act-pace {
+      text-align: right;
+    }
+
     .coach {
       margin-top: .5rem;
       background: var(--surface2);
@@ -841,6 +874,7 @@
       border-radius: 4px;
       padding: .55rem .65rem;
     }
+
     .coach-head {
       font-size: .58rem;
       letter-spacing: .14em;
@@ -848,14 +882,25 @@
       color: #f07030;
       margin-bottom: .3rem;
     }
+
     .coach-body {
       font-size: .66rem;
       color: var(--muted);
       line-height: 1.65;
     }
-    .coach-body strong { color: var(--text); }
-    .coach-body p { margin-bottom: .4rem; }
-    .coach-body p:last-child { margin-bottom: 0; }
+
+    .coach-body strong {
+      color: var(--text);
+    }
+
+    .coach-body p {
+      margin-bottom: .4rem;
+    }
+
+    .coach-body p:last-child {
+      margin-bottom: 0;
+    }
+
     .adjusted {
       display: inline-block;
       background: #f07030;
@@ -866,10 +911,12 @@
       padding: .1rem .35rem;
       border-radius: 2px;
     }
+
     .vol-bar-track {
       background: var(--border);
       position: relative;
     }
+
     .vol-bar-fill {
       position: absolute;
       left: 0;
@@ -878,6 +925,17 @@
       border-radius: 2px 2px 0 0;
       box-shadow: 0 -1px 0 rgba(255, 255, 255, .45) inset;
     }
+
+    .day.gym {
+      cursor: pointer;
+    }
+
+    .day.gym a {
+      color: inherit;
+      text-decoration: none;
+      display: contents;
+    }
+
     /* /sync:styles */
   </style>
 </head>
@@ -1032,28 +1090,47 @@
       <div class="week-notes">Completed: 5×5km flat Z2. Solid base established.</div>
       <!-- sync:actuals:w1 -->
       <div class="actuals">
-        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.1 km · 38 m D+</span></div>
-        <div class="act-row"><span class="act-when">Mon 11</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">8 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">7:51/km</span></div>
-        <div class="act-row"><span class="act-when">Tue 12</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">8 m</span><span class="act-hr">149</span><span class="act-zone z2">Z2</span><span class="act-pace">7:53/km</span></div>
-        <div class="act-row"><span class="act-when">Wed 13</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">8 m</span><span class="act-hr">152</span><span class="act-zone z3">Z3</span><span class="act-pace">7:57/km</span></div>
-        <div class="act-row"><span class="act-when">Thu 14</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">153</span><span class="act-zone z3">Z3</span><span class="act-pace">8:02/km</span></div>
-        <div class="act-row"><span class="act-when">Fri 15</span><span class="act-ico">🏃</span><span class="act-km">5.1 km</span><span class="act-vert">7 m</span><span class="act-hr">158</span><span class="act-zone z3">Z3</span><span class="act-pace">6:25/km</span></div>
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.1 km ·
+            38 m D+</span></div>
+        <div class="act-row"><span class="act-when">Mon 11</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">8 m</span><span class="act-hr">151</span><span
+            class="act-zone z2">Z2</span><span class="act-pace">7:51/km</span></div>
+        <div class="act-row"><span class="act-when">Tue 12</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">8 m</span><span class="act-hr">149</span><span
+            class="act-zone z2">Z2</span><span class="act-pace">7:53/km</span></div>
+        <div class="act-row"><span class="act-when">Wed 13</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">8 m</span><span class="act-hr">152</span><span
+            class="act-zone z3">Z3</span><span class="act-pace">7:57/km</span></div>
+        <div class="act-row"><span class="act-when">Thu 14</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">7 m</span><span class="act-hr">153</span><span
+            class="act-zone z3">Z3</span><span class="act-pace">8:02/km</span></div>
+        <div class="act-row"><span class="act-when">Fri 15</span><span class="act-ico">🏃</span><span class="act-km">5.1
+            km</span><span class="act-vert">7 m</span><span class="act-hr">158</span><span
+            class="act-zone z3">Z3</span><span class="act-pace">6:25/km</span></div>
       </div>
       <!-- /sync:actuals:w1 -->
       <!-- sync:coach:w1 -->
       <div class="coach" data-hash="2b37299b1057">
         <div class="coach-head">🧭 Coach</div>
-        <div class="coach-body"><p><strong>Five for five — 25.1 km, every run done, bang on the 25 km target.</strong> Outstanding consistency to open the block. But read the heart rate: <strong>three of five runs landed in Z3</strong>, above your 151 bpm VT1 ceiling, and the week averaged 153 bpm. These were meant to be flat Z2 base runs.</p><p>Two things are happening. Mon–Thu you ran genuinely <em>slow</em> (7:51–8:02/km, Z1 pace) yet HR still climbed past 151 — that is May heat and an aerobic engine still waking up, not you forcing the pace. Friday (6:25/km, 158 bpm) you did run hard. Early in a rebuild this is normal, but adaptation is strongest below VT1 — so govern by heart rate, not pace, and ease off the moment the watch reads 151.</p></div>
+        <div class="coach-body">
+          <p><strong>Five for five — 25.1 km, every run done, bang on the 25 km target.</strong> Outstanding consistency
+            to open the block. But read the heart rate: <strong>three of five runs landed in Z3</strong>, above your 151
+            bpm VT1 ceiling, and the week averaged 153 bpm. These were meant to be flat Z2 base runs.</p>
+          <p>Two things are happening. Mon–Thu you ran genuinely <em>slow</em> (7:51–8:02/km, Z1 pace) yet HR still
+            climbed past 151 — that is May heat and an aerobic engine still waking up, not you forcing the pace. Friday
+            (6:25/km, 158 bpm) you did run hard. Early in a rebuild this is normal, but adaptation is strongest below
+            VT1 — so govern by heart rate, not pace, and ease off the moment the watch reads 151.</p>
+        </div>
       </div>
       <!-- /sync:coach:w1 -->
     </div>
   </div>
 
-  <div class="week current open" id="w2">
+  <div class="week" id="w2">
     <div class="week-header" onclick="toggle('w2')">
       <div class="week-num">2</div>
       <div class="week-summary">
-        <div class="week-title">Base Week 2 <span class="current-badge">Current</span></div>
+        <div class="week-title">Base Week 2 <span class="done-badge">Done ✓</span></div>
         <div class="week-date">May 18–24 · 5 runs Z2 flat</div>
       </div>
       <div class="week-stats">
@@ -1066,28 +1143,53 @@
       <div class="week-notes">In progress. 5×5km this week, same as W1.</div>
       <!-- sync:actuals:w2 -->
       <div class="actuals">
-        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.0 km · 38 m D+</span></div>
-        <div class="act-row"><span class="act-when">Mon 18</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">9 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">7:44/km</span></div>
-        <div class="act-row"><span class="act-when">Tue 19</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">157</span><span class="act-zone z3">Z3</span><span class="act-pace">7:34/km</span></div>
-        <div class="act-row"><span class="act-when">Wed 20</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">7:33/km</span></div>
-        <div class="act-row"><span class="act-when">Thu 21</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">6 m</span><span class="act-hr">153</span><span class="act-zone z3">Z3</span><span class="act-pace">7:33/km</span></div>
-        <div class="act-row"><span class="act-when">Fri 22</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">9 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:24/km</span></div>
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.0 km ·
+            38 m D+</span></div>
+        <div class="act-row"><span class="act-when">Mon 18</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">9 m</span><span class="act-hr">151</span><span
+            class="act-zone z2">Z2</span><span class="act-pace">7:44/km</span></div>
+        <div class="act-row"><span class="act-when">Tue 19</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">7 m</span><span class="act-hr">157</span><span
+            class="act-zone z3">Z3</span><span class="act-pace">7:34/km</span></div>
+        <div class="act-row"><span class="act-when">Wed 20</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">7 m</span><span class="act-hr">151</span><span
+            class="act-zone z2">Z2</span><span class="act-pace">7:33/km</span></div>
+        <div class="act-row"><span class="act-when">Thu 21</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">6 m</span><span class="act-hr">153</span><span
+            class="act-zone z3">Z3</span><span class="act-pace">7:33/km</span></div>
+        <div class="act-row"><span class="act-when">Fri 22</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">9 m</span><span class="act-hr">148</span><span
+            class="act-zone z2">Z2</span><span class="act-pace">7:24/km</span></div>
       </div>
       <!-- /sync:actuals:w2 -->
       <!-- sync:coach:w2 -->
       <div class="coach" data-hash="c980d1f1d37a">
         <div class="coach-head">🧭 Coach</div>
-        <div class="coach-body"><p><strong>Another perfect volume week — 25.0 km across five runs, and you had the full target banked by Friday.</strong> The Z2 discipline is improving, too: Z3 time fell from 60% of W1 to <strong>40% this week</strong> (only Tue and Thu crept over 151). Friday's run — 148 bpm, your calmest — is exactly what every base run should feel like. That is the target.</p><p>The pattern is clear and fixable: your <em>pace</em> is genuinely easy (7:24–7:44/km) but <em>HR</em> drifts into Z3. That is heat and early-base cardiac drift, not over-running — so let heart rate govern the run: when it touches 151, slow further or take 30–60 s walk breaks, especially in the second half, and get out before the day warms up. Sat/Sun you have already banked the week's volume — rest, or an optional very easy Z1 jog, nothing more.</p><p><strong>Week 3 — take it exactly as written.</strong> The gym introduction (Tue/Thu) is well-timed and run volume eases to 21 km, which fits where your aerobic system is. No plan change needed; the work now is execution — cap every W3 run at 151 bpm, and treat Saturday's 6 km as your first real test of holding Z2 over a longer effort. Smart beats heroic.</p></div>
+        <div class="coach-body">
+          <p><strong>Another perfect volume week — 25.0 km across five runs, and you had the full target banked by
+              Friday.</strong> The Z2 discipline is improving, too: Z3 time fell from 60% of W1 to <strong>40% this
+              week</strong> (only Tue and Thu crept over 151). Friday's run — 148 bpm, your calmest — is exactly what
+            every base run should feel like. That is the target.</p>
+          <p>The pattern is clear and fixable: your <em>pace</em> is genuinely easy (7:24–7:44/km) but <em>HR</em>
+            drifts into Z3. That is heat and early-base cardiac drift, not over-running — so let heart rate govern the
+            run: when it touches 151, slow further or take 30–60 s walk breaks, especially in the second half, and get
+            out before the day warms up. Sat/Sun you have already banked the week's volume — rest, or an optional very
+            easy Z1 jog, nothing more.</p>
+          <p><strong>Week 3 — take it exactly as written.</strong> The gym introduction (Tue/Thu) is well-timed and run
+            volume eases to 21 km, which fits where your aerobic system is. No plan change needed; the work now is
+            execution — cap every W3 run at 151 bpm, and treat Saturday's 6 km as your first real test of holding Z2
+            over a longer effort. Smart beats heroic.</p>
+        </div>
       </div>
       <!-- /sync:coach:w2 -->
     </div>
   </div>
 
-  <div class="week" id="w3">
+  <div class="week current open" id="w3">
     <div class="week-header" onclick="toggle('w3')">
       <div class="week-num">3</div>
       <div class="week-summary">
-        <div class="week-title">Introduce Gym</div>
+        <div class="week-title">Introduce Gym <span class="current-badge">Current</span></div>
         <div class="week-date">May 25–31 · 4 runs · 2 gym</div>
       </div>
       <div class="week-stats">
@@ -1144,6 +1246,35 @@
       <div class="week-notes"><strong>Introduce gym (Tue/Thu)</strong> + first proper long run on Saturday (6km).
         Foundation gym: Bulgarian split squats, single-leg calf raises, glute bridges, dead bugs, Copenhagen planks.
       </div>
+      <!-- sync:actuals:w3 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">1 run · 5.0 km · 6
+            m D+</span></div>
+        <div class="act-row"><span class="act-when">Mon 25</span><span class="act-ico">🏃</span><span class="act-km">5.0
+            km</span><span class="act-vert">6 m</span><span class="act-hr">149</span><span
+            class="act-zone z2">Z2</span><span class="act-pace">7:33/km</span></div>
+      </div>
+      <!-- /sync:actuals:w3 -->
+      <!-- sync:coach:w3 -->
+      <div class="coach" data-hash="2a65120a3d74">
+        <div class="coach-head">🧭 Coach</div>
+        <div class="coach-body">
+          <p><strong>Week 3 has opened with your cleanest run yet.</strong> Monday: 5.0 km, 149 bpm average, 153 bpm max
+            — entirely inside Z2 for the first time across three weeks. That is exactly what base training looks like.
+            The improved pacing (7:33/km vs 7:44 last week) while keeping HR lower is a direct sign of early aerobic
+            adaptation — keep it up.</p>
+          <p>This week the structure shifts. <strong>Gym sessions are on Tue and Thu — their own dedicated days,
+              separate from the runs.</strong> First session: all five exercises at bodyweight only. Focus on the two
+            hardest patterns to get right: on the <strong>Bulgarian split squat</strong>, push through the heel of the
+            front foot and keep 90% of the work on the front leg; on the <strong>single-leg calf raise</strong>, the
+            eccentric — the 3-second lowering — is the whole point, don’t rush it down. Those two exercises will feel
+            easier than they should at bodyweight; that is correct for week one.</p>
+          <p>Three runs remain (Wed, Fri, Sat). <strong>Cap every one at 151 bpm</strong> — Monday showed you can do it.
+            Saturday’s 6 km long run is the week’s key session: run it easy, walk any moment HR approaches the ceiling,
+            and finish feeling like you could have gone further. Smart beats heroic.</p>
+        </div>
+      </div>
+      <!-- /sync:coach:w3 -->
     </div>
   </div>
 
@@ -2671,8 +2802,8 @@
 
     const weeks = [
       { label: '1', km: 25, elev: 0, color: '#1a9e63', done: true },
-      { label: '2', km: 25, elev: 0, color: '#1a9e63', current: true },
-      { label: '3', km: 21, elev: 0, color: '#1a9e63' },
+      { label: '2', km: 25, elev: 0, color: '#1a9e63', done: true },
+      { label: '3', km: 21, elev: 0, color: '#1a9e63', current: true },
       { label: '4', km: 22, elev: 0, color: '#1a9e63' },
       { label: '5', km: 23, elev: 80, color: '#2a9a6a' },
       { label: '6', km: 17, elev: 30, color: '#2a5fb5', reco: true },
@@ -2705,7 +2836,8 @@
     // sync:chart
     const actuals = {
       1: { km: 25.1, elev: 38 },
-      2: { km: 25.0, elev: 38 }
+      2: { km: 25.0, elev: 38 },
+      3: { km: 5.0, elev: 6 }
     };
 
     weeks.forEach((w, i) => {
@@ -2735,6 +2867,10 @@
       chart.appendChild(wrap);
     });
     // /sync:chart
+
+    document.querySelectorAll('.day.gym .day-km').forEach(el => {
+      el.innerHTML = `<a href="gimnasio-semana1.html">${el.textContent}</a>`;
+    });
 
     function toggleTheme() {
       const html = document.documentElement;
