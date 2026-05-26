@@ -12,12 +12,13 @@ ahead.
 
 ## Files
 
-| File | Role |
-|------|------|
-| `.claude/skills/sync-training-plan/parse-log.py` | Data engine — run it, use its JSON |
-| `running/dements-2026-plan.html` | The plan — the file you edit |
-| `running/running-zones.html` | The athlete's lab HR zones — read for coach analysis |
-| `running/data/tcx-*.csv` | Activity exports (refreshed by the engine) |
+| File                                             | Role                                                                             |
+| ------------------------------------------------ | -------------------------------------------------------------------------------- |
+| `.claude/skills/sync-training-plan/parse-log.py` | Data engine — run it, use its JSON                                               |
+| `running/dements-2026-plan.html`                 | The plan — the file you edit                                                     |
+| `running/running-zones.html`                     | The athlete's lab HR zones — read for coach analysis                             |
+| `running/gimnasio-semana1.html`                  | The gym strength programme — read for coach context on StrengthTraining sessions |
+| `running/data/tcx-*.csv`                         | Activity exports (refreshed by the engine)                                       |
 
 The athlete is **57, with an injury history**; the plan's own principle is
 "smart beats heroic." Coach accordingly — conservative, never push through
@@ -40,8 +41,15 @@ engine fell back to existing CSVs. Tell the user which weeks have data.
 
 Key JSON fields: `current_week`, `weeks[]` (each with `status`, `plan_km`,
 `plan_elev`, `actual_km`, `actual_elev`, `km_pct`, `polarized`, `avg_hr`,
-`zone_km`, `activities[]`, `has_data`, `data_hash`, `actuals_html`), and
-`chart_js`.
+`zone_km`, `activities[]`, `has_data`, `data_hash`, `actuals_html`,
+`plan_days[]`), and `chart_js`.
+
+`plan_days[]` is the planned day grid extracted from the HTML week card. Each
+entry is `{"day":"Mon","type":"z2","km":"5km","label":"Z2"}`. `type` values:
+`z2` / `z4` / `strides` / `trail-z2` / `trail-hike` / `rec` / `gym` / `rest`.
+An empty list means the week card has no day grid (typically W1–W2). Use this
+array when writing coach blocks so every factual claim about remaining sessions,
+gym days, and session order is correct.
 
 ### 2. One-time setup (skip if already present)
 
@@ -52,7 +60,7 @@ is absent, this is the first run:
 - Mark the volume chart's render code: find the `weeks.forEach(w => {` block and
   its matching closing `});`, and replace that whole block with the engine's
   `chart_js` value, fenced by JS-comment markers each on their own line (a `<!--
-  -->` HTML comment is not valid inside `<script>`):
+-->` HTML comment is not valid inside `<script>`):
   ```
       // sync:chart
   <chart_js from JSON>
@@ -177,6 +185,12 @@ specific, and encouraging; never generic.
   common base-phase mistake; call it out.
 - **Cite the data**: volume vs plan (`km_pct`), elevation, `avg_hr`,
   consistency, specific runs from `activities[]`.
+- **Use `plan_days[]` for schedule facts**: before writing phrases like
+  "gym on Tue/Thu", "three runs remain", "your long run is Saturday", derive
+  those claims directly from `plan_days[]`. Count remaining run-type days
+  (type `z2`, `z4`, `strides`, `trail-z2`, `trail-hike`, `rec`) after the last
+  logged activity's date; list gym days by day name; never infer schedule from
+  prose. If `plan_days` is empty, omit schedule-specific claims.
 - Cover, in 3–6 sentences: how the week went, what was good, what to watch,
   and concrete guidance for the weeks ahead. Reference plan principles when
   relevant (vert specificity, power-hike practice, eccentric descents,
@@ -189,98 +203,123 @@ specific, and encouraging; never generic.
 Insert verbatim before `</style>` on first run:
 
 ```css
-    /* sync:styles */
-    /* injected by the sync-training-plan skill — do not edit by hand */
-    .actuals {
-      margin-top: .7rem;
-      background: var(--surface2);
-      border-left: 2px solid #2ecc8a;
-      border-radius: 4px;
-      padding: .5rem .65rem;
-    }
-    .actuals-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: .6rem;
-      margin-bottom: .35rem;
-    }
-    .actuals-title {
-      font-size: .58rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .actuals-sum {
-      font-size: .62rem;
-      font-weight: 500;
-      color: var(--text);
-      text-align: right;
-    }
-    .act-row {
-      display: grid;
-      grid-template-columns: 3.6rem 1.2rem 1fr 2.8rem 2.2rem 1.6rem 3.6rem;
-      gap: .3rem;
-      align-items: center;
-      font-size: .62rem;
-      color: var(--muted);
-      padding: .14rem 0;
-    }
-    .act-when,
-    .act-km { color: var(--text); }
-    .act-ico { text-align: center; }
-    .act-zone { font-weight: 500; text-align: center; }
-    .act-zone.z1 { color: #3a7bd5; }
-    .act-zone.z2 { color: #2ecc8a; }
-    .act-zone.z3 { color: #f0c040; }
-    .act-zone.z4 { color: #f07030; }
-    .act-zone.z5 { color: #d03050; }
-    .act-pace { text-align: right; }
-    .coach {
-      margin-top: .5rem;
-      background: var(--surface2);
-      border-left: 2px solid #f07030;
-      border-radius: 4px;
-      padding: .55rem .65rem;
-    }
-    .coach-head {
-      font-size: .58rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: #f07030;
-      margin-bottom: .3rem;
-    }
-    .coach-body {
-      font-size: .66rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-    .coach-body strong { color: var(--text); }
-    .coach-body p { margin-bottom: .4rem; }
-    .coach-body p:last-child { margin-bottom: 0; }
-    .adjusted {
-      display: inline-block;
-      background: #f07030;
-      color: #fff;
-      font-size: .56rem;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      padding: .1rem .35rem;
-      border-radius: 2px;
-    }
-    .vol-bar-track {
-      background: var(--border);
-      position: relative;
-    }
-    .vol-bar-fill {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 2px 2px 0 0;
-      box-shadow: 0 -1px 0 rgba(255, 255, 255, .45) inset;
-    }
-    /* /sync:styles */
+/* sync:styles */
+/* injected by the sync-training-plan skill — do not edit by hand */
+.actuals {
+  margin-top: 0.7rem;
+  background: var(--surface2);
+  border-left: 2px solid #2ecc8a;
+  border-radius: 4px;
+  padding: 0.5rem 0.65rem;
+}
+.actuals-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+.actuals-title {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.actuals-sum {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text);
+  text-align: right;
+}
+.act-row {
+  display: grid;
+  grid-template-columns: 3.6rem 1.2rem 1fr 2.8rem 2.2rem 1.6rem 3.6rem;
+  gap: 0.3rem;
+  align-items: center;
+  font-size: 0.62rem;
+  color: var(--muted);
+  padding: 0.14rem 0;
+}
+.act-when,
+.act-km {
+  color: var(--text);
+}
+.act-ico {
+  text-align: center;
+}
+.act-zone {
+  font-weight: 500;
+  text-align: center;
+}
+.act-zone.z1 {
+  color: #3a7bd5;
+}
+.act-zone.z2 {
+  color: #2ecc8a;
+}
+.act-zone.z3 {
+  color: #f0c040;
+}
+.act-zone.z4 {
+  color: #f07030;
+}
+.act-zone.z5 {
+  color: #d03050;
+}
+.act-pace {
+  text-align: right;
+}
+.coach {
+  margin-top: 0.5rem;
+  background: var(--surface2);
+  border-left: 2px solid #f07030;
+  border-radius: 4px;
+  padding: 0.55rem 0.65rem;
+}
+.coach-head {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f07030;
+  margin-bottom: 0.3rem;
+}
+.coach-body {
+  font-size: 0.66rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.coach-body strong {
+  color: var(--text);
+}
+.coach-body p {
+  margin-bottom: 0.4rem;
+}
+.coach-body p:last-child {
+  margin-bottom: 0;
+}
+.adjusted {
+  display: inline-block;
+  background: #f07030;
+  color: #fff;
+  font-size: 0.56rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+}
+.vol-bar-track {
+  background: var(--border);
+  position: relative;
+}
+.vol-bar-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+/* /sync:styles */
 ```
 
 ## Notes
@@ -289,4 +328,6 @@ Insert verbatim before `</style>` on first run:
   recompute week dates or zone boundaries by hand; use its JSON.
 - Activities before 2026-05-11 or after the 26-week window are ignored.
 - StrengthTraining activities count as sessions but contribute 0 km; they show
-  as `gym` in the actuals panel.
+  as `gym` in the actuals panel. When coaching on a week that includes a gym
+  session, read `running/gimnasio-semana1.html` for the exercise list and cues
+  so your feedback is specific to what the athlete actually did.

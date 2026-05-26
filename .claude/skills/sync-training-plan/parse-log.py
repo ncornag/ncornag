@@ -31,6 +31,7 @@ import glob
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import date, datetime, timedelta
@@ -248,7 +249,52 @@ def render_actuals_html(acts):
         '      </div>')
 
 
-def aggregate(activities, today):
+# Regex helpers for extracting the planned day grid from the HTML.
+_WEEK_ID_RE = re.compile(r'<div[^>]+id="(w\d+)"')
+_DAY_CELL_RE = re.compile(
+    r'<div class="day ([^"]+)">\s*'
+    r'<div class="day-label">([^<]+)</div>\s*'
+    r'<div class="day-icon">[^<]*</div>\s*'
+    r'<div class="day-km">([^<]+)</div>\s*'
+    r'<div class="day-type">([^<]+)</div>',
+    re.MULTILINE,
+)
+
+
+def parse_plan_days(html_path):
+    """Extract the planned day grid for each week from dements-2026-plan.html.
+
+    Returns a dict mapping week number (int) to a list of day dicts:
+      [{"day": "Mon", "type": "z2", "km": "5km", "label": "Z2"}, ...]
+    Weeks whose card has no <div class="days"> block (e.g. W1/W2 in the early
+    plan) return an empty list.
+    """
+    try:
+        with open(html_path, encoding="utf-8") as f:
+            html = f.read()
+    except OSError:
+        return {}
+
+    positions = [(m.start(), int(m.group(1)[1:])) for m in _WEEK_ID_RE.finditer(html)]
+    result = {}
+    for i, (pos, wnum) in enumerate(positions):
+        end = positions[i + 1][0] if i + 1 < len(positions) else len(html)
+        block = html[pos:end]
+        days = [
+            {
+                "day": m.group(2).strip(),
+                "type": m.group(1).strip(),
+                "km": m.group(3).strip(),
+                "label": m.group(4).strip(),
+            }
+            for m in _DAY_CELL_RE.finditer(block)
+        ]
+        if days:
+            result[wnum] = days
+    return result
+
+
+def aggregate(activities, today, plan_days_by_week=None):
     by_week = {}
     for a in activities:
         by_week.setdefault(a["week"], []).append(a)
@@ -299,6 +345,7 @@ def aggregate(activities, today):
             "activities": acts,
             "data_hash": week_hash(acts) if acts else None,
             "actuals_html": render_actuals_html(acts) if acts else None,
+            "plan_days": (plan_days_by_week or {}).get(n, []),
         })
     return weeks
 
@@ -367,7 +414,9 @@ def main():
     for msg in errors:
         print(f"warning: {msg}", file=sys.stderr)
 
-    weeks = aggregate(activities, today)
+    html_path = os.path.join(repo, "running", "dements-2026-plan.html")
+    plan_days_by_week = parse_plan_days(html_path)
+    weeks = aggregate(activities, today, plan_days_by_week)
     cw = week_of(today)
     print(json.dumps({
         "generated": datetime.now().isoformat(timespec="seconds"),
