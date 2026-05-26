@@ -12,13 +12,13 @@ ahead.
 
 ## Files
 
-| File                                             | Role                                                                             |
-| ------------------------------------------------ | -------------------------------------------------------------------------------- |
-| `.claude/skills/sync-training-plan/parse-log.py` | Data engine — run it, use its JSON                                               |
-| `running/dements-2026-plan.html`                 | The plan — the file you edit                                                     |
-| `running/running-zones.html`                     | The athlete's lab HR zones — read for coach analysis                             |
-| `running/gimnasio-semana1.html`                  | The gym strength programme — read for coach context on StrengthTraining sessions |
-| `running/data/tcx-*.csv`                         | Activity exports (refreshed by the engine)                                       |
+| File                                             | Role                                                                                           |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `.claude/skills/sync-training-plan/parse-log.py` | Data engine — run it, use its JSON                                                             |
+| `running/dements-2026-plan.html`                 | The plan — the file you edit                                                                   |
+| `running/running-zones.html`                     | The athlete's lab HR zones — read for coach analysis                                           |
+| `running/gimnasio-semana3.html`                  | The gym strength programme — read for coach context on StrengthTraining sessions for each week |
+| `running/data/tcx-*.csv`                         | Activity exports (refreshed by the engine)                                                     |
 
 The athlete is **57, with an injury history**; the plan's own principle is
 "smart beats heroic." Coach accordingly — conservative, never push through
@@ -329,5 +329,5 @@ Insert verbatim before `</style>` on first run:
 - Activities before 2026-05-11 or after the 26-week window are ignored.
 - StrengthTraining activities count as sessions but contribute 0 km; they show
   as `gym` in the actuals panel. When coaching on a week that includes a gym
-  session, read `running/gimnasio-semana1.html` for the exercise list and cues
-  so your feedback is specific to what the athlete actually did.
+  session, read `running/gimnasio-3.html` for the exercise list and cues
+  so your feedback is specific to what the athlete actually did in that week (3)
