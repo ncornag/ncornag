@@ -26,6 +26,7 @@
 set -euo pipefail
 
 readonly DEFAULT_LOG_DIR="/Users/ncornag/Library/CloudStorage/GoogleDrive-ncornag@gmail.com/My Drive/personal/running/log"
+readonly DEFAULT_TAPIRIIK_DIR="/Users/ncornag/Dropbox/Apps/tapiriik"
 
 usage() {
   echo "Usage: $(basename "$0") YEAR MONTH" >&2
@@ -53,6 +54,24 @@ log_dir="${TCX_LOG_DIR:-$DEFAULT_LOG_DIR}"
 # TCX files are organised into a per-year subfolder, e.g. log/2026/.
 year_dir="$log_dir/$year"
 [ -d "$year_dir" ] || { echo "Error: no log folder for year $year: $year_dir" >&2; exit 1; }
+
+# Copy new TCX files from the tapiriik export folder into the per-year log subfolder.
+tapiriik_dir="${TAPIRIIK_DIR:-$DEFAULT_TAPIRIIK_DIR}"
+if [ -d "$tapiriik_dir" ]; then
+  shopt -s nullglob
+  new_count=0
+  for src in "$tapiriik_dir/$year-$month-"*.tcx; do
+    dest="$year_dir/$(basename "$src")"
+    if [ ! -e "$dest" ]; then
+      mv "$src" "$dest"
+      new_count=$((new_count + 1))
+    fi
+  done
+  shopt -u nullglob
+  [ "$new_count" -gt 0 ] && echo "Moved $new_count new .tcx file$([ "$new_count" -eq 1 ] && echo '' || echo s) from tapiriik to $year_dir"
+else
+  echo "Warning: tapiriik folder not found: $tapiriik_dir — skipping sync" >&2
+fi
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 out_dir="$script_dir/data"
