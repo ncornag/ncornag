@@ -54,6 +54,14 @@ ICONS = {"Running": "\U0001F3C3", "Hiking": "\U0001F97E",
 TYPE_NOUN = {"Running": "run", "Hiking": "hike", "StrengthTraining": "gym"}
 ZONES = ("Z1", "Z2", "Z3", "Z4", "Z5")
 
+# Canonical icon and zone-class for each plan day type (used when regenerating the days grid)
+DAY_ICON = {
+    "z2": "\U0001F3C3", "trail-z2": "⛰", "trail-hike": "⛰",
+    "z4": "\U0001F525", "strides": "⚡", "rec": "\U0001F3C3",
+    "gym": "\U0001F4AA", "rest": "\U0001F4A4",
+}
+DAY_ELEV_TYPES = {"trail-z2", "trail-hike"}
+
 
 def hr_zone(hr):
     """Map an average HR to a lab-calibrated zone (VT1 151, VT2 173)."""
@@ -254,8 +262,10 @@ _WEEK_ID_RE = re.compile(r'<div[^>]+id="(w\d+)"')
 _DAY_CELL_RE = re.compile(
     r'<div class="day ([^"]+)">\s*'
     r'<div class="day-label">([^<]+)</div>\s*'
+    r'(?:<div class="day-done-dot">[^<]*</div>\s*)?'  # optional logged indicator
     r'<div class="day-icon">[^<]*</div>\s*'
     r'<div class="day-km">([^<]+)</div>\s*'
+    r'(?:<div class="day-elev">([^<]*)</div>\s*)?'
     r'<div class="day-type">([^<]+)</div>',
     re.MULTILINE,
 )
@@ -265,9 +275,7 @@ def parse_plan_days(html_path):
     """Extract the planned day grid for each week from dements-2026-plan.html.
 
     Returns a dict mapping week number (int) to a list of day dicts:
-      [{"day": "Mon", "type": "z2", "km": "5km", "label": "Z2"}, ...]
-    Weeks whose card has no <div class="days"> block (e.g. W1/W2 in the early
-    plan) return an empty list.
+      [{"day": "Mon", "type": "z2", "km": "5km", "elev": "50m", "label": "Z2"}, ...]
     """
     try:
         with open(html_path, encoding="utf-8") as f:
@@ -283,15 +291,53 @@ def parse_plan_days(html_path):
         days = [
             {
                 "day": m.group(2).strip(),
-                "type": m.group(1).strip(),
+                # Strip the "logged" marker class if present — it's injected by
+                # the sync engine and must not be treated as a plan day type.
+                "type": m.group(1).strip().replace(" logged", ""),
                 "km": m.group(3).strip(),
-                "label": m.group(4).strip(),
+                "elev": (m.group(4) or "").strip(),
+                "label": m.group(5).strip(),
             }
             for m in _DAY_CELL_RE.finditer(block)
         ]
         if days:
             result[wnum] = days
     return result
+
+
+def render_days_html(plan_days, logged_days):
+    """Regenerate the full .days grid from plan_days[], marking logged chips.
+
+    logged_days is a set of weekday abbreviations (e.g. {"Mon", "Tue"}) for
+    days where at least one activity was recorded that week.
+    Returns the full <div class="days">...</div> block as a string.
+    """
+    chips = []
+    for d in plan_days:
+        day_name = d["day"]
+        css_type = d["type"]
+        extra_cls = " logged" if day_name in logged_days else ""
+        icon = DAY_ICON.get(css_type, "•")
+        done_dot = ('          <div class="day-done-dot">✓</div>\n'
+                    if day_name in logged_days else "")
+        elev_line = ""
+        if d.get("elev") and d["elev"] not in ("", "—"):
+            elev_line = f'          <div class="day-elev">{d["elev"]}</div>\n'
+        chips.append(
+            f'        <div class="day {css_type}{extra_cls}">\n'
+            f'          <div class="day-label">{day_name}</div>\n'
+            f'{done_dot}'
+            f'          <div class="day-icon">{icon}</div>\n'
+            f'          <div class="day-km">{d["km"]}</div>\n'
+            f'{elev_line}'
+            f'          <div class="day-type">{d["label"]}</div>\n'
+            f'        </div>'
+        )
+    return (
+        '      <div class="days">\n'
+        + "\n".join(chips) + "\n"
+        '      </div>'
+    )
 
 
 def aggregate(activities, today, plan_days_by_week=None):
@@ -346,6 +392,11 @@ def aggregate(activities, today, plan_days_by_week=None):
             "data_hash": week_hash(acts) if acts else None,
             "actuals_html": render_actuals_html(acts) if acts else None,
             "plan_days": (plan_days_by_week or {}).get(n, []),
+            "logged_days": sorted({a["weekday"] for a in acts}),
+            "days_html": render_days_html(
+                (plan_days_by_week or {}).get(n, []),
+                {a["weekday"] for a in acts},
+            ) if (plan_days_by_week or {}).get(n) else None,
         })
     return weeks
 

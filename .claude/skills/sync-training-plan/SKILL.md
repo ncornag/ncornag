@@ -26,7 +26,7 @@ warning signs.
 
 ## Workflow
 
-Do these steps in order. Steps 2–7 all edit `running/dements-2026-plan.html`.
+Do these steps in order. Steps 2–8 all edit `running/dements-2026-plan.html`.
 
 ### 1. Run the engine
 
@@ -42,14 +42,20 @@ engine fell back to existing CSVs. Tell the user which weeks have data.
 Key JSON fields: `current_week`, `weeks[]` (each with `status`, `plan_km`,
 `plan_elev`, `actual_km`, `actual_elev`, `km_pct`, `polarized`, `avg_hr`,
 `zone_km`, `activities[]`, `has_data`, `data_hash`, `actuals_html`,
-`plan_days[]`), and `chart_js`.
+`plan_days[]`, `logged_days`, `days_html`), and `chart_js`.
 
 `plan_days[]` is the planned day grid extracted from the HTML week card. Each
-entry is `{"day":"Mon","type":"z2","km":"5km","label":"Z2"}`. `type` values:
-`z2` / `z4` / `strides` / `trail-z2` / `trail-hike` / `rec` / `gym` / `rest`.
-An empty list means the week card has no day grid (typically W1–W2). Use this
-array when writing coach blocks so every factual claim about remaining sessions,
-gym days, and session order is correct.
+entry is `{"day":"Mon","type":"z2","km":"5km","elev":"","label":"Z2"}`. `type`
+values: `z2` / `z4` / `strides` / `trail-z2` / `trail-hike` / `rec` / `gym` /
+`rest`. Use this array when writing coach blocks so every factual claim about
+remaining sessions, gym days, and session order is correct.
+
+`logged_days` is a sorted list of weekday abbreviations (e.g. `["Mon","Wed"]`)
+for days with at least one logged activity that week.
+
+`days_html` is the regenerated `<div class="days">…</div>` block with a green
+`.day-done-dot` element inserted into each chip whose weekday appears in
+`logged_days`. It is `null` when `plan_days` is empty for that week.
 
 ### 2. One-time setup (skip if already present)
 
@@ -68,7 +74,25 @@ is absent, this is the first run:
   ```
   `maxKm`, `maxEl` and `chart` are declared just above and stay in scope.
 
-### 3. Write the actuals panel for each week with data
+### 3. Refresh the day-chip grid for each week with data
+
+For every `weeks[]` entry where `days_html` is non-null, locate the
+`<!-- sync:days:wN -->` / `<!-- /sync:days:wN -->` markers inside the week card
+and replace everything between them with the engine's `days_html` value:
+
+```
+      <!-- sync:days:wN -->
+<days_html from JSON>
+      <!-- /sync:days:wN -->
+```
+
+This regenerates the entire `<div class="days">…</div>` block, adding a green
+`.day-done-dot` inside each chip that has a matching logged activity. It is
+deterministic: re-running with the same data must produce zero diff.
+
+If `days_html` is null for a week (e.g. the card has no day grid), skip it.
+
+### 4. Write the actuals panel for each week with data
 
 For every `weeks[]` entry where `has_data` is true, in the matching `<div
 class="week" id="wN">`, locate the `<div class="week-notes">…</div>` inside
@@ -84,7 +108,7 @@ The engine's `actuals_html` is already rendered HTML — drop it in verbatim. If
 the delimiters already exist, replace only what is between them. This is
 deterministic: re-running with the same data must produce zero diff here.
 
-### 4. Write the coach block for each week with data
+### 5. Write the coach block for each week with data
 
 Immediately after each `<!-- /sync:actuals:wN -->`, maintain a coach block:
 
@@ -109,7 +133,7 @@ A `done` or `current` week with **no** logged data still gets a coach block
 (no actuals panel) flagging the missing data — silence on a missed week is bad
 coaching.
 
-### 5. Update week status
+### 6. Update week status
 
 For every week, make the card match the JSON `status`:
 
@@ -124,7 +148,7 @@ status badge (`done-badge`, `current-badge`). **Preserve** `race-badge` and
 `qualifier-badge` — those are not status badges. Keep `recovery-week` /
 `race-week` / `qualifier-week` classes untouched.
 
-### 6. Refresh the volume chart
+### 7. Refresh the volume chart
 
 Replace everything between `// sync:chart` and `// /sync:chart` with the
 engine's `chart_js` value. This redraws each past week's bar as a planned track
@@ -135,7 +159,7 @@ each week's `status`: done weeks get `done: true`, the current week gets
 `current: true` (and not `done`), upcoming weeks have neither. Preserve every
 entry's `reco` / `peak` / `race` / `color` / `km` / `elev`.
 
-### 7. Adjust the next week (only when warranted)
+### 8. Adjust the next week (only when warranted)
 
 You may adjust **only** week `current_week + 1`. Adjust when the data clearly
 calls for it, for example:
@@ -164,10 +188,10 @@ adjusted week is no longer warranted, restore the originals from
 The volume chart shows the original plan baseline; week-card adjustments are
 not reflected in the chart.
 
-### 8. Verify
+### 9. Verify
 
-- Re-run the engine and re-apply steps 3, 6: the deterministic regions
-  (actuals panels, chart, CSS) must produce **zero diff** on the second pass.
+- Re-run the engine and re-apply steps 3, 4, 7: the deterministic regions
+  (day grids, actuals panels, chart, CSS) must produce **zero diff** on the second pass.
 - `git diff running/dements-2026-plan.html` — review that only intended
   regions changed and the HTML is well-formed (tags balanced).
 - Summarise for the user: weeks updated, key coach points, any adjustment made.
@@ -318,6 +342,17 @@ Insert verbatim before `</style>` on first run:
   bottom: 0;
   border-radius: 2px 2px 0 0;
   box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+.day {
+  position: relative;
+}
+.day-done-dot {
+  position: absolute;
+  top: .25rem;
+  right: .25rem;
+  font-size: .62rem;
+  line-height: 1;
+  color: #2ecc8a;
 }
 /* /sync:styles */
 ```

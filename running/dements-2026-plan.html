@@ -936,6 +936,19 @@
       display: contents;
     }
 
+    .day {
+      position: relative;
+    }
+
+    .day-done-dot {
+      position: absolute;
+      top: .25rem;
+      right: .25rem;
+      font-size: .62rem;
+      line-height: 1;
+      color: #2ecc8a;
+    }
+
     /* /sync:styles */
   </style>
 </head>
@@ -1087,6 +1100,57 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w1 -->
+      <div class="days">
+        <div class="day z2 logged">
+          <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Wed</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Thu</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Fri</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day rest">
+          <div class="day-label">Sat</div>
+          <div class="day-icon">💤</div>
+          <div class="day-km">—</div>
+          <div class="day-type">Rest</div>
+        </div>
+        <div class="day rest">
+          <div class="day-label">Sun</div>
+          <div class="day-icon">💤</div>
+          <div class="day-km">—</div>
+          <div class="day-type">Rest</div>
+        </div>
+      </div>
+      <!-- /sync:days:w1 -->
       <div class="week-notes">Completed: 5×5km flat Z2. Solid base established.</div>
       <!-- sync:actuals:w1 -->
       <div class="actuals">
@@ -1140,6 +1204,57 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w2 -->
+      <div class="days">
+        <div class="day z2 logged">
+          <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Wed</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Thu</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day z2 logged">
+          <div class="day-label">Fri</div>
+          <div class="day-done-dot">✓</div>
+          <div class="day-icon">🏃</div>
+          <div class="day-km">5km</div>
+          <div class="day-type">Z2</div>
+        </div>
+        <div class="day rest">
+          <div class="day-label">Sat</div>
+          <div class="day-icon">💤</div>
+          <div class="day-km">—</div>
+          <div class="day-type">Rest</div>
+        </div>
+        <div class="day rest">
+          <div class="day-label">Sun</div>
+          <div class="day-icon">💤</div>
+          <div class="day-km">—</div>
+          <div class="day-type">Rest</div>
+        </div>
+      </div>
+      <!-- /sync:days:w2 -->
       <div class="week-notes">In progress. 5×5km this week, same as W1.</div>
       <!-- sync:actuals:w2 -->
       <div class="actuals">
@@ -1199,21 +1314,25 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w3 -->
       <div class="days">
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym A</div>
           <div class="day-type">Strength</div>
         </div>
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Wed</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
@@ -1243,6 +1362,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w3 -->
       <div class="week-notes"><strong>Introduce gym (Tue/Thu)</strong> + first proper long run on Saturday (6km).
         Foundation gym: Bulgarian split squats, single-leg calf raises, glute bridges, dead bugs, lateral planks.
       </div>
@@ -1281,6 +1401,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w4 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1325,6 +1446,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w4 -->
       <div class="week-notes">Long run nudges to 7km. Everything else holds. Slight gym load increase if form is solid.
       </div>
     </div>
@@ -1344,6 +1466,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w5 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1390,6 +1513,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w5 -->
       <div class="week-notes">First trails — rolling paths only. No real climbs yet. Add step-ups to gym for trail
         specificity.</div>
     </div>
@@ -1409,6 +1533,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w6 -->
       <div class="days">
         <div class="day rec">
           <div class="day-label">Mon</div>
@@ -1454,6 +1579,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w6 -->
       <div class="week-notes">First recovery week. Real reduction — this is where adaptation locks in.</div>
     </div>
   </div>
@@ -1475,6 +1601,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w7 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1521,6 +1648,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w7 -->
       <div class="week-notes"><strong>Wed = hill session.</strong> Find a 100–150m climb. Power-hike up, jog down,
         repeat. Saturday extends to 12km with rolling elevation. Practice hiking technique — this is a SKILL session.
       </div>
@@ -1541,6 +1669,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w8 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1584,10 +1713,10 @@
           <div class="day-label">Sun</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">4km</div>
-          <div class="day-elev">—</div>
           <div class="day-type">Easy</div>
         </div>
       </div>
+      <!-- /sync:days:w8 -->
       <div class="week-notes">First <strong>back-to-back weekend</strong> — Sat long, Sun shoreline easy trail. Sun is
         short and very easy (Z1), just to teach your body to run on tired legs. This is critical for ultra prep.</div>
     </div>
@@ -1607,6 +1736,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w9 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1653,6 +1783,7 @@
           <div class="day-type">Recovery</div>
         </div>
       </div>
+      <!-- /sync:days:w9 -->
       <div class="week-notes">Long run jumps to 15km. Vert ratio ~27m/km — gentle compared to race but appropriate for
         now. Practice fueling: gels/food every 30min on Sat.</div>
     </div>
@@ -1672,6 +1803,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w10 -->
       <div class="days">
         <div class="day rec">
           <div class="day-label">Mon</div>
@@ -1718,6 +1850,7 @@
           <div class="day-type">Z1</div>
         </div>
       </div>
+      <!-- /sync:days:w10 -->
       <div class="week-notes">Recovery. Saturday stays trail but easy — keep the trail feet adapting even on rest weeks.
       </div>
     </div>
@@ -1737,6 +1870,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w11 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1783,6 +1917,7 @@
           <div class="day-type">Recovery</div>
         </div>
       </div>
+      <!-- /sync:days:w11 -->
       <div class="week-notes"><strong>1000m D+ milestone.</strong> Vert ratio approaching ~33m/km. Wed = hill reps:
         6×3min uphill at sustained Z2-Z3 effort, easy down. Saturday long with real climbs.</div>
     </div>
@@ -1802,6 +1937,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w12 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1848,6 +1984,7 @@
           <div class="day-type">Recovery</div>
         </div>
       </div>
+      <!-- /sync:days:w12 -->
       <div class="week-notes">First 20km mountain long. Vert ratio 40m/km. Heat will be brutal in August — start very
         early or move to evenings. Hydration strategy matters now.</div>
     </div>
@@ -1870,6 +2007,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w13 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1917,6 +2055,7 @@
           <div class="day-type">B2B easy</div>
         </div>
       </div>
+      <!-- /sync:days:w13 -->
       <div class="week-notes"><strong>Z4 debut:</strong> 2km WU → 4×6min @ 162–173 bpm w/ 2min Z1 → 2km CD. Only 1 gym
         now to manage load — strength becomes maintenance.</div>
     </div>
@@ -1936,6 +2075,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w14 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -1982,6 +2122,7 @@
           <div class="day-type">B2B easy</div>
         </div>
       </div>
+      <!-- /sync:days:w14 -->
       <div class="week-notes">Vert ratio 45m/km — getting closer. Take poles on Sat if you'll use them in the race.
       </div>
     </div>
@@ -2001,6 +2142,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w15 -->
       <div class="days">
         <div class="day rec">
           <div class="day-label">Mon</div>
@@ -2047,6 +2189,7 @@
           <div class="day-type">Recovery</div>
         </div>
       </div>
+      <!-- /sync:days:w15 -->
       <div class="week-notes">Strategic recovery before qualifier window. Aim to feel fresh and hungry for week 16.
       </div>
     </div>
@@ -2066,6 +2209,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w16 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2099,7 +2243,7 @@
         </div>
         <div class="day race">
           <div class="day-label">Sat</div>
-          <div class="day-icon">🏁</div>
+          <div class="day-icon">•</div>
           <div class="day-km">~25km</div>
           <div class="day-elev">1500m</div>
           <div class="day-type">RACE</div>
@@ -2111,6 +2255,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w16 -->
       <div class="week-notes"><strong>QUALIFIER RACE</strong> — needed for Dements registration. Find a 21K+ trail race
         with significant D+ (look at Runática's calendar, races in Castellón/Valencia/Teruel). Goal: finish strong, dial
         in nutrition, test gear. Not a peak performance.</div>
@@ -2131,6 +2276,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w17 -->
       <div class="days">
         <div class="day rest">
           <div class="day-label">Mon</div>
@@ -2176,6 +2322,7 @@
           <div class="day-type">Recovery</div>
         </div>
       </div>
+      <!-- /sync:days:w17 -->
       <div class="week-notes">Recovery from race effort. Mon full rest mandatory. Saturday returns to long mountain
         training.</div>
     </div>
@@ -2195,6 +2342,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w18 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2242,6 +2390,7 @@
           <div class="day-type">B2B easy</div>
         </div>
       </div>
+      <!-- /sync:days:w18 -->
       <div class="week-notes">Vert ratio 56m/km — getting Dements-realistic. 25km/1400m is a serious day. Bring race
         nutrition, test poles, simulate race conditions.</div>
     </div>
@@ -2264,6 +2413,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w19 -->
       <div class="days">
         <div class="day rec">
           <div class="day-label">Mon</div>
@@ -2310,6 +2460,7 @@
           <div class="day-type">Easy</div>
         </div>
       </div>
+      <!-- /sync:days:w19 -->
       <div class="week-notes">Critical recovery before 3 hardest weeks. Don't skip — peak weeks demand absorption.</div>
     </div>
   </div>
@@ -2328,6 +2479,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w20 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2375,6 +2527,7 @@
           <div class="day-type">B2B</div>
         </div>
       </div>
+      <!-- /sync:days:w20 -->
       <div class="week-notes"><strong>Race simulation day.</strong> 28km/2000m at 71m/km — matches Dements vert ratio.
         Full race kit, race nutrition, poles, vest. This is the biggest training day of the cycle.</div>
     </div>
@@ -2394,6 +2547,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w21 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2437,10 +2591,10 @@
           <div class="day-label">Sun</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">12km</div>
-          <div class="day-elev">—</div>
           <div class="day-type">B2B</div>
         </div>
       </div>
+      <!-- /sync:days:w21 -->
       <div class="week-notes"><strong>Biggest training week.</strong> 30km/2500m = 83m/km — within 8% of race ratio. If
         possible, do this on Serra d'Espadà itself. Full race rehearsal: gear, fuel, pacing, mental approach.</div>
     </div>
@@ -2460,6 +2614,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w22 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2506,6 +2661,7 @@
           <div class="day-type">B2B</div>
         </div>
       </div>
+      <!-- /sync:days:w22 -->
       <div class="week-notes">Slight pullback from W21 peak. Fitness is built — now hold it. No more building, no new
         stresses.</div>
     </div>
@@ -2528,6 +2684,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w23 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2573,6 +2730,7 @@
           <div class="day-type">Easy</div>
         </div>
       </div>
+      <!-- /sync:days:w23 -->
       <div class="week-notes">First taper week. Volume drops, intensity stays sharp. Saturday is shorter but quality —
         sustained climb effort. Last full gym session.</div>
     </div>
@@ -2592,6 +2750,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w24 -->
       <div class="days">
         <div class="day z2">
           <div class="day-label">Mon</div>
@@ -2637,6 +2796,7 @@
           <div class="day-type">Rest</div>
         </div>
       </div>
+      <!-- /sync:days:w24 -->
       <div class="week-notes">Resist the urge to "do more". Sleep, eat well, hydrate. Logistics, race kit, drop bags.
         The fitness is in the bank — now protect it.</div>
     </div>
@@ -2656,6 +2816,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w25 -->
       <div class="days">
         <div class="day rec">
           <div class="day-label">Mon</div>
@@ -2700,6 +2861,7 @@
           <div class="day-type">Travel/easy</div>
         </div>
       </div>
+      <!-- /sync:days:w25 -->
       <div class="week-notes">Race week begins. Short, sharp, mostly rest. Travel to Eslida Fri/Sat. Bib pickup. Final
         gear check.</div>
     </div>
@@ -2719,6 +2881,7 @@
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
+      <!-- sync:days:w26 -->
       <div class="days">
         <div class="day rec">
           <div class="day-label">Mon</div>
@@ -2752,18 +2915,19 @@
         </div>
         <div class="day race">
           <div class="day-label">Sat</div>
-          <div class="day-icon">🏁</div>
+          <div class="day-icon">•</div>
           <div class="day-km">42.5km</div>
           <div class="day-elev">3808m</div>
           <div class="day-type">RACE</div>
         </div>
         <div class="day rest">
           <div class="day-label">Sun</div>
-          <div class="day-icon">🍻</div>
+          <div class="day-icon">💤</div>
           <div class="day-km">—</div>
           <div class="day-type">Celebrate</div>
         </div>
       </div>
+      <!-- /sync:days:w26 -->
       <div class="race-day">
         <div class="race-day-label">SATURDAY 7 NOV · 07:30</div>
         <div class="race-day-name">MARATÓ DELS DEMENTS</div>
