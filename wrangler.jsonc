@@ -1,0 +1,26 @@
+{
+  // Cloudflare Worker for nicolas.cornaglia.xyz — static assets only.
+  //
+  // Deploy serves the contents of `dist/`, which build.sh stages as an
+  // allowlist (index.html, assets/, and the /running pages). README.md,
+  // .claude/, docs/, raw HR data and helper scripts are never uploaded.
+  //
+  // Cloudflare Workers Builds settings:
+  //   Build command:    bash build.sh    (must be set — it generates dist/)
+  //   Deploy command:   npx wrangler deploy
+  //
+  // /running stays gated by Cloudflare Access (Google auth) on the /running*
+  // path — that policy lives in the dashboard, not here.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "profile",
+  "compatibility_date": "2026-05-27",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "dist"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
