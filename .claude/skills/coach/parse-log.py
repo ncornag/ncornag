@@ -271,6 +271,57 @@ _DAY_CELL_RE = re.compile(
 )
 
 
+_GYM_FILE_RE = re.compile(r"gimnasio-semana(\d+)(?:-(\d+))?\.html$")
+
+
+def parse_gym_files(running_dir):
+    """Map each plan week to its gym HTML file.
+
+    Scans running/gimnasio-semana*.html. A single-week file
+    (gimnasio-semana3.html) maps week 3; a range file (gimnasio-semana3-5.html)
+    maps weeks 3, 4 and 5. Files are processed in sorted order so overlaps
+    resolve deterministically (later filename wins).
+    """
+    mapping = {}
+    for path in sorted(glob.glob(os.path.join(running_dir, "gimnasio-semana*.html"))):
+        m = _GYM_FILE_RE.search(os.path.basename(path))
+        if not m:
+            continue
+        lo = int(m.group(1))
+        hi = int(m.group(2)) if m.group(2) else lo
+        if hi < lo:
+            lo, hi = hi, lo
+        for wk in range(lo, hi + 1):
+            mapping[wk] = os.path.basename(path)
+    return mapping
+
+
+def render_gym_links_js(gym_files):
+    """JS that links each week's gym day-chip to its mapped gym file.
+
+    Emitted between the `// sync:gymlinks` markers in the plan HTML. Iterates
+    every .week[id="wN"] so it covers future weeks too, not only those with
+    logged data. Deterministic — identical input yields identical output.
+    """
+    if gym_files:
+        entries = ", ".join(f"{wk}: {json.dumps(name)}"
+                            for wk, name in sorted(gym_files.items()))
+        obj = "{ " + entries + " }"
+    else:
+        obj = "{}"
+    return (
+        f"    const gymFiles = {obj};\n"
+        "    document.querySelectorAll('.week[id]').forEach(wk => {\n"
+        "      const n = parseInt(wk.id.slice(1), 10);\n"
+        "      const file = gymFiles[n];\n"
+        "      if (!file) return;\n"
+        "      wk.querySelectorAll('.day.gym .day-km').forEach(el => {\n"
+        "        el.innerHTML = `<a href=\"${file}\">${el.textContent}</a>`;\n"
+        "      });\n"
+        "    });"
+    )
+
+
 def parse_plan_days(html_path):
     """Extract the planned day grid for each week from dements-2026-plan.html.
 
@@ -465,9 +516,13 @@ def main():
     for msg in errors:
         print(f"warning: {msg}", file=sys.stderr)
 
-    html_path = os.path.join(repo, "running", "dements-2026-plan.html")
+    running_dir = os.path.join(repo, "running")
+    html_path = os.path.join(running_dir, "dements-2026-plan.html")
     plan_days_by_week = parse_plan_days(html_path)
+    gym_files = parse_gym_files(running_dir)
     weeks = aggregate(activities, today, plan_days_by_week)
+    for w in weeks:
+        w["gym_file"] = gym_files.get(w["week"])
     cw = week_of(today)
     print(json.dumps({
         "generated": datetime.now().isoformat(timespec="seconds"),
@@ -478,8 +533,11 @@ def main():
         "refresh_errors": refresh_log,
         "csv_errors": errors,
         "activity_count": len(activities),
+        "gym_files": gym_files,
+        "current_gym_file": gym_files.get(cw),
         "weeks": weeks,
         "chart_js": render_chart_js(weeks),
+        "gym_links_js": render_gym_links_js(gym_files),
     }, indent=2, ensure_ascii=False))
 
 

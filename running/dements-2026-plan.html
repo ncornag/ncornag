@@ -3021,9 +3021,17 @@
     });
     // /sync:chart
 
-    document.querySelectorAll('.day.gym .day-km').forEach(el => {
-      el.innerHTML = `<a href="gimnasio-semana3.html">${el.textContent}</a>`;
+    // sync:gymlinks
+    const gymFiles = { 3: "gimnasio-semana3-5.html", 4: "gimnasio-semana3-5.html", 5: "gimnasio-semana3-5.html" };
+    document.querySelectorAll('.week[id]').forEach(wk => {
+      const n = parseInt(wk.id.slice(1), 10);
+      const file = gymFiles[n];
+      if (!file) return;
+      wk.querySelectorAll('.day.gym .day-km').forEach(el => {
+        el.innerHTML = `<a href="${file}">${el.textContent}</a>`;
+      });
     });
+    // /sync:gymlinks
 
     function toggleTheme() {
       const html = document.documentElement;
