@@ -13,3 +13,7 @@ Entry shape:
 ---
 
 <!-- entries below, newest first -->
+
+## 2026-05-30 · Week 3
+**You:** Body felt great all week, no niggles. Gym A/B done, form held. Found the glute bridge and dead bug too light — have 8 kg and 12 kg kettlebells, asked about loading the bridge.
+**Coach:** Confirmed best week of the block — 4 runs all clean Z2 (avg 148, under VT1 151), 100% easy/0% tempo, Sat 6 km long run at 150 on plan. Agreed to load the glute bridge (8 kg KB → 12 kg) but keep dead bug bodyweight (anti-extension control drill → progress via tempo/longer lever, not weight). At your request, split the shared gym file into per-week files: `gimnasio-semana3.html` (week 3, frozen bodyweight) + `gimnasio-semana4-5.html` (weeks 4–5, carries the new KB load + dead-bug cue). KB load applies week 4 onward only. No Week 4 run adjustment — execute baseline (long run steps to 7 km). Open threads: watch how the loaded glute bridge feels in week 4; week 5 introduces first trail/elevation work.
