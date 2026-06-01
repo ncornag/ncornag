@@ -8,9 +8,10 @@ lab-calibrated training zone, aggregates per week, and prints a JSON summary on
 stdout for the skill to act on. All progress/errors go to stderr.
 
 Steps:
-  1. Refresh CSVs by running running/tcx-to-csv.sh for every month from the plan
-     start (2026-05) to today. Failures (e.g. Drive offline) are recorded and
-     the script falls back to whatever CSVs already exist.
+  1. Refresh CSVs by running running/download-garmin.py (downloads new Garmin
+     .fit activities from the plan start onward and rebuilds the monthly CSVs
+     with the Garmin FIT SDK). Failures (e.g. Drive offline, or a Garmin login
+     is needed) are recorded and the script falls back to existing CSVs.
   2. Read every running/data/tcx-*.csv.
   3. Map each activity to a plan week (week 1 = Mon 2026-05-11; week N spans
      [start+(N-1)*7, +6d]). Activities outside the plan range are ignored.
@@ -92,23 +93,6 @@ def parse_int(s):
         return None
 
 
-def norm_pace(s):
-    """Normalise tcx-ls pace to m:ss.
-
-    tcx-ls prints pace un-padded ('6:0') and sometimes with the seconds field
-    overflowing 60 ('7:62'); carry the overflow so '7:62' becomes '8:02'.
-    """
-    s = (s or "").strip()
-    if not s or ":" not in s or "Inf" in s or "NaN" in s:
-        return ""
-    m, _, sec = s.partition(":")
-    try:
-        total = int(m) * 60 + int(sec)
-    except ValueError:
-        return ""
-    return f"{total // 60}:{total % 60:02d}"
-
-
 def week_range(n):
     start = PLAN_START + timedelta(days=(n - 1) * 7)
     return start, start + timedelta(days=6)
@@ -136,29 +120,56 @@ def week_status(start, end, today):
 
 
 def refresh_csvs(repo, today, log):
-    """Run running/tcx-to-csv.sh for every month from the plan start to today."""
-    script = os.path.join(repo, "running", "tcx-to-csv.sh")
+    """Download new Garmin .fit activities and rebuild the monthly CSVs.
+
+    Delegates to running/download-garmin.py, which downloads any new .fit files
+    from the plan start onward and (re)writes running/data/tcx-*.csv from them
+    via the Garmin FIT SDK. A non-empty log here (e.g. Drive offline, or a
+    Garmin login is needed) is fine — the engine then falls back to the CSVs
+    already on disk."""
+    script = os.path.join(repo, "running", "download-garmin.py")
     if not os.path.exists(script):
-        log.append(f"tcx-to-csv.sh not found at {script}; skipped refresh")
+        log.append(f"download-garmin.py not found at {script}; skipped refresh")
         return
-    y, m = PLAN_START.year, PLAN_START.month
-    while (y, m) <= (today.year, today.month):
-        try:
-            r = subprocess.run(["bash", script, str(y), str(m)],
-                               capture_output=True, text=True, timeout=300)
-            if r.returncode != 0:
-                log.append(f"{y}-{m:02d}: {r.stderr.strip() or 'refresh failed'}")
-        except Exception as exc:  # noqa: BLE001 - report any refresh failure
-            log.append(f"{y}-{m:02d}: {exc}")
-        m += 1
-        if m > 12:
-            m, y = 1, y + 1
+    try:
+        r = subprocess.run([sys.executable, script,
+                            "--start", PLAN_START.isoformat(), "--no-prompt"],
+                           capture_output=True, text=True, timeout=600)
+        if r.returncode != 0:
+            log.append(r.stderr.strip() or "garmin refresh failed")
+    except Exception as exc:  # noqa: BLE001 - report any refresh failure
+        log.append(str(exc))
+
+
+def pace_from_speed(speed_mps):
+    """Average speed (m/s, raw SDK enhanced_avg_speed) -> 'm:ss' pace per km."""
+    v = parse_float(speed_mps)
+    if v <= 0:
+        return ""
+    sec_per_km = round(1000.0 / v)
+    return f"{sec_per_km // 60}:{sec_per_km % 60:02d}"
+
+
+def hms_from_seconds(seconds):
+    """Seconds (raw SDK total_timer_time) -> 'm:ss' or 'h:mm:ss'."""
+    v = parse_float(seconds)
+    if v <= 0:
+        return ""
+    s = round(v)
+    h, rem = divmod(s, 3600)
+    m, sec = divmod(rem, 60)
+    return f"{h}:{m:02d}:{sec:02d}" if h else f"{m}:{sec:02d}"
 
 
 def build_activity(row, csvname, errors):
-    """Turn one CSV row into a normalised activity dict, or None to skip it."""
+    """Turn one CSV row into a normalised activity dict, or None to skip it.
+
+    Columns are the raw Garmin FIT SDK session field names written by
+    running/download-garmin.py (total_distance in metres, enhanced_avg_speed in
+    m/s, etc.). The full set of SDK fields is present in the row; we read the
+    ones the coach reports on by name and derive pace/time from raw values."""
     src = (row.get("source_file") or "").strip()
-    aid = (row.get("Activity ID") or "").strip()
+    aid = (row.get("start_time") or "").strip()
     d = None
     for cand in (src[:10], aid[:10]):
         try:
@@ -172,8 +183,8 @@ def build_activity(row, csvname, errors):
     wk = week_of(d)
     if wk is None:
         return None  # activity falls outside the 26-week plan window
-    atype = (row.get("activity_type") or row.get("Sport") or "Activity").strip()
-    avg_hr = parse_int(row.get("Average Heartrate [bpm]"))
+    atype = (row.get("activity_type") or row.get("sport") or "Activity").strip()
+    avg_hr = parse_int(row.get("avg_heart_rate"))
     return {
         "date": d.isoformat(),
         "weekday": d.strftime("%a"),
@@ -181,14 +192,21 @@ def build_activity(row, csvname, errors):
         "week": wk,
         "type": atype,
         "icon": ICONS.get(atype, "•"),
-        "km": round(parse_float(row.get("Accumulated Distance [km]")), 2),
-        "elev": parse_int(row.get("Altitude Ascent [m]")) or 0,
+        "km": round(parse_float(row.get("total_distance")) / 1000.0, 2),
+        "elev": parse_int(row.get("total_ascent")) or 0,
         "avg_hr": avg_hr,
-        "max_hr": parse_int(row.get("Maximum Heartrate [bpm]")),
+        "max_hr": parse_int(row.get("max_heart_rate")),
         "zone": hr_zone(avg_hr),
-        "pace": norm_pace(row.get("Average Pace")),
-        "time": (row.get("Accumulated Time") or "").strip(),
-        "calories": parse_int(row.get("Accumulated Calories")),
+        "pace": pace_from_speed(row.get("enhanced_avg_speed")),
+        "time": hms_from_seconds(row.get("total_timer_time")),
+        "calories": parse_int(row.get("total_calories")),
+        # Running-dynamics fields from the FIT SDK (blank for non-run activities).
+        "run_cadence": parse_int(row.get("avg_running_cadence")),
+        "step_length": parse_float(row.get("avg_step_length")),       # mm
+        "vert_ratio": parse_float(row.get("avg_vertical_ratio")),     # %
+        "vert_osc": parse_float(row.get("avg_vertical_oscillation")), # mm
+        "ground_contact": parse_float(row.get("avg_stance_time")),    # ms
+        "avg_temp": parse_int(row.get("avg_temperature")),            # °C
     }
 
 
@@ -215,6 +233,35 @@ def week_hash(acts):
     return hashlib.sha1(key.encode()).hexdigest()[:12]
 
 
+# Garmin running-form color zones (fenix 7 / FR945 owner's manual). Each entry
+# is (upper_bound_exclusive, css_class); the last catch-all uses inf. Lower is
+# better for ground contact / vertical oscillation / vertical ratio; higher is
+# better for cadence (handled by its own ascending table). Classes map to the
+# panel palette: purple/blue/green = good→better, orange/red = needs work.
+GZ_CADENCE = [   # total steps/min (the SDK per-leg value is doubled first)
+    (153, "gz-red"), (164, "gz-orange"), (174, "gz-green"),
+    (184, "gz-blue"), (float("inf"), "gz-purple")]
+GZ_GCT = [       # ground contact time, ms
+    (218, "gz-purple"), (249, "gz-blue"), (278, "gz-green"),
+    (309, "gz-orange"), (float("inf"), "gz-red")]
+GZ_VOSC = [      # vertical oscillation, mm (chest scale)
+    (64, "gz-purple"), (82, "gz-blue"), (98, "gz-green"),
+    (116, "gz-orange"), (float("inf"), "gz-red")]
+GZ_VRATIO = [    # vertical ratio, % (chest scale)
+    (6.1, "gz-purple"), (7.5, "gz-blue"), (8.7, "gz-green"),
+    (10.2, "gz-orange"), (float("inf"), "gz-red")]
+
+
+def garmin_form_zone(value, table):
+    """Return the CSS color class for a running-form value, or '' if no value."""
+    if not value:
+        return ""
+    for upper, cls in table:
+        if value < upper:
+            return cls
+    return table[-1][1]
+
+
 def render_actuals_html(acts):
     """Render the deterministic 'Logged' panel for a week (zero-diff on re-run)."""
     counts = {}
@@ -230,7 +277,27 @@ def render_actuals_html(acts):
     elev = sum(a["elev"] for a in acts)
     summary = " · ".join(seg + [f"{km:.1f} km", f"{elev} m D+"])
 
-    rows = []
+    # Column titles row — same 15-cell grid as the data rows.
+    head = (
+        '        <div class="act-row act-head">'
+        '<span class="act-when">Day</span>'
+        '<span class="act-ico"></span>'
+        '<span class="act-km">Dist</span>'
+        '<span class="act-vert">Asc</span>'
+        '<span class="act-hr">HR</span>'
+        '<span class="act-zone">Zone</span>'
+        '<span class="act-pace">Pace</span>'
+        '<span class="act-cal">Cal</span>'
+        '<span class="act-maxhr">Max</span>'
+        '<span class="act-cad">Cad</span>'
+        '<span class="act-stride">Stride</span>'
+        '<span class="act-vratio">V.Ratio</span>'
+        '<span class="act-vosc">V.Osc</span>'
+        '<span class="act-gct">GCT</span>'
+        '<span class="act-temp">Temp</span>'
+        '</div>')
+
+    rows = [head]
     for a in acts:
         zone = a["zone"] or ""
         zcls = f" {zone.lower()}" if zone else ""
@@ -238,6 +305,24 @@ def render_actuals_html(acts):
         elev_txt = f'{a["elev"]} m' if a["elev"] else "—"
         hr_txt = str(a["avg_hr"]) if a["avg_hr"] else "—"
         pace_txt = f'{a["pace"]}/km' if a["pace"] else "—"
+        # New SDK metrics; "—" when absent (parse_int->None, parse_float->0.0)
+        # or not applicable (running dynamics are blank on non-run activities).
+        cal_txt = str(a["calories"]) if a["calories"] else "—"
+        maxhr_txt = str(a["max_hr"]) if a["max_hr"] else "—"
+        # Cadence: the SDK stores it per leg; double to total steps/min so it
+        # matches Garmin's scale (and its color zones) and the watch display.
+        cad_total = a["run_cadence"] * 2 if a["run_cadence"] else 0
+        cad_txt = f'{cad_total} spm' if cad_total else "—"
+        stride_txt = f'{round(a["step_length"])} mm' if a["step_length"] else "—"
+        vratio_txt = f'{a["vert_ratio"]:.1f}%' if a["vert_ratio"] else "—"
+        vosc_txt = f'{a["vert_osc"]:.1f} mm' if a["vert_osc"] else "—"
+        gct_txt = f'{round(a["ground_contact"])} ms' if a["ground_contact"] else "—"
+        temp_txt = f'{a["avg_temp"]}°' if a["avg_temp"] is not None else "—"
+        # Garmin running-form color zones (blank cells stay uncolored).
+        cad_cls = garmin_form_zone(cad_total, GZ_CADENCE)
+        vratio_cls = garmin_form_zone(a["vert_ratio"], GZ_VRATIO)
+        vosc_cls = garmin_form_zone(a["vert_osc"], GZ_VOSC)
+        gct_cls = garmin_form_zone(a["ground_contact"], GZ_GCT)
         rows.append(
             '        <div class="act-row">'
             f'<span class="act-when">{a["day_label"]}</span>'
@@ -247,6 +332,14 @@ def render_actuals_html(acts):
             f'<span class="act-hr">{hr_txt}</span>'
             f'<span class="act-zone{zcls}">{zone or "—"}</span>'
             f'<span class="act-pace">{pace_txt}</span>'
+            f'<span class="act-cal">{cal_txt}</span>'
+            f'<span class="act-maxhr">{maxhr_txt}</span>'
+            f'<span class="act-cad {cad_cls}">{cad_txt}</span>'
+            f'<span class="act-stride">{stride_txt}</span>'
+            f'<span class="act-vratio {vratio_cls}">{vratio_txt}</span>'
+            f'<span class="act-vosc {vosc_cls}">{vosc_txt}</span>'
+            f'<span class="act-gct {gct_cls}">{gct_txt}</span>'
+            f'<span class="act-temp">{temp_txt}</span>'
             '</div>')
     return (
         '      <div class="actuals">\n'
@@ -494,7 +587,7 @@ def render_chart_js(weeks):
 def main():
     ap = argparse.ArgumentParser(description="Aggregate TCX logs vs the Dements plan.")
     ap.add_argument("--no-refresh", action="store_true",
-                    help="skip running tcx-to-csv.sh; use existing CSVs only")
+                    help="skip running download-garmin.py; use existing CSVs only")
     ap.add_argument("--today", help="override today's date (YYYY-MM-DD), for testing")
     ap.add_argument("--data-dir", help="directory holding tcx-*.csv (default: <repo>/running/data)")
     ap.add_argument("--repo", help="repo root (default: inferred from script location)")

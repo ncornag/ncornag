@@ -822,7 +822,7 @@
 
     .act-row {
       display: grid;
-      grid-template-columns: 3.6rem 1.2rem 1fr 2.8rem 2.2rem 1.6rem 3.6rem;
+      grid-template-columns: 3.6rem 1.2rem 4.4rem 2.8rem 2.2rem 1.6rem 3.6rem 3.2rem 2.6rem 3.8rem 4rem 3.2rem 4rem 4rem 2.4rem 1fr;
       gap: .3rem;
       align-items: center;
       font-size: .62rem;
@@ -833,6 +833,17 @@
     .act-when,
     .act-km {
       color: var(--text);
+    }
+
+    .act-cal,
+    .act-maxhr,
+    .act-cad,
+    .act-stride,
+    .act-vratio,
+    .act-vosc,
+    .act-gct,
+    .act-temp {
+      text-align: right;
     }
 
     .act-ico {
@@ -867,6 +878,22 @@
     .act-pace {
       text-align: right;
     }
+
+    /* Column-titles row above the logged sessions */
+    .act-head span {
+      font-size: .54rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: .7;
+    }
+
+    /* Garmin running-form color zones (cadence, vert ratio, vert osc, GCT) */
+    .gz-purple { color: #9b59b6; }
+    .gz-blue   { color: #3a7bd5; }
+    .gz-green  { color: #2ecc8a; }
+    .gz-orange { color: #f07030; }
+    .gz-red    { color: #d03050; }
 
     .coach {
       margin-top: .5rem;
@@ -1155,23 +1182,13 @@
       <div class="week-notes">Completed: 5×5km flat Z2. Solid base established.</div>
       <!-- sync:actuals:w1 -->
       <div class="actuals">
-        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.1 km ·
-            38 m D+</span></div>
-        <div class="act-row"><span class="act-when">Mon 11</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">8 m</span><span class="act-hr">151</span><span
-            class="act-zone z2">Z2</span><span class="act-pace">7:51/km</span></div>
-        <div class="act-row"><span class="act-when">Tue 12</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">8 m</span><span class="act-hr">149</span><span
-            class="act-zone z2">Z2</span><span class="act-pace">7:53/km</span></div>
-        <div class="act-row"><span class="act-when">Wed 13</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">8 m</span><span class="act-hr">152</span><span
-            class="act-zone z3">Z3</span><span class="act-pace">7:57/km</span></div>
-        <div class="act-row"><span class="act-when">Thu 14</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">7 m</span><span class="act-hr">153</span><span
-            class="act-zone z3">Z3</span><span class="act-pace">8:02/km</span></div>
-        <div class="act-row"><span class="act-when">Fri 15</span><span class="act-ico">🏃</span><span class="act-km">5.1
-            km</span><span class="act-vert">7 m</span><span class="act-hr">158</span><span
-            class="act-zone z3">Z3</span><span class="act-pace">6:25/km</span></div>
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.1 km · 46 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 11</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">7:48/km</span><span class="act-cal">320</span><span class="act-maxhr">172</span><span class="act-cad gz-orange">160 spm</span><span class="act-stride">804 mm</span><span class="act-vratio gz-red">11.4%</span><span class="act-vosc gz-green">93.4 mm</span><span class="act-gct gz-orange">298 ms</span><span class="act-temp">30°</span></div>
+        <div class="act-row"><span class="act-when">Tue 12</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">15 m</span><span class="act-hr">150</span><span class="act-zone z2">Z2</span><span class="act-pace">7:53/km</span><span class="act-cal">328</span><span class="act-maxhr">161</span><span class="act-cad gz-orange">162 spm</span><span class="act-stride">787 mm</span><span class="act-vratio gz-red">11.0%</span><span class="act-vosc gz-green">87.7 mm</span><span class="act-gct gz-orange">294 ms</span><span class="act-temp">29°</span></div>
+        <div class="act-row"><span class="act-when">Wed 13</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">152</span><span class="act-zone z3">Z3</span><span class="act-pace">7:57/km</span><span class="act-cal">323</span><span class="act-maxhr">169</span><span class="act-cad gz-orange">156 spm</span><span class="act-stride">801 mm</span><span class="act-vratio gz-red">11.9%</span><span class="act-vosc gz-green">96.6 mm</span><span class="act-gct gz-orange">299 ms</span><span class="act-temp">28°</span></div>
+        <div class="act-row"><span class="act-when">Thu 14</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">154</span><span class="act-zone z3">Z3</span><span class="act-pace">8:02/km</span><span class="act-cal">325</span><span class="act-maxhr">161</span><span class="act-cad gz-orange">156 spm</span><span class="act-stride">798 mm</span><span class="act-vratio gz-red">12.1%</span><span class="act-vosc gz-green">97.3 mm</span><span class="act-gct gz-orange">298 ms</span><span class="act-temp">26°</span></div>
+        <div class="act-row"><span class="act-when">Fri 15</span><span class="act-ico">🏃</span><span class="act-km">5.1 km</span><span class="act-vert">10 m</span><span class="act-hr">159</span><span class="act-zone z3">Z3</span><span class="act-pace">6:25/km</span><span class="act-cal">317</span><span class="act-maxhr">181</span><span class="act-cad gz-orange">160 spm</span><span class="act-stride">957 mm</span><span class="act-vratio gz-orange">8.9%</span><span class="act-vosc gz-green">85.8 mm</span><span class="act-gct gz-green">277 ms</span><span class="act-temp">24°</span></div>
       </div>
       <!-- /sync:actuals:w1 -->
       <!-- sync:coach:w1 -->
@@ -1259,23 +1276,13 @@
       <div class="week-notes">In progress. 5×5km this week, same as W1.</div>
       <!-- sync:actuals:w2 -->
       <div class="actuals">
-        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.0 km ·
-            38 m D+</span></div>
-        <div class="act-row"><span class="act-when">Mon 18</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">9 m</span><span class="act-hr">151</span><span
-            class="act-zone z2">Z2</span><span class="act-pace">7:44/km</span></div>
-        <div class="act-row"><span class="act-when">Tue 19</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">7 m</span><span class="act-hr">157</span><span
-            class="act-zone z3">Z3</span><span class="act-pace">7:34/km</span></div>
-        <div class="act-row"><span class="act-when">Wed 20</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">7 m</span><span class="act-hr">151</span><span
-            class="act-zone z2">Z2</span><span class="act-pace">7:33/km</span></div>
-        <div class="act-row"><span class="act-when">Thu 21</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">6 m</span><span class="act-hr">153</span><span
-            class="act-zone z3">Z3</span><span class="act-pace">7:33/km</span></div>
-        <div class="act-row"><span class="act-when">Fri 22</span><span class="act-ico">🏃</span><span class="act-km">5.0
-            km</span><span class="act-vert">9 m</span><span class="act-hr">148</span><span
-            class="act-zone z2">Z2</span><span class="act-pace">7:24/km</span></div>
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">5 runs · 25.0 km · 35 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 18</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">8 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">7:44/km</span><span class="act-cal">311</span><span class="act-maxhr">160</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">821 mm</span><span class="act-vratio gz-red">12.1%</span><span class="act-vosc gz-orange">100.9 mm</span><span class="act-gct gz-orange">290 ms</span><span class="act-temp">30°</span></div>
+        <div class="act-row"><span class="act-when">Tue 19</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">6 m</span><span class="act-hr">157</span><span class="act-zone z3">Z3</span><span class="act-pace">7:34/km</span><span class="act-cal">323</span><span class="act-maxhr">170</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">832 mm</span><span class="act-vratio gz-red">11.2%</span><span class="act-vosc gz-green">94.8 mm</span><span class="act-gct gz-orange">291 ms</span><span class="act-temp">31°</span></div>
+        <div class="act-row"><span class="act-when">Wed 20</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">5 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">7:31/km</span><span class="act-cal">310</span><span class="act-maxhr">158</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">843 mm</span><span class="act-vratio gz-red">11.3%</span><span class="act-vosc gz-green">97.0 mm</span><span class="act-gct gz-orange">290 ms</span><span class="act-temp">28°</span></div>
+        <div class="act-row"><span class="act-when">Thu 21</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">153</span><span class="act-zone z3">Z3</span><span class="act-pace">7:19/km</span><span class="act-cal">314</span><span class="act-maxhr">161</span><span class="act-cad gz-orange">160 spm</span><span class="act-stride">854 mm</span><span class="act-vratio gz-red">10.8%</span><span class="act-vosc gz-green">92.9 mm</span><span class="act-gct gz-orange">291 ms</span><span class="act-temp">31°</span></div>
+        <div class="act-row"><span class="act-when">Fri 22</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">9 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:24/km</span><span class="act-cal">317</span><span class="act-maxhr">157</span><span class="act-cad gz-orange">160 spm</span><span class="act-stride">839 mm</span><span class="act-vratio gz-red">11.0%</span><span class="act-vosc gz-green">93.7 mm</span><span class="act-gct gz-orange">285 ms</span><span class="act-temp">30°</span></div>
       </div>
       <!-- /sync:actuals:w2 -->
       <!-- sync:coach:w2 -->
@@ -1372,13 +1379,14 @@
       </div>
       <!-- sync:actuals:w3 -->
       <div class="actuals">
-        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">4 runs · 2 gyms · 21.0 km · 29 m D+</span></div>
-        <div class="act-row"><span class="act-when">Mon 25</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">6 m</span><span class="act-hr">149</span><span class="act-zone z2">Z2</span><span class="act-pace">7:33/km</span></div>
-        <div class="act-row"><span class="act-when">Tue 26</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">—</span><span class="act-zone">—</span><span class="act-pace">—</span></div>
-        <div class="act-row"><span class="act-when">Wed 27</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">8 m</span><span class="act-hr">147</span><span class="act-zone z2">Z2</span><span class="act-pace">7:52/km</span></div>
-        <div class="act-row"><span class="act-when">Thu 28</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">109</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span></div>
-        <div class="act-row"><span class="act-when">Fri 29</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">6 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">8:09/km</span></div>
-        <div class="act-row"><span class="act-when">Sat 30</span><span class="act-ico">🏃</span><span class="act-km">6.0 km</span><span class="act-vert">9 m</span><span class="act-hr">150</span><span class="act-zone z2">Z2</span><span class="act-pace">7:53/km</span></div>
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">4 runs · 2 gyms · 21.0 km · 26 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 25</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">6 m</span><span class="act-hr">149</span><span class="act-zone z2">Z2</span><span class="act-pace">7:33/km</span><span class="act-cal">309</span><span class="act-maxhr">153</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">834 mm</span><span class="act-vratio gz-red">11.7%</span><span class="act-vosc gz-orange">99.1 mm</span><span class="act-gct gz-orange">282 ms</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Tue 26</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">103</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">98</span><span class="act-maxhr">132</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">31°</span></div>
+        <div class="act-row"><span class="act-when">Wed 27</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">5 m</span><span class="act-hr">147</span><span class="act-zone z2">Z2</span><span class="act-pace">7:52/km</span><span class="act-cal">303</span><span class="act-maxhr">157</span><span class="act-cad gz-orange">156 spm</span><span class="act-stride">810 mm</span><span class="act-vratio gz-red">12.3%</span><span class="act-vosc gz-orange">101.4 mm</span><span class="act-gct gz-orange">288 ms</span><span class="act-temp">30°</span></div>
+        <div class="act-row"><span class="act-when">Thu 28</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">110</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">91</span><span class="act-maxhr">140</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Fri 29</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">5 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">8:09/km</span><span class="act-cal">314</span><span class="act-maxhr">157</span><span class="act-cad gz-orange">154 spm</span><span class="act-stride">795 mm</span><span class="act-vratio gz-red">12.0%</span><span class="act-vosc gz-green">96.2 mm</span><span class="act-gct gz-orange">306 ms</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Sat 30</span><span class="act-ico">🏃</span><span class="act-km">6.0 km</span><span class="act-vert">10 m</span><span class="act-hr">150</span><span class="act-zone z2">Z2</span><span class="act-pace">7:53/km</span><span class="act-cal">376</span><span class="act-maxhr">160</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">798 mm</span><span class="act-vratio gz-red">11.2%</span><span class="act-vosc gz-green">91.8 mm</span><span class="act-gct gz-orange">292 ms</span><span class="act-temp">31°</span></div>
       </div>
       <!-- /sync:actuals:w3 -->
       <!-- sync:coach:w3 -->

@@ -40,10 +40,12 @@ Steps C1–C8 edit `running/dements-2026-plan.html`. Do the movements in order.
 python3 .claude/skills/coach/parse-log.py
 ```
 
-It refreshes the monthly CSVs (via `running/tcx-to-csv.sh`) and prints a JSON
-summary on stdout. Parse that JSON — every later step uses it. If
-`refresh_errors` is non-empty (e.g. Google Drive offline) that is fine: the
-engine fell back to existing CSVs. Tell the user which weeks have data.
+It refreshes the monthly CSVs (via `running/download-garmin.py`, which downloads
+new Garmin `.fit` activities and rebuilds them with the Garmin FIT SDK) and
+prints a JSON summary on stdout. Parse that JSON — every later step uses it. If
+`refresh_errors` is non-empty (e.g. Google Drive offline, or a Garmin login is
+needed) that is fine: the engine fell back to existing CSVs. Tell the user which
+weeks have data.
 
 Key JSON fields: `current_week`, `current_gym_file`, `gym_files` (week→file map),
 `gym_links_js`, and `weeks[]` (each with `status`, `plan_km`, `plan_elev`,
@@ -335,7 +337,7 @@ Insert verbatim before `</style>` on first run:
 }
 .act-row {
   display: grid;
-  grid-template-columns: 3.6rem 1.2rem 1fr 2.8rem 2.2rem 1.6rem 3.6rem;
+  grid-template-columns: 3.6rem 1.2rem 4.4rem 2.8rem 2.2rem 1.6rem 3.6rem 3.2rem 2.6rem 3.8rem 4rem 3.2rem 4rem 4rem 2.4rem 1fr;
   gap: 0.3rem;
   align-items: center;
   font-size: 0.62rem;
@@ -345,6 +347,16 @@ Insert verbatim before `</style>` on first run:
 .act-when,
 .act-km {
   color: var(--text);
+}
+.act-cal,
+.act-maxhr,
+.act-cad,
+.act-stride,
+.act-vratio,
+.act-vosc,
+.act-gct,
+.act-temp {
+  text-align: right;
 }
 .act-ico {
   text-align: center;
@@ -371,6 +383,18 @@ Insert verbatim before `</style>` on first run:
 .act-pace {
   text-align: right;
 }
+.act-head span {
+  font-size: 0.54rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
+}
+.gz-purple { color: #9b59b6; }
+.gz-blue   { color: #3a7bd5; }
+.gz-green  { color: #2ecc8a; }
+.gz-orange { color: #f07030; }
+.gz-red    { color: #d03050; }
 .coach {
   margin-top: 0.5rem;
   background: var(--surface2);
