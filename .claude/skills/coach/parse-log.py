@@ -161,6 +161,22 @@ def hms_from_seconds(seconds):
     return f"{h}:{m:02d}:{sec:02d}" if h else f"{m}:{sec:02d}"
 
 
+def hre_value(avg_hr, pace_str):
+    """Heart Rate Efficiency = avg HR (bpm) × pace (min/km), i.e. beats per km.
+
+    Lower is better. Needs both a heart rate and a pace, so it is None for
+    strength sessions (no pace) or any activity missing HR. pace_str is the
+    'm:ss' string from pace_from_speed()."""
+    if not avg_hr or not pace_str:
+        return None
+    try:
+        mm, ss = pace_str.split(":")
+        pace_min = int(mm) + int(ss) / 60.0
+    except ValueError:
+        return None
+    return round(avg_hr * pace_min)
+
+
 def build_activity(row, csvname, errors):
     """Turn one CSV row into a normalised activity dict, or None to skip it.
 
@@ -198,6 +214,7 @@ def build_activity(row, csvname, errors):
         "max_hr": parse_int(row.get("max_heart_rate")),
         "zone": hr_zone(avg_hr),
         "pace": pace_from_speed(row.get("enhanced_avg_speed")),
+        "hre": hre_value(avg_hr, pace_from_speed(row.get("enhanced_avg_speed"))),
         "time": hms_from_seconds(row.get("total_timer_time")),
         "calories": parse_int(row.get("total_calories")),
         # Running-dynamics fields from the FIT SDK (blank for non-run activities).
@@ -584,6 +601,118 @@ def render_chart_js(weeks):
     return f"    const actuals = {obj};\n{CHART_RENDER}"
 
 
+# Runs at/above this D+ are flagged on the HRE chart and excluded from the
+# trend fit: hills raise HR for the same pace independently of fitness, so they
+# make HRE look worse without meaning a fitness loss, and the plan's vert grows
+# steadily. Heat is NOT flagged — this athlete trains consistently at 28–32 °C,
+# so it is the baseline condition, not a confound; temp stays in the tooltip
+# for context only.
+HRE_HILLY_ELEV = 30   # m D+ — matches the plan's "flat" cutoff
+
+# Zone color palette, mirrors the .act-zone.zN classes in the plan CSS.
+HRE_ZONE_COLOR = {
+    "Z1": "#3a7bd5", "Z2": "#2ecc8a", "Z3": "#f0c040",
+    "Z4": "#f07030", "Z5": "#d03050",
+}
+
+# SVG scatter + trend for Heart Rate Efficiency (avg HR × pace = beats/km;
+# lower is better). One dot per run, colored by HR zone; runs that are hilly
+# or hot get a ring marker and are dropped from the least-squares trend so the
+# fitness signal stays readable as the plan adds vert. Emitted whole between
+# the `// sync:hre` delimiters for deterministic, zero-diff re-runs. The data
+# array is the only part that changes run to run; the render code is constant.
+HRE_RENDER = r"""
+    (() => {
+      const host = document.getElementById('hre-chart');
+      if (!host || !hreRuns.length) return;
+      const W = 720, H = 200, padL = 44, padR = 12, padT = 14, padB = 30;
+      const xs = hreRuns.map((_, i) => i);
+      const ys = hreRuns.map(r => r.hre);
+      const yMin = Math.min(...ys), yMax = Math.max(...ys);
+      const yLo = Math.floor((yMin - 20) / 20) * 20;
+      const yHi = Math.ceil((yMax + 20) / 20) * 20;
+      const n = hreRuns.length;
+      const px = i => padL + (n <= 1 ? (W - padL - padR) / 2 : (i / (n - 1)) * (W - padL - padR));
+      const py = v => padT + (1 - (v - yLo) / (yHi - yLo)) * (H - padT - padB);
+
+      // Least-squares trend over flat + cool runs only (fitness signal).
+      const fit = hreRuns.map((r, i) => ({ i, r })).filter(o => !o.r.flagged);
+      let trend = '';
+      if (fit.length >= 2) {
+        const mx = fit.reduce((s, o) => s + o.i, 0) / fit.length;
+        const my = fit.reduce((s, o) => s + o.r.hre, 0) / fit.length;
+        let num = 0, den = 0;
+        fit.forEach(o => { num += (o.i - mx) * (o.r.hre - my); den += (o.i - mx) ** 2; });
+        const slope = den ? num / den : 0;
+        const b = my - slope * mx;
+        const x1 = 0, x2 = n - 1;
+        trend = `<line x1="${px(x1).toFixed(1)}" y1="${py(slope * x1 + b).toFixed(1)}" x2="${px(x2).toFixed(1)}" y2="${py(slope * x2 + b).toFixed(1)}" stroke="#9b6dff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85"/>`;
+      }
+
+      // Y gridlines + labels.
+      let grid = '';
+      for (let v = yLo; v <= yHi; v += 20) {
+        const y = py(v).toFixed(1);
+        grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--border)" stroke-width="0.5"/>`;
+        grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-size="8" fill="var(--muted)">${v}</text>`;
+      }
+
+      // Connecting polyline (faint) + per-run dots.
+      const path = hreRuns.map((r, i) => `${px(i).toFixed(1)},${py(r.hre).toFixed(1)}`).join(' ');
+      const line = `<polyline points="${path}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+      const dots = hreRuns.map((r, i) => {
+        const cx = px(i).toFixed(1), cy = py(r.hre).toFixed(1);
+        const ring = r.flagged
+          ? `<circle cx="${cx}" cy="${cy}" r="5.5" fill="none" stroke="${r.color}" stroke-width="1" opacity="0.6"/>`
+          : '';
+        const tip = `<title>${r.label}: ${r.hre} bpm·km${r.flag ? ' · ' + r.flag : ''}${r.flagged ? ' (hilly — off trend)' : ''}</title>`;
+        return `<g>${ring}<circle cx="${cx}" cy="${cy}" r="3" fill="${r.color}">${tip}</circle></g>`;
+      }).join('');
+
+      // X labels: week boundaries only, to avoid clutter.
+      let xlab = '';
+      let lastWk = null;
+      hreRuns.forEach((r, i) => {
+        if (r.week !== lastWk) {
+          xlab += `<text x="${px(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" font-size="8" fill="var(--muted)">W${r.week}</text>`;
+          lastWk = r.week;
+        }
+      });
+
+      host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet">${grid}${line}${trend}${dots}${xlab}</svg>`;
+    })();"""
+
+
+def render_hre_js(weeks):
+    """Build the per-run HRE data array + render code for the plan's HRE chart.
+
+    Runs only (strength has no pace); flat-and-cool runs feed the trend line,
+    hilly/hot runs are flagged and excluded from it. Deterministic — identical
+    activities yield byte-identical output."""
+    runs = []
+    for w in weeks:
+        for a in w["activities"]:
+            if a["type"] == "StrengthTraining" or a.get("hre") is None:
+                continue
+            hilly = a["elev"] >= HRE_HILLY_ELEV
+            # Tooltip context: always show D+ and temp; the chart flags only
+            # hilly runs (heat is this athlete's baseline, see HRE_HILLY_ELEV).
+            temp = f"{a['avg_temp']}°" if a["avg_temp"] is not None else ""
+            ctx = " · ".join(c for c in (f"{a['elev']} m D+", temp) if c)
+            runs.append({
+                "label": a["day_label"],
+                "week": a["week"],
+                "hre": a["hre"],
+                "color": HRE_ZONE_COLOR.get(a["zone"], "#888"),
+                "flagged": hilly,
+                "flag": ctx,
+            })
+    data = ",\n".join(
+        "      " + json.dumps(r, ensure_ascii=False) for r in runs)
+    arr = "[]" if not runs else "[\n" + data + "\n    ]"
+    return f"    const hreRuns = {arr};\n{HRE_RENDER}"
+
+
 def main():
     ap = argparse.ArgumentParser(description="Aggregate TCX logs vs the Dements plan.")
     ap.add_argument("--no-refresh", action="store_true",
@@ -630,6 +759,7 @@ def main():
         "current_gym_file": gym_files.get(cw),
         "weeks": weeks,
         "chart_js": render_chart_js(weeks),
+        "hre_js": render_hre_js(weeks),
         "gym_links_js": render_gym_links_js(gym_files),
     }, indent=2, ensure_ascii=False))
 

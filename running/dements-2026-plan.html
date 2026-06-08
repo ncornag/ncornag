@@ -698,6 +698,58 @@
       color: #7040d099;
     }
 
+    /* Heart Rate Efficiency chart */
+    .hre-sub {
+      font-size: .62rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin: -.3rem 0 .6rem;
+      max-width: 60rem;
+    }
+
+    .hre-sub strong {
+      color: var(--text);
+    }
+
+    .hre-chart {
+      width: 100%;
+      margin-top: .2rem;
+    }
+
+    .hre-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .2rem 1rem;
+      margin-top: .5rem;
+    }
+
+    .hre-key {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .58rem;
+      color: var(--muted);
+    }
+
+    .hre-dot {
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+    }
+
+    .hre-ring {
+      width: .6rem;
+      height: .6rem;
+      border-radius: 50%;
+      border: 1px solid var(--muted);
+    }
+
+    .hre-trend {
+      width: 1.1rem;
+      height: 0;
+      border-top: 1.5px dashed #9b6dff;
+    }
+
     /* Race week emphasis */
     .race-day {
       text-align: center;
@@ -1402,11 +1454,11 @@
     </div>
   </div>
 
-  <div class="week current open" id="w4">
+  <div class="week" id="w4">
     <div class="week-header" onclick="toggle('w4')">
       <div class="week-num">4</div>
       <div class="week-summary">
-        <div class="week-title">Extend Long Run <span class="current-badge">Current</span></div>
+        <div class="week-title">Extend Long Run <span class="done-badge">Done ✓</span></div>
         <div class="week-date">Jun 1–7 · 4 runs · 2 gym</div>
       </div>
       <div class="week-stats">
@@ -1425,20 +1477,23 @@
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym A</div>
           <div class="day-type">Strength</div>
         </div>
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Wed</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Thu</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym B</div>
           <div class="day-type">Strength</div>
@@ -1467,42 +1522,48 @@
       </div>
       <!-- sync:actuals:w4 -->
       <div class="actuals">
-        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">1 run · 5.0 km · 8 m D+</span></div>
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">4 runs · 2 gyms · 22.0 km · 100 m D+</span></div>
         <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
         <div class="act-row"><span class="act-when">Mon 1</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">8 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:12/km</span><span class="act-cal">332</span><span class="act-maxhr">156</span><span class="act-cad gz-orange">154 spm</span><span class="act-stride">906 mm</span><span class="act-vratio gz-red">10.9%</span><span class="act-vosc gz-orange">99.0 mm</span><span class="act-gct gz-orange">290 ms</span><span class="act-temp">29°</span></div>
+        <div class="act-row"><span class="act-when">Tue 2</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">100</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">82</span><span class="act-maxhr">132</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Wed 3</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:45/km</span><span class="act-cal">321</span><span class="act-maxhr">155</span><span class="act-cad gz-orange">154 spm</span><span class="act-stride">839 mm</span><span class="act-vratio gz-red">11.3%</span><span class="act-vosc gz-green">95.6 mm</span><span class="act-gct gz-red">315 ms</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Thu 4</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">95</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">75</span><span class="act-maxhr">125</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">33°</span></div>
+        <div class="act-row"><span class="act-when">Fri 5</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">147</span><span class="act-zone z2">Z2</span><span class="act-pace">6:51/km</span><span class="act-cal">318</span><span class="act-maxhr">153</span><span class="act-cad gz-green">168 spm</span><span class="act-stride">863 mm</span><span class="act-vratio gz-orange">10.0%</span><span class="act-vosc gz-green">88.3 mm</span><span class="act-gct gz-green">268 ms</span><span class="act-temp">25°</span></div>
+        <div class="act-row"><span class="act-when">Sat 6</span><span class="act-ico">🏃</span><span class="act-km">7.0 km</span><span class="act-vert">78 m</span><span class="act-hr">146</span><span class="act-zone z2">Z2</span><span class="act-pace">7:42/km</span><span class="act-cal">459</span><span class="act-maxhr">159</span><span class="act-cad gz-red">150 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
       </div>
       <!-- /sync:actuals:w4 -->
       <!-- sync:coach:w4 -->
-      <div class="coach" data-hash="bac56ce9613b">
+      <div class="coach" data-hash="36b47163368c">
         <div class="coach-head">🧭 Coach</div>
         <div class="coach-body">
-          <p><strong>One run in and it’s a quiet milestone.</strong> Monday’s 5 km came in at <strong>148 bpm — Z2, under your 151 VT1 ceiling — but at 7:12/km, the quickest easy pace of the whole block</strong>, with a 906 mm stride against your usual ~800. You told me it felt “quick but fine,” and that’s exactly the read I want: the pace got faster while the heart rate held, so it’s free aerobic speed, not you pressing. That’s what twelve clean easy weeks of base work buy you. No niggles off the loaded glute bridge either — the 8 kg is doing its job without flaring anything.</p>
-          <p><strong>The rest of the week is unchanged and on plan: Gym A Tuesday, Z2 Wednesday, Gym B Thursday, Z2 Friday, and your 7 km long run Saturday.</strong> Run Saturday exactly like last week’s 6 km — settle in around 147–150, and if the heat lifts your HR, ease the pace or walk a few steps rather than letting it drift into Z3. Let pace stay quick only while the HR stays capped. Stay at 8 kg on the bridge; only step to 12 kg when the last rep of the third set is genuinely easy.</p>
-          <p>Looking ahead, <strong>Week 5 is your first deliberate vert</strong> — a Wednesday 5 km +50 m and a Saturday 8 km trail long run — and you’ve confirmed you’ve got the terrain. Two things will matter more than the climbing itself: <strong>power-hike the steep pitches</strong> rather than running everything (it’s more race-specific and spares the legs), and <strong>hold Z2 on the climbs</strong> by slowing or hiking so the average stays near 150. The descents are where your history says to be careful — short steps, brake gently, and let the slow eccentric calf and step-down work do its job. Smart beats heroic, and right now smart looks like a base that’s genuinely getting fitter.</p>
+          <p><strong>Best week of the block, full stop.</strong> All four runs and both gyms in — <strong>22.0 / 22 km, 100% of plan, 100% easy, zero Z3</strong> at an average of 147 bpm, comfortably under your 151 VT1. Monday opened at 7:12/km @ 148, and Friday was the standout: <strong>6:51/km at just 147 bpm with cadence up to 168 spm and ground contact down to 268 ms</strong> — that’s the quickest easy pace of the whole block for the same aerobic cost. Your engine is getting more efficient at Z2, exactly what base phase is supposed to buy you.</p>
+          <p><strong>And there it is — your first real positive meters.</strong> Saturday’s 7 km long run carried <strong>78 m of climbing held at 146 bpm</strong>, the most vert in any single session so far, and you said it honestly didn’t register as hard. That’s the green light I was hoping for: when a 57-year-old with your history takes on new climbing and the body shrugs, it means the strength work and the patient Z2 base are doing their job. Note the cadence dropped to 150 on the climb — normal, and on real terrain we’ll convert that into a deliberate power-hike rather than grinding up.</p>
+          <p><strong>Nothing to fix, so nothing changes.</strong> Week 5 stays exactly as planned — first dedicated vert block on your local +35 m hill (Wed one ascent ~50 m, Sat three ~105 m), with the glute bridge at 12 kg. Same rules as Saturday proved out: <strong>power-hike the steep pitch, hold Z2 by easing or hiking</strong> so the average sits near 150, and on the descents — the one place your history says stay honest — short steps and gentle braking, letting the eccentric step-downs from the gym carry the load. You’ve banked two clean weeks back to back; keep stacking them. Smart beats heroic.</p>
         </div>
       </div>
       <!-- /sync:coach:w4 -->
     </div>
   </div>
 
-  <div class="week" id="w5">
+  <div class="week current open" id="w5">
     <div class="week-header" onclick="toggle('w5')">
       <div class="week-num">5</div>
       <div class="week-summary">
-        <div class="week-title">First Gentle Trail</div>
+        <div class="week-title">First Gentle Trail <span class="current-badge">Current</span> <span class="adjusted">adjusted</span></div>
         <div class="week-date">Jun 8–14 · 4 runs · 2 gym · trail debut</div>
       </div>
-      <div class="week-stats">
+      <div class="week-stats" data-plan-km="23" data-plan-elev="80">
         <div class="week-km">23km</div>
-        <div class="week-elev">80m</div>
+        <div class="week-elev">155m</div>
       </div>
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
       <!-- sync:days:w5 -->
       <div class="days">
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
@@ -1518,7 +1579,7 @@
           <div class="day-icon">⛰</div>
           <div class="day-km">5km</div>
           <div class="day-elev">50m</div>
-          <div class="day-type">Trail</div>
+          <div class="day-type">Hill ×1</div>
         </div>
         <div class="day gym">
           <div class="day-label">Thu</div>
@@ -1536,8 +1597,8 @@
           <div class="day-label">Sat</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">8km</div>
-          <div class="day-elev">30m</div>
-          <div class="day-type">Long trail</div>
+          <div class="day-elev">105m</div>
+          <div class="day-type">Hill ×3</div>
         </div>
         <div class="day rest">
           <div class="day-label">Sun</div>
@@ -1547,8 +1608,26 @@
         </div>
       </div>
       <!-- /sync:days:w5 -->
-      <div class="week-notes">First trails — rolling paths only. No real climbs yet. Add step-ups to gym for trail
+      <div class="week-notes">First vert, on your local hill: ~3.5 km flat out, then the +35 m climb — once Wed, three reps
+        Sat. Power-hike the steep bit, hold Z2, brake gently on the way down. Step-ups in the gym for trail
         specificity.</div>
+      <!-- sync:actuals:w5 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">1 run · 5.0 km · 7 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 8</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">6:55/km</span><span class="act-cal">319</span><span class="act-maxhr">155</span><span class="act-cad gz-green">164 spm</span><span class="act-stride">876 mm</span><span class="act-vratio gz-orange">10.2%</span><span class="act-vosc gz-green">90.6 mm</span><span class="act-gct gz-green">272 ms</span><span class="act-temp">30°</span></div>
+      </div>
+      <!-- /sync:actuals:w5 -->
+      <!-- sync:coach:w5 -->
+      <div class="coach" data-hash="9ec0e24757dd">
+        <div class="coach-head">🧭 Coach</div>
+        <div class="coach-body">
+          <p><strong>Strong open to your first vert week.</strong> Monday’s 5 km came in at <strong>6:55/km @ 148 bpm</strong> — Z2, under VT1, with cadence at 164 spm and ground contact 272 ms. That’s the same efficient, quick-but-easy signature you showed on Friday last week, so you’re carrying form straight into this block, not paying for the back-to-back clean weeks.</p>
+          <p><strong>The week’s purpose is the hills, and Saturday proved you’re ready for them.</strong> Wednesday is one ascent of your +35 m hill (~50 m total) and Saturday is three reps (~105 m) — building on the 78 m you handled at 146 bpm without noticing. Run the 3.5 km out flat and easy, then <strong>power-hike the steep pitch</strong>: short, deliberate steps, hands on thighs if it helps, keeping the average near 150 rather than chasing a running stride uphill. On each descent, this is the one spot to stay disciplined — <strong>short steps, soft knees, gentle braking</strong>, and let the eccentric step-downs from the gym do their job. The 12 kg glute bridge stays as set; drop to 8 kg only if your form breaks.</p>
+          <p><strong>No changes — the plan is right where it should be.</strong> Two flawless weeks banked and the body tolerating vert means we hold course: hit Wed and Sat as written, keep the easy days genuinely easy, and you’ll roll into next week’s recovery block having earned it. Smart beats heroic.</p>
+        </div>
+      </div>
+      <!-- /sync:coach:w5 -->
     </div>
   </div>
 
@@ -2975,6 +3054,24 @@
     <div class="vol-chart" id="vol-chart"></div>
   </div>
 
+  <!-- Heart Rate Efficiency chart -->
+  <div class="chart-section">
+    <div class="section-label">Heart Rate Efficiency · beats per km</div>
+    <div class="hre-sub">HRE = avg HR × pace (min/km) — the heartbeats spent to cover one km. <strong>Lower is
+      better.</strong> One dot per run, colored by HR zone; the dashed line is the trend over flat runs. Ringed
+      dots are hilly runs (≥30 m D+) — excluded from the trend, since climbing raises HR for the same pace.</div>
+    <div class="hre-chart" id="hre-chart"></div>
+    <div class="hre-legend">
+      <span class="hre-key"><span class="hre-dot" style="background:#3a7bd5"></span>Z1</span>
+      <span class="hre-key"><span class="hre-dot" style="background:#2ecc8a"></span>Z2</span>
+      <span class="hre-key"><span class="hre-dot" style="background:#f0c040"></span>Z3</span>
+      <span class="hre-key"><span class="hre-dot" style="background:#f07030"></span>Z4</span>
+      <span class="hre-key"><span class="hre-dot" style="background:#d03050"></span>Z5</span>
+      <span class="hre-key"><span class="hre-ring"></span>hilly (off trend)</span>
+      <span class="hre-key"><span class="hre-trend"></span>trend</span>
+    </div>
+  </div>
+
   <script>
     function toggle(id) {
       document.getElementById(id).classList.toggle('open');
@@ -2990,8 +3087,8 @@
       { label: '1', km: 25, elev: 0, color: '#1a9e63', done: true },
       { label: '2', km: 25, elev: 0, color: '#1a9e63', done: true },
       { label: '3', km: 21, elev: 0, color: '#1a9e63', done: true },
-      { label: '4', km: 22, elev: 0, color: '#1a9e63', current: true },
-      { label: '5', km: 23, elev: 80, color: '#2a9a6a' },
+      { label: '4', km: 22, elev: 0, color: '#1a9e63', done: true },
+      { label: '5', km: 23, elev: 80, color: '#2a9a6a', current: true },
       { label: '6', km: 17, elev: 30, color: '#2a5fb5', reco: true },
       { label: '7', km: 28, elev: 300, color: '#1e8050' },
       { label: '8', km: 33, elev: 500, color: '#1e8050' },
@@ -3024,7 +3121,8 @@
       1: { km: 25.1, elev: 46 },
       2: { km: 25.0, elev: 35 },
       3: { km: 21.0, elev: 26 },
-      4: { km: 5.0, elev: 8 }
+      4: { km: 22.0, elev: 100 },
+      5: { km: 5.0, elev: 7 }
     };
 
     weeks.forEach((w, i) => {
@@ -3054,6 +3152,90 @@
       chart.appendChild(wrap);
     });
     // /sync:chart
+
+    // sync:hre
+    const hreRuns = [
+      {"label": "Mon 11", "week": 1, "hre": 1178, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 30°"},
+      {"label": "Tue 12", "week": 1, "hre": 1182, "color": "#2ecc8a", "flagged": false, "flag": "15 m D+ · 29°"},
+      {"label": "Wed 13", "week": 1, "hre": 1208, "color": "#f0c040", "flagged": false, "flag": "7 m D+ · 28°"},
+      {"label": "Thu 14", "week": 1, "hre": 1237, "color": "#f0c040", "flagged": false, "flag": "7 m D+ · 26°"},
+      {"label": "Fri 15", "week": 1, "hre": 1020, "color": "#f0c040", "flagged": false, "flag": "10 m D+ · 24°"},
+      {"label": "Mon 18", "week": 2, "hre": 1168, "color": "#2ecc8a", "flagged": false, "flag": "8 m D+ · 30°"},
+      {"label": "Tue 19", "week": 2, "hre": 1188, "color": "#f0c040", "flagged": false, "flag": "6 m D+ · 31°"},
+      {"label": "Wed 20", "week": 2, "hre": 1135, "color": "#2ecc8a", "flagged": false, "flag": "5 m D+ · 28°"},
+      {"label": "Thu 21", "week": 2, "hre": 1119, "color": "#f0c040", "flagged": false, "flag": "7 m D+ · 31°"},
+      {"label": "Fri 22", "week": 2, "hre": 1095, "color": "#2ecc8a", "flagged": false, "flag": "9 m D+ · 30°"},
+      {"label": "Mon 25", "week": 3, "hre": 1125, "color": "#2ecc8a", "flagged": false, "flag": "6 m D+ · 32°"},
+      {"label": "Wed 27", "week": 3, "hre": 1156, "color": "#2ecc8a", "flagged": false, "flag": "5 m D+ · 30°"},
+      {"label": "Fri 29", "week": 3, "hre": 1206, "color": "#2ecc8a", "flagged": false, "flag": "5 m D+ · 32°"},
+      {"label": "Sat 30", "week": 3, "hre": 1182, "color": "#2ecc8a", "flagged": false, "flag": "10 m D+ · 31°"},
+      {"label": "Mon 1", "week": 4, "hre": 1066, "color": "#2ecc8a", "flagged": false, "flag": "8 m D+ · 29°"},
+      {"label": "Wed 3", "week": 4, "hre": 1147, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 32°"},
+      {"label": "Fri 5", "week": 4, "hre": 1007, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 25°"},
+      {"label": "Sat 6", "week": 4, "hre": 1124, "color": "#2ecc8a", "flagged": true, "flag": "78 m D+ · 32°"},
+      {"label": "Mon 8", "week": 5, "hre": 1024, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 30°"}
+    ];
+
+    (() => {
+      const host = document.getElementById('hre-chart');
+      if (!host || !hreRuns.length) return;
+      const W = 720, H = 200, padL = 44, padR = 12, padT = 14, padB = 30;
+      const xs = hreRuns.map((_, i) => i);
+      const ys = hreRuns.map(r => r.hre);
+      const yMin = Math.min(...ys), yMax = Math.max(...ys);
+      const yLo = Math.floor((yMin - 20) / 20) * 20;
+      const yHi = Math.ceil((yMax + 20) / 20) * 20;
+      const n = hreRuns.length;
+      const px = i => padL + (n <= 1 ? (W - padL - padR) / 2 : (i / (n - 1)) * (W - padL - padR));
+      const py = v => padT + (1 - (v - yLo) / (yHi - yLo)) * (H - padT - padB);
+
+      // Least-squares trend over flat + cool runs only (fitness signal).
+      const fit = hreRuns.map((r, i) => ({ i, r })).filter(o => !o.r.flagged);
+      let trend = '';
+      if (fit.length >= 2) {
+        const mx = fit.reduce((s, o) => s + o.i, 0) / fit.length;
+        const my = fit.reduce((s, o) => s + o.r.hre, 0) / fit.length;
+        let num = 0, den = 0;
+        fit.forEach(o => { num += (o.i - mx) * (o.r.hre - my); den += (o.i - mx) ** 2; });
+        const slope = den ? num / den : 0;
+        const b = my - slope * mx;
+        const x1 = 0, x2 = n - 1;
+        trend = `<line x1="${px(x1).toFixed(1)}" y1="${py(slope * x1 + b).toFixed(1)}" x2="${px(x2).toFixed(1)}" y2="${py(slope * x2 + b).toFixed(1)}" stroke="#9b6dff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85"/>`;
+      }
+
+      // Y gridlines + labels.
+      let grid = '';
+      for (let v = yLo; v <= yHi; v += 20) {
+        const y = py(v).toFixed(1);
+        grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--border)" stroke-width="0.5"/>`;
+        grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-size="8" fill="var(--muted)">${v}</text>`;
+      }
+
+      // Connecting polyline (faint) + per-run dots.
+      const path = hreRuns.map((r, i) => `${px(i).toFixed(1)},${py(r.hre).toFixed(1)}`).join(' ');
+      const line = `<polyline points="${path}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+      const dots = hreRuns.map((r, i) => {
+        const cx = px(i).toFixed(1), cy = py(r.hre).toFixed(1);
+        const ring = r.flagged
+          ? `<circle cx="${cx}" cy="${cy}" r="5.5" fill="none" stroke="${r.color}" stroke-width="1" opacity="0.6"/>`
+          : '';
+        const tip = `<title>${r.label}: ${r.hre} bpm·km${r.flag ? ' · ' + r.flag : ''}${r.flagged ? ' (hilly — off trend)' : ''}</title>`;
+        return `<g>${ring}<circle cx="${cx}" cy="${cy}" r="3" fill="${r.color}">${tip}</circle></g>`;
+      }).join('');
+
+      // X labels: week boundaries only, to avoid clutter.
+      let xlab = '';
+      let lastWk = null;
+      hreRuns.forEach((r, i) => {
+        if (r.week !== lastWk) {
+          xlab += `<text x="${px(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" font-size="8" fill="var(--muted)">W${r.week}</text>`;
+          lastWk = r.week;
+        }
+      });
+
+      host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet">${grid}${line}${trend}${dots}${xlab}</svg>`;
+    })();
+    // /sync:hre
 
     // sync:gymlinks
     const gymFiles = { 3: "gimnasio-semana3.html", 4: "gimnasio-semana4.html", 5: "gimnasio-semana5.html" };

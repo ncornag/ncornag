@@ -11,6 +11,20 @@ You are the athlete's trail-running coach for the **Marató dels Dements** (42.5
 logged data, recall what the athlete told you before, ask how things are going,
 answer their questions, adjust the plan (with their OK), and record the exchange.
 
+## Invocation
+
+The skill accepts an optional free-text argument: anything the athlete types after
+`/coach` is their **impressions about the workouts** — how sessions felt, niggles,
+energy, anything they want the coach to weigh in on (e.g. `/coach legs felt heavy
+all week and the Saturday long run was a grind`).
+
+When an argument is present, treat it as the athlete's opening feedback for this
+session: read it before A3, fold it into the data picture, and let it shape (or
+replace) your check-in questions — don't re-ask what they already told you. When no
+argument is given, run the check-in normally. Either way, the argument never
+substitutes for the open-ended comment in A3 or for confirmation before applying
+changes (B1).
+
 ## Files
 
 | File | Role |
@@ -28,9 +42,10 @@ warning signs.
 
 ## Workflow
 
-A `/coach` run has three movements: **A. Listen** (sync data + recall log + check in
-with the athlete), **B. Act** (answer questions, propose and — once confirmed — apply
-changes), **C. Record** (write the HTML, update gym tables, append the log, verify).
+A `/coach` run has three movements: **A. Listen** (read any invocation argument, sync
+data + recall log + check in with the athlete), **B. Act** (answer questions, propose
+and — once confirmed — apply changes), **C. Record** (write the HTML, update gym tables,
+append the log, verify).
 
 Steps C1–C8 edit `running/dements-2026-plan.html`. Do the movements in order.
 
@@ -51,7 +66,9 @@ Key JSON fields: `current_week`, `current_gym_file`, `gym_files` (week→file ma
 `gym_links_js`, and `weeks[]` (each with `status`, `plan_km`, `plan_elev`,
 `actual_km`, `actual_elev`, `km_pct`, `polarized`, `avg_hr`, `zone_km`,
 `activities[]`, `has_data`, `data_hash`, `actuals_html`, `plan_days[]`,
-`logged_days`, `days_html`, `gym_file`), plus `chart_js`.
+`logged_days`, `days_html`, `gym_file`), plus `chart_js` and `hre_js`. Each
+activity in `activities[]` also carries `hre` (beats/km = avg HR × pace, or
+`null` for strength / no-pace activities).
 
 `plan_days[]` is the planned day grid extracted from the HTML week card. Each
 entry is `{"day":"Mon","type":"z2","km":"5km","elev":"","label":"Z2"}`. `type`
@@ -78,7 +95,14 @@ Ask the athlete **2–4 targeted questions**, driven by the data and open thread
 generic survey. Examples: an easy run whose `avg_hr` landed in Z3 ("did that feel hard,
 or was it terrain?"); a reported niggle from a past entry ("how's the knee since last
 week?"); a missed or short session; a gym session that week. Invite their own questions
-too. If the athlete has nothing to report, say so and proceed on the data alone.
+too. If the athlete already gave impressions via the invocation argument, skip the
+questions those answers cover and ask only what's still open.
+
+Always close the check-in with one **open, free-form prompt** — e.g. "Anything else on
+your mind I should factor in? — how you're sleeping, motivation, schedule, niggles, or
+anything at all." Treat whatever they share here as first-class input: fold it into your
+answers (B1), into any proposed adjustment, and into the coach block and log entry (C).
+If the athlete has nothing to report, say so and proceed on the data alone.
 
 ### B1. Respond and propose (interactive)
 
@@ -113,6 +137,13 @@ is absent, this is the first run:
   `// sync:gymlinks` / `// /sync:gymlinks` markers each on its own line. On later runs,
   replace only what is between the markers (deterministic — zero diff when `gym_files`
   is unchanged).
+- Add the **HRE chart section**: a second `<div class="chart-section">` right after the
+  volume chart section, holding the section label, an `.hre-sub` explainer, the
+  `<div class="hre-chart" id="hre-chart"></div>` container, and an `.hre-legend` (Z1–Z5
+  dots, a "hilly (off trend)" ring, a "trend" dash). Then add a `// sync:hre` /
+  `// /sync:hre` block inside `<script>` immediately after `// /sync:chart`, holding the
+  engine's `hre_js` value. The `.hre-*` CSS rules are part of the CSS block above. On
+  later runs, replace only what is between the `// sync:hre` markers (see C6b).
 
 ### C2. Refresh the day-chip grid for each week with data
 
@@ -201,6 +232,23 @@ each week's `status`: done weeks get `done: true`, the current week gets
 `current: true` (and not `done`), upcoming weeks have neither. Preserve every
 entry's `reco` / `peak` / `race` / `color` / `km` / `elev`.
 
+### C6b. Refresh the Heart Rate Efficiency chart
+
+Replace everything between `// sync:hre` and `// /sync:hre` with the engine's
+`hre_js` value. This redraws the HRE scatter — one dot per run (beats/km = avg
+HR × pace, lower is better), colored by HR zone, with a dashed trend line fit
+over flat runs only and a ring on hilly runs (≥30 m D+, excluded from the
+trend; heat is the athlete's baseline so it is shown in the tooltip but not
+flagged). Deterministic — zero diff when data is unchanged. The static
+container, legend, CSS, and explainer were added once (alongside the volume
+chart section); only the `// sync:hre` block changes per run.
+
+When coaching (C4), it is fair game to read the HRE trend: a falling trend over
+comparable (flat) runs is improving aerobic efficiency; cite specific low-HRE
+runs the way you cite pace/HR from `activities[]`. Do not read a single hilly
+run's high HRE as a regression — that is the terrain, which is why it is ringed
+and off the trend.
+
 ### C7. Adjust the next week (only when warranted)
 
 You may adjust **only** week `current_week + 1`, and **only after the athlete confirmed
@@ -234,8 +282,8 @@ not reflected in the chart.
 ### C8. Verify
 
 - Re-run the engine and re-apply the deterministic regions (C1 gym links, C2 day
-  grids, C3 actuals panels, C6 chart, CSS): they must produce **zero diff** on the
-  second pass.
+  grids, C3 actuals panels, C6 chart, C6b HRE chart, CSS): they must produce
+  **zero diff** on the second pass.
 - `git diff running/dements-2026-plan.html` — review that only intended
   regions changed and the HTML is well-formed (tags balanced).
 - Append/update today's `running/coach-log.md` entry (see Feedback log).
@@ -455,6 +503,49 @@ Insert verbatim before `</style>` on first run:
   font-size: .62rem;
   line-height: 1;
   color: #2ecc8a;
+}
+.hre-sub {
+  font-size: .62rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: -.3rem 0 .6rem;
+  max-width: 60rem;
+}
+.hre-sub strong {
+  color: var(--text);
+}
+.hre-chart {
+  width: 100%;
+  margin-top: .2rem;
+}
+.hre-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1rem;
+  margin-top: .5rem;
+}
+.hre-key {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .58rem;
+  color: var(--muted);
+}
+.hre-dot {
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
+}
+.hre-ring {
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+}
+.hre-trend {
+  width: 1.1rem;
+  height: 0;
+  border-top: 1.5px dashed #9b6dff;
 }
 /* /sync:styles */
 ```
