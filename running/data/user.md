@@ -1,5 +1,85 @@
-# Running data config
+# Athlete & training profile
 
-Per-machine paths for the garmin skill, kept out of the committed scripts.
+<!-- Read in full by the coach skill as planning context. parse-log.py and the
+     garmin skill parse the structured bits: the `key: value` lines and the two
+     tables below (HR zones, Training plan). Hand-edit freely. -->
+
+## Paths
 
 - log_dir: /Users/ncornag/Library/CloudStorage/GoogleDrive-ncornag@gmail.com/My Drive/personal/running/log
+- plan_file: dements-2026-plan.html
+- gym_prefix: gimnasio-semana
+
+## Athlete
+
+- age: 57
+
+Injury history — coach conservatively and never push through warning signs.
+(Add specifics here: past injuries, niggles to watch, recovery constraints.)
+
+## HR zones
+
+Lab-calibrated. VT1 151, VT2 173. Z2 (135–151) is the athlete's aerobic focus.
+
+| zone | from_bpm |
+| Z1 | 0 |
+| Z2 | 135 |
+| Z3 | 152 |
+| Z4 | 163 |
+| Z5 | 174 |
+
+- polarized_target: 80/20
+
+## Goal race
+
+- name: Marató dels Dements
+- terrain: Serra d'Espadà
+
+(Distance and elevation are the last row of the Training plan table below — 42.5 km, 3808 m D+; the race is plan week 26.)
+
+## Equipment
+
+_(Coach reads this when prescribing sessions. List shoes, watch / HR strap, poles, vest, and any treadmill or gym access.)_
+
+## Terrain from home
+
+_(Coach reads this when prescribing sessions. List the routes you can run from home with their distance and elevation — e.g. "River loop — 8 km, 40 m D+, flat"; "Hill repeats — 5 km, 300 m D+, trail".)_
+
+## Training principles
+
+- principle: smart beats heroic
+
+(The plan is polarized ~80% easy / ~20% hard, minimal Z3. Vert specificity, power-hike practice, eccentric descents, back-to-back long days.)
+
+## Training plan
+
+- plan_start: 2026-05-11
+- hilly_elev: 30
+
+| week | km | elev |
+| 1 | 25 | 0 |
+| 2 | 25 | 0 |
+| 3 | 21 | 0 |
+| 4 | 22 | 0 |
+| 5 | 23 | 80 |
+| 6 | 17 | 30 |
+| 7 | 28 | 300 |
+| 8 | 33 | 500 |
+| 9 | 38 | 700 |
+| 10 | 25 | 350 |
+| 11 | 45 | 1000 |
+| 12 | 50 | 1200 |
+| 13 | 52 | 1400 |
+| 14 | 56 | 1600 |
+| 15 | 32 | 500 |
+| 16 | 45 | 1500 |
+| 17 | 35 | 700 |
+| 18 | 60 | 2000 |
+| 19 | 38 | 800 |
+| 20 | 68 | 2600 |
+| 21 | 75 | 2900 |
+| 22 | 65 | 2200 |
+| 23 | 48 | 1400 |
+| 24 | 28 | 600 |
+| 25 | 22 | 300 |
+| 26 | 42.5 | 3808 |

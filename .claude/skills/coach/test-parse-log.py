@@ -16,7 +16,7 @@ def test_parse_gym_files_single_and_range():
         for name in ("gimnasio-semana3-5.html", "gimnasio-semana7.html",
                      "theme.css", "index.html"):
             open(os.path.join(d, name), "w").close()
-        m = pl.parse_gym_files(d)
+        m = pl.parse_gym_files(d, "gimnasio-semana")
         assert m == {3: "gimnasio-semana3-5.html",
                      4: "gimnasio-semana3-5.html",
                      5: "gimnasio-semana3-5.html",
@@ -25,7 +25,7 @@ def test_parse_gym_files_single_and_range():
 
 def test_parse_gym_files_empty():
     with tempfile.TemporaryDirectory() as d:
-        assert pl.parse_gym_files(d) == {}
+        assert pl.parse_gym_files(d, "gimnasio-semana") == {}
 
 
 def test_render_gym_links_js_has_map_and_walker():

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""parse-log.py - Aggregate logged TCX activities against the Dements 2026 plan.
+"""parse-log.py - Aggregate logged activities against the athlete's training plan.
 
 Part of the coach skill. This script does the deterministic work so Claude does
 not have to: it reads the monthly activity CSVs (refreshed separately by the
 garmin skill), maps every logged activity onto a plan week, classifies average
-heart rate into a lab-calibrated training zone, aggregates per week, and prints
-a JSON summary on stdout for the skill to act on. All progress/errors go to
-stderr.
+heart rate into a training zone, aggregates per week, and prints a JSON summary
+on stdout for the skill to act on. Athlete- and plan-specific values (zones,
+plan start, the weekly baseline, file names) come from the profile in
+running/data/user.md. All progress/errors go to stderr.
 
 Steps:
   1. Read every running/data/<YYYY-MM>.csv.
-  2. Map each activity to a plan week (week 1 = Mon 2026-05-11; week N spans
-     [start+(N-1)*7, +6d]). Activities outside the plan range are ignored.
-  3. Classify average HR into Z1-Z5 from the VT1/VT2 zones in running-zones.html.
+  2. Map each activity to a plan week (week 1 starts at the profile's plan_start;
+     week N spans [start+(N-1)*7, +6d]). Activities outside the plan range are
+     ignored.
+  3. Classify average HR into zones from the profile's HR-zone cutoffs.
   4. Aggregate per week and emit JSON.
 
 Usage:
@@ -33,18 +35,14 @@ import re
 import sys
 from datetime import date, datetime, timedelta
 
-PLAN_START = date(2026, 5, 11)   # Monday of plan week 1
-TOTAL_WEEKS = 26
+from user_profile import read_profile
 
-# Planned weekly volume (km) and elevation (m D+). Canonical baseline - mirrors
-# the weeks[] array in dements-2026-plan.html. Index 0 == week 1.
-PLAN = [
-    (25, 0), (25, 0), (21, 0), (22, 0), (23, 80), (17, 30),
-    (28, 300), (33, 500), (38, 700), (25, 350), (45, 1000), (50, 1200),
-    (52, 1400), (56, 1600), (32, 500), (45, 1500), (35, 700), (60, 2000),
-    (38, 800), (68, 2600), (75, 2900), (65, 2200), (48, 1400), (28, 600),
-    (22, 300), (42.5, 3808),
-]
+# Athlete- and plan-specific values are loaded from the profile
+# (running/data/user.md) by main(); the coach skill itself is generic.
+PLAN_START = None     # date — profile plan_start
+TOTAL_WEEKS = None    # int — len(PLAN)
+PLAN = None           # list[(km, elev)] — profile Training-plan table
+ZONE_CUTOFFS = None   # [int,int,int,int] — profile HR-zone Z2..Z5 lower bounds
 
 ICONS = {"Running": "\U0001F3C3", "Hiking": "\U0001F97E",
          "StrengthTraining": "\U0001F4AA"}
@@ -61,18 +59,13 @@ DAY_ELEV_TYPES = {"trail-z2", "trail-hike"}
 
 
 def hr_zone(hr):
-    """Map an average HR to a lab-calibrated zone (VT1 151, VT2 173)."""
+    """Map an average HR to a zone using the profile's ZONE_CUTOFFS."""
     if hr is None:
         return None
-    if hr < 135:
-        return "Z1"
-    if hr < 152:
-        return "Z2"
-    if hr < 163:
-        return "Z3"
-    if hr < 174:
-        return "Z4"
-    return "Z5"
+    for i, cutoff in enumerate(ZONE_CUTOFFS):
+        if hr < cutoff:
+            return ZONES[i]
+    return ZONES[-1]
 
 
 def parse_float(s):
@@ -355,20 +348,18 @@ _DAY_CELL_RE = re.compile(
 )
 
 
-_GYM_FILE_RE = re.compile(r"gimnasio-semana(\d+)(?:-(\d+))?\.html$")
-
-
-def parse_gym_files(running_dir):
+def parse_gym_files(running_dir, gym_prefix):
     """Map each plan week to its gym HTML file.
 
-    Scans running/gimnasio-semana*.html. A single-week file
-    (gimnasio-semana3.html) maps week 3; a range file (gimnasio-semana3-5.html)
-    maps weeks 3, 4 and 5. Files are processed in sorted order so overlaps
-    resolve deterministically (later filename wins).
+    Scans running/<gym_prefix>*.html. A single-week file (<prefix>3.html) maps
+    week 3; a range file (<prefix>3-5.html) maps weeks 3, 4 and 5. Files are
+    processed in sorted order so overlaps resolve deterministically (later
+    filename wins).
     """
+    file_re = re.compile(re.escape(gym_prefix) + r"(\d+)(?:-(\d+))?\.html$")
     mapping = {}
-    for path in sorted(glob.glob(os.path.join(running_dir, "gimnasio-semana*.html"))):
-        m = _GYM_FILE_RE.search(os.path.basename(path))
+    for path in sorted(glob.glob(os.path.join(running_dir, gym_prefix + "*.html"))):
+        m = file_re.search(os.path.basename(path))
         if not m:
             continue
         lo = int(m.group(1))
@@ -407,7 +398,7 @@ def render_gym_links_js(gym_files):
 
 
 def parse_plan_days(html_path):
-    """Extract the planned day grid for each week from dements-2026-plan.html.
+    """Extract the planned day grid for each week from the plan file.
 
     Returns a dict mapping week number (int) to a list of day dicts:
       [{"day": "Mon", "type": "z2", "km": "5km", "elev": "50m", "label": "Z2"}, ...]
@@ -581,7 +572,7 @@ def render_chart_js(weeks):
 # steadily. Heat is NOT flagged — this athlete trains consistently at 28–32 °C,
 # so it is the baseline condition, not a confound; temp stays in the tooltip
 # for context only.
-HRE_HILLY_ELEV = 30   # m D+ — matches the plan's "flat" cutoff
+HRE_HILLY_ELEV = None   # m D+ — set from the profile's hilly_elev in main()
 
 # Zone color palette, mirrors the .act-zone.zN classes in the plan CSS.
 HRE_ZONE_COLOR = {
@@ -688,7 +679,7 @@ def render_hre_js(weeks):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Aggregate TCX logs vs the Dements plan.")
+    ap = argparse.ArgumentParser(description="Aggregate logged activities vs the training plan.")
     ap.add_argument("--today", help="override today's date (YYYY-MM-DD), for testing")
     ap.add_argument("--data-dir", help="directory holding the monthly YYYY-MM.csv files (default: <repo>/running/data)")
     ap.add_argument("--repo", help="repo root (default: inferred from script location)")
@@ -700,15 +691,23 @@ def main():
     today = datetime.strptime(args.today, "%Y-%m-%d").date() if args.today \
         else date.today()
 
+    prof = read_profile(os.path.join(repo, "running", "data", "user.md"))
+    global PLAN_START, TOTAL_WEEKS, PLAN, ZONE_CUTOFFS, HRE_HILLY_ELEV
+    PLAN_START = prof["plan_start"]
+    PLAN = prof["plan"]
+    TOTAL_WEEKS = len(PLAN)
+    ZONE_CUTOFFS = prof["zone_cutoffs"]
+    HRE_HILLY_ELEV = prof["hilly_elev"]
+
     errors = []
     activities = read_activities(data_dir, errors)
     for msg in errors:
         print(f"warning: {msg}", file=sys.stderr)
 
     running_dir = os.path.join(repo, "running")
-    html_path = os.path.join(running_dir, "dements-2026-plan.html")
+    html_path = os.path.join(running_dir, prof["plan_file"])
     plan_days_by_week = parse_plan_days(html_path)
-    gym_files = parse_gym_files(running_dir)
+    gym_files = parse_gym_files(running_dir, prof["gym_prefix"])
     weeks = aggregate(activities, today, plan_days_by_week)
     for w in weeks:
         w["gym_file"] = gym_files.get(w["week"])
