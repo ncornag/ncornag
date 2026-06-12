@@ -229,7 +229,7 @@ def build_activity(row, csvname, errors):
 
 def read_activities(data_dir, errors):
     acts = []
-    for path in sorted(glob.glob(os.path.join(data_dir, "tcx-*.csv"))):
+    for path in sorted(glob.glob(os.path.join(data_dir, "[0-9][0-9][0-9][0-9]-[0-9][0-9].csv"))):
         try:
             with open(path, newline="", encoding="utf-8") as f:
                 for row in csv.DictReader(f):
@@ -718,7 +718,7 @@ def main():
     ap.add_argument("--no-refresh", action="store_true",
                     help="skip running download-garmin.py; use existing CSVs only")
     ap.add_argument("--today", help="override today's date (YYYY-MM-DD), for testing")
-    ap.add_argument("--data-dir", help="directory holding tcx-*.csv (default: <repo>/running/data)")
+    ap.add_argument("--data-dir", help="directory holding the monthly YYYY-MM.csv files (default: <repo>/running/data)")
     ap.add_argument("--repo", help="repo root (default: inferred from script location)")
     args = ap.parse_args()
 

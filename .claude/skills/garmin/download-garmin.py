@@ -8,7 +8,7 @@ tcx-to-csv.sh pipeline). It does two things in one run:
      2026-01-01) to today as its native .fit file, into the per-year log
      folder, skipping activities already on disk.
   2. Decode each .fit with the official Garmin FIT SDK and (re)write the coach's
-     monthly summary CSVs (running/data/tcx-YYYY-MM.csv) with every named SDK
+     monthly summary CSVs (running/data/YYYY-MM.csv) with every named SDK
      session field, raw, one row per activity. The header is the union of fields
      seen that month (lead columns the coach keys on first, then the rest
      alphabetical); parse-log.py reads the fields it needs by name.
@@ -293,7 +293,7 @@ def month_header(rows: list[dict]) -> list[str]:
 
 
 def build_csvs(start: date, end: date) -> None:
-    """Rebuild running/data/tcx-YYYY-MM.csv from .fit files in the log folders."""
+    """Rebuild running/data/YYYY-MM.csv from .fit files in the log folders."""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     rows_by_month: dict[str, list] = defaultdict(list)
     fname_re = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-\d{2}-\d{2}_.+\.fit$",
@@ -314,7 +314,7 @@ def build_csvs(start: date, end: date) -> None:
     for month, items in sorted(rows_by_month.items()):
         items.sort(key=lambda t: t[0])        # filenames sort chronologically
         rows = [r for _, r in items]
-        out = DATA_DIR / f"tcx-{month}.csv"
+        out = DATA_DIR / f"{month}.csv"
         with open(out, "w", newline="") as fh:
             w = csv.DictWriter(fh, fieldnames=month_header(rows), extrasaction="ignore")
             w.writeheader()
