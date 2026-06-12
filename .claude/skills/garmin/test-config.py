@@ -45,6 +45,18 @@ def test_read_log_dir_happy_path():
         assert cfg.read_log_dir(p) == "/tmp/log"
 
 
+def test_read_log_dir_empty_value_exits():
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "user.md")
+        with open(p, "w") as f:
+            f.write("log_dir:   \n")
+        try:
+            cfg.read_log_dir(p)
+            assert False, "expected SystemExit for empty log_dir value"
+        except SystemExit:
+            pass
+
+
 if __name__ == "__main__":
     test_parse_log_dir_bulleted()
     test_parse_log_dir_plain()
@@ -52,4 +64,5 @@ if __name__ == "__main__":
     test_parse_log_dir_missing_key()
     test_read_log_dir_missing_file_exits()
     test_read_log_dir_happy_path()
+    test_read_log_dir_empty_value_exits()
     print("OK")

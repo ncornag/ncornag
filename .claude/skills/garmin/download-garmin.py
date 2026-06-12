@@ -14,7 +14,7 @@ tcx-to-csv.sh pipeline). It does two things in one run:
      alphabetical); parse-log.py reads the fields it needs by name.
 
 Dependencies (garminconnect, garmin-fit-sdk, curl_cffi) are installed into a
-local venv (running/.venv) automatically on first run; the script re-executes
+local venv (.claude/skills/garmin/.venv) automatically on first run; the script re-executes
 itself inside that venv, so plain `python3 download-garmin.py` just works.
 
 Usage:
