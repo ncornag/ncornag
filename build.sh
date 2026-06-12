@@ -12,8 +12,9 @@
 #
 # /running is published but gated by Cloudflare Access (Google auth) on the
 # /running* path — that policy lives in the Cloudflare dashboard, not here.
-# Only the running/ *pages* ship; raw data (running/data/*.csv), the
-# download-garmin.py helper, and coach-log.md stay in the repo but are never uploaded.
+# Only the running/ *pages* ship; raw data (running/data/*.csv) and coach-log.md
+# stay in the repo but are never uploaded. The garmin skill (and its
+# download-garmin.py) lives under .claude/ and is never part of the build.
 #
 # When you add a new public top-level file or folder, add it to ROOT below.
 set -euo pipefail

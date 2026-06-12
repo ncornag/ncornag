@@ -1,7 +1,7 @@
 __pycache__/
 
-# Auto-managed venv for running/download-garmin.py
-running/.venv/
+# Auto-managed venv for the garmin skill's download-garmin.py
+.claude/skills/garmin/.venv/
 
 # playwright-cli scratch (snapshots/screenshots)
 .playwright-cli/

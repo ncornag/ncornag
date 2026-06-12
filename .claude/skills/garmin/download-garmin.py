@@ -18,11 +18,11 @@ local venv (running/.venv) automatically on first run; the script re-executes
 itself inside that venv, so plain `python3 download-garmin.py` just works.
 
 Usage:
-  python3 download-garmin.py                       # from 2026-01-01 to today
-  python3 download-garmin.py --start 2026-05-01    # custom start date
-  python3 download-garmin.py --end 2026-06-30      # custom end date
-  python3 download-garmin.py --no-download          # only rebuild CSVs from existing .fit
-  python3 download-garmin.py --no-csv               # only download, skip CSV build
+  python3 .claude/skills/garmin/download-garmin.py                    # 2026-01-01 to today
+  python3 .claude/skills/garmin/download-garmin.py --start 2026-05-01 # custom start date
+  python3 .claude/skills/garmin/download-garmin.py --end 2026-06-30   # custom end date
+  python3 .claude/skills/garmin/download-garmin.py --no-download      # only rebuild CSVs
+  python3 .claude/skills/garmin/download-garmin.py --no-csv           # only download
 
 Credentials: set GARMIN_EMAIL / GARMIN_PASSWORD in the environment, or you will
 be prompted. Tokens are cached in ~/.garminconnect so later runs need no login.
@@ -35,12 +35,12 @@ import subprocess
 from pathlib import Path
 
 # --- venv bootstrap ---------------------------------------------------------
-# Re-exec inside running/.venv with the required third-party deps installed.
+# Re-exec inside the skill-local .venv with the required third-party deps installed.
 # system Python is PEP 668-managed, so we never install into it.
 
-REPO = Path(__file__).resolve().parent.parent          # .../profile
-RUNNING_DIR = Path(__file__).resolve().parent          # .../profile/running
-VENV_DIR = RUNNING_DIR / ".venv"
+SKILL_DIR = Path(__file__).resolve().parent            # .../.claude/skills/garmin
+REPO = Path(__file__).resolve().parents[3]             # .../profile
+VENV_DIR = SKILL_DIR / ".venv"
 VENV_PY = VENV_DIR / "bin" / "python"
 REQUIRED = ["garminconnect", "garmin-fit-sdk", "curl_cffi"]
 
@@ -83,12 +83,13 @@ from datetime import date, datetime, timezone
 from garminconnect import Garmin
 from garmin_fit_sdk import Decoder, Stream
 
+from config import read_log_dir
+
 # The download-format enum is nested on the Garmin class in this version.
 ActivityDownloadFormat = Garmin.ActivityDownloadFormat
 
-LOG_DIR = Path("/Users/ncornag/Library/CloudStorage/"
-               "GoogleDrive-ncornag@gmail.com/My Drive/personal/running/log")
 DATA_DIR = REPO / "running" / "data"
+LOG_DIR = Path(read_log_dir(DATA_DIR / "user.md"))
 TOKEN_STORE = os.path.expanduser("~/.garminconnect")
 
 # Map Garmin typeKey -> the filename suffix / activity_type the coach expects.
