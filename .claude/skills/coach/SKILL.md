@@ -34,7 +34,7 @@ changes (B1).
 | `running/dements-2026-plan.html` | The plan — the file you edit. |
 | `running/running-zones.html` | The athlete's lab HR zones — read for coach analysis. |
 | `running/gimnasio-semana<N>.html` | Per-week gym tables (range-named when identical, e.g. `gimnasio-semana3-5.html`). |
-| `running/data/tcx-*.csv` | Activity exports (refreshed by the engine). |
+| `running/data/<YYYY-MM>.csv` | Activity exports (refreshed by the `garmin` skill, read by the engine). |
 
 The athlete is **57, with an injury history**; the plan's own principle is
 "smart beats heroic." Coach accordingly — conservative, never push through
@@ -49,18 +49,22 @@ append the log, verify).
 
 Steps C1–C8 edit `running/dements-2026-plan.html`. Do the movements in order.
 
-### A1. Run the engine
+### A1. Sync Garmin, then run the engine
+
+First **invoke the `garmin` skill** to refresh the data, with start date
+`2026-05-11` (the plan start) in no-prompt mode so it never blocks on a Garmin
+login. It downloads any new `.fit`/`.tcx` activities and rebuilds the monthly
+CSVs. If it reports it could not reach Garmin (Drive offline, or a login is
+needed), that is fine — proceed on the existing CSVs.
+
+Then run the engine:
 
 ```
 python3 .claude/skills/coach/parse-log.py
 ```
 
-It refreshes the monthly CSVs (via `running/download-garmin.py`, which downloads
-new Garmin `.fit` activities and rebuilds them with the Garmin FIT SDK) and
-prints a JSON summary on stdout. Parse that JSON — every later step uses it. If
-`refresh_errors` is non-empty (e.g. Google Drive offline, or a Garmin login is
-needed) that is fine: the engine fell back to existing CSVs. Tell the user which
-weeks have data.
+It prints a JSON summary on stdout. Parse that JSON — every later step uses it.
+Tell the user which weeks have data.
 
 Key JSON fields: `current_week`, `current_gym_file`, `gym_files` (week→file map),
 `gym_links_js`, and `weeks[]` (each with `status`, `plan_km`, `plan_elev`,
