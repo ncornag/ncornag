@@ -140,11 +140,11 @@ def parse_start(a: dict) -> datetime:
     return datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
 
 
-def fit_filename(a: dict) -> str:
-    """Build the coach-convention name: YYYY-MM-DD-HH-MM_<Type>.fit."""
+def activity_basename(a: dict) -> str:
+    """Coach-convention stem WITHOUT extension: YYYY-MM-DD-HH-MM_<Type>."""
     dt = parse_start(a)
     type_key = (a.get("activityType") or {}).get("typeKey", "")
-    return f"{dt:%Y-%m-%d-%H-%M}_{suffix_for(type_key)}.fit"
+    return f"{dt:%Y-%m-%d-%H-%M}_{suffix_for(type_key)}"
 
 
 # --- download ---------------------------------------------------------------
@@ -200,24 +200,30 @@ def download_all(start: date, end: date, no_prompt: bool = False) -> int:
     activities = client.get_activities_by_date(start.isoformat(), end.isoformat())
     print(f"Garmin returned {len(activities)} activities "
           f"in {start}..{end}")
+    # (extension, Garmin format, post-processor). ORIGINAL ships a zip holding
+    # the .fit; TCX is returned as raw XML, so it is written through unchanged.
+    formats = [
+        (".fit", ActivityDownloadFormat.ORIGINAL, extract_fit),
+        (".tcx", ActivityDownloadFormat.TCX, lambda b: b),
+    ]
     new = 0
     for a in activities:
         try:
-            name = fit_filename(a)
+            base = activity_basename(a)
         except Exception as exc:              # noqa: BLE001 - skip unparseable
             print(f"  skip activity {a.get('activityId')}: {exc}")
             continue
         year_dir = LOG_DIR / f"{parse_start(a):%Y}"
         year_dir.mkdir(parents=True, exist_ok=True)
-        dest = year_dir / name
-        if dest.exists():
-            continue                          # already downloaded
-        blob = client.download_activity(
-            a["activityId"], dl_fmt=ActivityDownloadFormat.ORIGINAL)
-        dest.write_bytes(extract_fit(blob))
-        print(f"  downloaded {name}")
-        new += 1
-    print(f"Downloaded {new} new .fit file(s)")
+        for ext, fmt, post in formats:
+            dest = year_dir / f"{base}{ext}"
+            if dest.exists():
+                continue                      # already downloaded
+            blob = client.download_activity(a["activityId"], dl_fmt=fmt)
+            dest.write_bytes(post(blob))
+            print(f"  downloaded {dest.name}")
+            new += 1
+    print(f"Downloaded {new} new file(s)")
     return new
 
 
