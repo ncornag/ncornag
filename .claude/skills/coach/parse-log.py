@@ -1,25 +1,22 @@
 #!/usr/bin/env python3
 """parse-log.py - Aggregate logged TCX activities against the Dements 2026 plan.
 
-Part of the sync-training-plan skill. This script does the deterministic work so
-Claude does not have to: it refreshes the monthly activity CSVs, maps every
-logged activity onto a plan week, classifies average heart rate into a
-lab-calibrated training zone, aggregates per week, and prints a JSON summary on
-stdout for the skill to act on. All progress/errors go to stderr.
+Part of the coach skill. This script does the deterministic work so Claude does
+not have to: it reads the monthly activity CSVs (refreshed separately by the
+garmin skill), maps every logged activity onto a plan week, classifies average
+heart rate into a lab-calibrated training zone, aggregates per week, and prints
+a JSON summary on stdout for the skill to act on. All progress/errors go to
+stderr.
 
 Steps:
-  1. Refresh CSVs by running running/download-garmin.py (downloads new Garmin
-     .fit activities from the plan start onward and rebuilds the monthly CSVs
-     with the Garmin FIT SDK). Failures (e.g. Drive offline, or a Garmin login
-     is needed) are recorded and the script falls back to existing CSVs.
-  2. Read every running/data/tcx-*.csv.
-  3. Map each activity to a plan week (week 1 = Mon 2026-05-11; week N spans
+  1. Read every running/data/<YYYY-MM>.csv.
+  2. Map each activity to a plan week (week 1 = Mon 2026-05-11; week N spans
      [start+(N-1)*7, +6d]). Activities outside the plan range are ignored.
-  4. Classify average HR into Z1-Z5 from the VT1/VT2 zones in running-zones.html.
-  5. Aggregate per week and emit JSON.
+  3. Classify average HR into Z1-Z5 from the VT1/VT2 zones in running-zones.html.
+  4. Aggregate per week and emit JSON.
 
 Usage:
-  parse-log.py [--no-refresh] [--today YYYY-MM-DD] [--data-dir DIR] [--repo DIR]
+  parse-log.py [--today YYYY-MM-DD] [--data-dir DIR] [--repo DIR]
 
 The JSON output is the contract with SKILL.md - keep them in sync if you change
 the shape here.
@@ -33,7 +30,6 @@ import hashlib
 import json
 import os
 import re
-import subprocess
 import sys
 from datetime import date, datetime, timedelta
 
@@ -119,28 +115,6 @@ def week_status(start, end, today):
     return "upcoming"
 
 
-def refresh_csvs(repo, today, log):
-    """Download new Garmin .fit activities and rebuild the monthly CSVs.
-
-    Delegates to running/download-garmin.py, which downloads any new .fit files
-    from the plan start onward and (re)writes running/data/tcx-*.csv from them
-    via the Garmin FIT SDK. A non-empty log here (e.g. Drive offline, or a
-    Garmin login is needed) is fine — the engine then falls back to the CSVs
-    already on disk."""
-    script = os.path.join(repo, "running", "download-garmin.py")
-    if not os.path.exists(script):
-        log.append(f"download-garmin.py not found at {script}; skipped refresh")
-        return
-    try:
-        r = subprocess.run([sys.executable, script,
-                            "--start", PLAN_START.isoformat(), "--no-prompt"],
-                           capture_output=True, text=True, timeout=600)
-        if r.returncode != 0:
-            log.append(r.stderr.strip() or "garmin refresh failed")
-    except Exception as exc:  # noqa: BLE001 - report any refresh failure
-        log.append(str(exc))
-
-
 def pace_from_speed(speed_mps):
     """Average speed (m/s, raw SDK enhanced_avg_speed) -> 'm:ss' pace per km."""
     v = parse_float(speed_mps)
@@ -180,8 +154,8 @@ def hre_value(avg_hr, pace_str):
 def build_activity(row, csvname, errors):
     """Turn one CSV row into a normalised activity dict, or None to skip it.
 
-    Columns are the raw Garmin FIT SDK session field names written by
-    running/download-garmin.py (total_distance in metres, enhanced_avg_speed in
+    Columns are the raw Garmin FIT SDK session field names written by the garmin
+    skill's download-garmin.py (total_distance in metres, enhanced_avg_speed in
     m/s, etc.). The full set of SDK fields is present in the row; we read the
     ones the coach reports on by name and derive pace/time from raw values."""
     src = (row.get("source_file") or "").strip()
@@ -715,8 +689,6 @@ def render_hre_js(weeks):
 
 def main():
     ap = argparse.ArgumentParser(description="Aggregate TCX logs vs the Dements plan.")
-    ap.add_argument("--no-refresh", action="store_true",
-                    help="skip running download-garmin.py; use existing CSVs only")
     ap.add_argument("--today", help="override today's date (YYYY-MM-DD), for testing")
     ap.add_argument("--data-dir", help="directory holding the monthly YYYY-MM.csv files (default: <repo>/running/data)")
     ap.add_argument("--repo", help="repo root (default: inferred from script location)")
@@ -728,12 +700,7 @@ def main():
     today = datetime.strptime(args.today, "%Y-%m-%d").date() if args.today \
         else date.today()
 
-    refresh_log, errors = [], []
-    if not args.no_refresh:
-        refresh_csvs(repo, today, refresh_log)
-    for msg in refresh_log:
-        print(f"refresh: {msg}", file=sys.stderr)
-
+    errors = []
     activities = read_activities(data_dir, errors)
     for msg in errors:
         print(f"warning: {msg}", file=sys.stderr)
@@ -752,7 +719,6 @@ def main():
         "today": today.isoformat(),
         "current_week": cw,
         "data_dir": data_dir,
-        "refresh_errors": refresh_log,
         "csv_errors": errors,
         "activity_count": len(activities),
         "gym_files": gym_files,
