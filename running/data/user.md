@@ -13,8 +13,9 @@
 ## Athlete
 
 - age: 57
+- fitness_condition: Very good
 
-Injury history — coach conservatively and never push through warning signs.
+Lower back injury history — coach conservatively and never push through warning signs.
 (Add specifics here: past injuries, niggles to watch, recovery constraints.)
 
 ## HR zones
@@ -39,9 +40,18 @@ Lab-calibrated. VT1 151, VT2 173. Z2 (135–151) is the athlete's aerobic focus.
 
 ## Equipment
 
+- Home gym (jump box, kettlebelts)
+- All terrain bicycle
+- Everything needed for a trail run
+
 _(Coach reads this when prescribing sessions. List shoes, watch / HR strap, poles, vest, and any treadmill or gym access.)_
 
 ## Terrain from home
+
+- Flat mainly
+- Distance to the nearest hill: 3.5Km flat
+- Elevation of the nearest hill: +35mts
+- Any other session (ie: weekend days) can be any distance/elevation
 
 _(Coach reads this when prescribing sessions. List the routes you can run from home with their distance and elevation — e.g. "River loop — 8 km, 40 m D+, flat"; "Hill repeats — 5 km, 300 m D+, trail".)_
 
