@@ -15,12 +15,18 @@
 - age: 57
 - fitness_condition: Very good
 
-Lower back injury history — coach conservatively and never push through warning signs.
-(Add specifics here: past injuries, niggles to watch, recovery constraints.)
+No active injuries or training restrictions — plan as if there is no injury history.
+A past lower-back issue is fully resolved (settled 2026-06-15); do not treat it as a
+live concern and do not ask about it. Sensible age-appropriate progression still
+applies (guiding principle: "smart beats heroic"), but no injury-driven caution.
 
 ## HR zones
 
 Lab-calibrated. VT1 151, VT2 173. Z2 (135–151) is the athlete's aerobic focus.
+
+The athlete cannot sustain Z1 while running — even easy/recovery pace sits around
+148 (Z2). Prescribe Z2 as the floor for all easy and recovery runs; never prescribe
+Z1 running. Recovery weeks come from reduced volume and frequency, not a lower zone.
 
 | zone | from_bpm |
 | Z1 | 0 |
@@ -73,10 +79,10 @@ _(Coach reads this when prescribing sessions. List the routes you can run from h
 | 4 | 22 | 0 |
 | 5 | 23 | 80 |
 | 6 | 17 | 30 |
-| 7 | 28 | 300 |
-| 8 | 33 | 500 |
-| 9 | 38 | 700 |
-| 10 | 25 | 350 |
+| 7 | 28 | 500 |
+| 8 | 33 | 750 |
+| 9 | 38 | 1000 |
+| 10 | 25 | 500 |
 | 11 | 45 | 1000 |
 | 12 | 50 | 1200 |
 | 13 | 52 | 1400 |
