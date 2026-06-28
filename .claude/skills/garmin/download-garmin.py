@@ -280,6 +280,26 @@ def fit_to_row(path: Path) -> dict | None:
     if alts:
         row["altitude_min"] = round(min(alts), 2)
         row["altitude_max"] = round(max(alts), 2)
+
+    # Per-bpm seconds histogram from the record stream, for the coach's
+    # time-in-zone analysis (parse-log.py buckets it against the lab zones in
+    # user.md, so the boundaries stay editable). Each inter-record interval is
+    # credited to the heart rate at its start; intervals over 15 s are treated
+    # as pauses and dropped (Garmin "smart recording" spaces points a few
+    # seconds apart, so this sums to moving time). Encoded "bpm:secs|bpm:secs",
+    # sorted by bpm, to stay a single comma-free CSV cell.
+    hr_pts = sorted(
+        (r["timestamp"], r["heart_rate"])
+        for r in messages.get("record_mesgs", [])
+        if r.get("heart_rate") and r.get("timestamp") is not None)
+    hist: dict[int, float] = {}
+    for (t0, hr0), (t1, _) in zip(hr_pts, hr_pts[1:]):
+        dt = (t1 - t0).total_seconds()
+        if 0 < dt <= 15:
+            hist[hr0] = hist.get(hr0, 0.0) + dt
+    if hist:
+        row["hr_seconds"] = "|".join(
+            f"{bpm}:{round(secs)}" for bpm, secs in sorted(hist.items()))
     return row
 
 

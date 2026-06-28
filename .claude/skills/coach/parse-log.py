@@ -68,6 +68,40 @@ def hr_zone(hr):
     return ZONES[-1]
 
 
+def parse_hr_seconds(s):
+    """Decode the garmin builder's "bpm:secs|bpm:secs|..." histogram column.
+
+    Returns {bpm: seconds} or None when the column is empty (strength sessions,
+    or activities recorded before the column existed)."""
+    s = (s or "").strip()
+    if not s:
+        return None
+    hist = {}
+    for pair in s.split("|"):
+        bpm, _, secs = pair.partition(":")
+        try:
+            hist[int(bpm)] = hist.get(int(bpm), 0) + int(secs)
+        except ValueError:
+            continue
+    return hist or None
+
+
+def time_in_zone(hist):
+    """Bucket a {bpm: seconds} histogram into seconds-per-zone via ZONE_CUTOFFS.
+
+    Returns {"Z1": secs, ... "Z5": secs} or None. Because the bucketing happens
+    here (not at download time), editing the zone table in user.md re-buckets
+    all history on the next run."""
+    if not hist:
+        return None
+    tiz = {z: 0 for z in ZONES}
+    for bpm, secs in hist.items():
+        z = hr_zone(bpm)
+        if z:
+            tiz[z] += secs
+    return tiz
+
+
 def parse_float(s):
     try:
         return float((s or "").strip())
@@ -106,6 +140,30 @@ def week_status(start, end, today):
     if start <= today <= end:
         return "current"
     return "upcoming"
+
+
+def week_complete_early(w):
+    """True when every planned (non-rest) day of week w has a logged activity.
+
+    Drives early advancement of the 'current' week: once the athlete has done
+    all the week's sessions, the focus moves on even if the calendar week is
+    not over. Needs the planned day grid; rest days don't count."""
+    planned = {d["day"] for d in (w.get("plan_days") or []) if d.get("type") != "rest"}
+    if not planned:
+        return False
+    return planned.issubset(set(w.get("logged_days") or []))
+
+
+def resolve_current_week(weeks, calendar_cw):
+    """Advance the calendar's current week past any week whose sessions are all
+    logged. Returns the calendar week unchanged when today is outside the plan
+    or the current week still has sessions left to do."""
+    if not calendar_cw:
+        return calendar_cw
+    cw = calendar_cw
+    while cw < TOTAL_WEEKS and week_complete_early(weeks[cw - 1]):
+        cw += 1
+    return cw
 
 
 def pace_from_speed(speed_mps):
@@ -180,6 +238,7 @@ def build_activity(row, csvname, errors):
         "avg_hr": avg_hr,
         "max_hr": parse_int(row.get("max_heart_rate")),
         "zone": hr_zone(avg_hr),
+        "time_in_zone": time_in_zone(parse_hr_seconds(row.get("hr_seconds"))),
         "pace": pace_from_speed(row.get("enhanced_avg_speed")),
         "hre": hre_value(avg_hr, pace_from_speed(row.get("enhanced_avg_speed"))),
         "time": hms_from_seconds(row.get("total_timer_time")),
@@ -244,6 +303,29 @@ def garmin_form_zone(value, table):
         if value < upper:
             return cls
     return table[-1][1]
+
+
+def render_zonebar(tiz):
+    """Render a run's time-in-zone as a thin proportional stacked bar + label.
+
+    tiz is the {zone: seconds} dict from time_in_zone(). Segment widths use
+    flex-grow set to the integer seconds, so proportions are exact and
+    deterministic (no rounding gaps). Returns None when there is no data."""
+    if not tiz:
+        return None
+    # Show only zones with at least a rounded minute — sub-minute slivers add a
+    # "Z5 0m" label and an invisible segment, so drop them everywhere.
+    shown = [z for z in ZONES if round(tiz[z] / 60) >= 1]
+    if not shown:
+        return None
+    segs = [f'<span class="zseg {z.lower()}" style="flex-grow:{round(tiz[z])}"></span>'
+            for z in shown]
+    labels = [f'{z}&nbsp;{round(tiz[z] / 60)}' for z in shown]
+    tip = " · ".join(f'{z} {round(tiz[z] / 60)}m' for z in shown)
+    return (
+        f'        <div class="act-zonebar" title="{tip}">'
+        f'<span class="zbar">{"".join(segs)}</span>'
+        f'<span class="zb-txt">{" · ".join(labels)}&nbsp;min</span></div>')
 
 
 def render_actuals_html(acts):
@@ -325,6 +407,11 @@ def render_actuals_html(acts):
             f'<span class="act-gct {gct_cls}">{gct_txt}</span>'
             f'<span class="act-temp">{temp_txt}</span>'
             '</div>')
+        # Time-in-zone bar under each run (strength HR sits in Z1, not useful).
+        if a["type"] != "StrengthTraining":
+            zbar = render_zonebar(a.get("time_in_zone"))
+            if zbar:
+                rows.append(zbar)
     return (
         '      <div class="actuals">\n'
         '        <div class="actuals-head">'
@@ -481,9 +568,13 @@ def aggregate(activities, today, plan_days_by_week=None):
         actual_km = round(sum(a["km"] for a in acts), 1)
         actual_elev = sum(a["elev"] for a in acts)
         zone_km = {z: 0.0 for z in ZONES}
+        zone_secs = {z: 0 for z in ZONES}
         for a in runs:
             if a["zone"]:
                 zone_km[a["zone"]] += a["km"]
+            if a.get("time_in_zone"):
+                for z in ZONES:
+                    zone_secs[z] += a["time_in_zone"][z]
         run_km = sum(zone_km.values())
         polarized = {"easy_pct": 0, "tempo_pct": 0, "hard_pct": 0}
         if run_km > 0:
@@ -491,6 +582,17 @@ def aggregate(activities, today, plan_days_by_week=None):
                 "easy_pct": round((zone_km["Z1"] + zone_km["Z2"]) / run_km * 100),
                 "tempo_pct": round(zone_km["Z3"] / run_km * 100),
                 "hard_pct": round((zone_km["Z4"] + zone_km["Z5"]) / run_km * 100),
+            }
+        # Time-in-zone polarized — the honest split (avg-HR zone_km masks the
+        # Z3/Z4 minutes that variable trail runs actually bank). None until the
+        # hr_seconds histogram exists for the week's runs.
+        run_secs = sum(zone_secs.values())
+        polarized_time = None
+        if run_secs > 0:
+            polarized_time = {
+                "easy_pct": round((zone_secs["Z1"] + zone_secs["Z2"]) / run_secs * 100),
+                "tempo_pct": round(zone_secs["Z3"] / run_secs * 100),
+                "hard_pct": round((zone_secs["Z4"] + zone_secs["Z5"]) / run_secs * 100),
             }
         hrs = [a["avg_hr"] for a in runs if a["avg_hr"]]
         counts = {}
@@ -512,7 +614,9 @@ def aggregate(activities, today, plan_days_by_week=None):
             "has_data": bool(acts),
             "counts": counts,
             "zone_km": {z: round(v, 1) for z, v in zone_km.items()},
+            "zone_seconds": zone_secs,
             "polarized": polarized,
+            "polarized_time": polarized_time,
             "avg_hr": round(sum(hrs) / len(hrs)) if hrs else None,
             "activities": acts,
             "data_hash": week_hash(acts) if acts else None,
@@ -711,12 +815,21 @@ def main():
     weeks = aggregate(activities, today, plan_days_by_week)
     for w in weeks:
         w["gym_file"] = gym_files.get(w["week"])
-    cw = week_of(today)
+    calendar_cw = week_of(today)
+    cw = resolve_current_week(weeks, calendar_cw)
+    if cw:
+        # Re-derive each week's status from the effective current week, so a
+        # week whose sessions are all logged flips to 'done' and the next week
+        # becomes 'current' even before the calendar week ends.
+        for w in weeks:
+            w["status"] = ("done" if w["week"] < cw
+                           else "current" if w["week"] == cw else "upcoming")
     print(json.dumps({
         "generated": datetime.now().isoformat(timespec="seconds"),
         "plan_start": PLAN_START.isoformat(),
         "today": today.isoformat(),
         "current_week": cw,
+        "calendar_week": calendar_cw,
         "data_dir": data_dir,
         "csv_errors": errors,
         "activity_count": len(activities),

@@ -73,13 +73,29 @@ python3 .claude/skills/coach/parse-log.py
 It prints a JSON summary on stdout. Parse that JSON — every later step uses it.
 Tell the user which weeks have data.
 
-Key JSON fields: `current_week`, `current_gym_file`, `gym_files` (week→file map),
-`gym_links_js`, and `weeks[]` (each with `status`, `plan_km`, `plan_elev`,
-`actual_km`, `actual_elev`, `km_pct`, `polarized`, `avg_hr`, `zone_km`,
-`activities[]`, `has_data`, `data_hash`, `actuals_html`, `plan_days[]`,
-`logged_days`, `days_html`, `gym_file`), plus `chart_js` and `hre_js`. Each
-activity in `activities[]` also carries `hre` (beats/km = avg HR × pace, or
-`null` for strength / no-pace activities).
+Key JSON fields: `current_week`, `calendar_week`, `current_gym_file`, `gym_files`
+(week→file map), `gym_links_js`, and `weeks[]` (each with `status`, `plan_km`,
+`plan_elev`, `actual_km`, `actual_elev`, `km_pct`, `polarized`, `polarized_time`,
+`avg_hr`, `zone_km`, `zone_seconds`, `activities[]`, `has_data`, `data_hash`,
+`actuals_html`, `plan_days[]`, `logged_days`, `days_html`, `gym_file`), plus
+`chart_js` and `hre_js`. Each activity in `activities[]` also carries `hre`
+(beats/km = avg HR × pace, or `null` for strength / no-pace activities) and
+`time_in_zone` (`{"Z1":secs,…"Z5":secs}` from the per-second HR histogram, or
+`null` for strength / pre-histogram activities).
+
+**`current_week` advances early.** It is the *effective* current week: it starts
+from `calendar_week` (the week today's date falls in) but advances past any week
+whose every planned non-rest day already has a logged activity. So once the
+athlete finishes a week's sessions, `current_week` (and each week's `status`)
+moves on to the next week even before the calendar week ends. `calendar_week` is
+the raw date-based week, kept for reference.
+
+**`polarized_time` is the honest split.** `polarized` / `zone_km` classify each
+run by its *average* HR, which mislabels variable trail runs as all-Z2.
+`polarized_time` and `zone_seconds` are computed from real time-in-zone (the
+`hr_seconds` histogram the garmin skill writes per activity), so they show the
+actual Z3/Z4 minutes the average hides. Cite `polarized_time` when judging
+polarized discipline on weeks with trail/vert runs.
 
 `plan_days[]` is the planned day grid extracted from the HTML week card. Each
 entry is `{"day":"Mon","type":"z2","km":"5km","elev":"","label":"Z2"}`. `type`
@@ -188,7 +204,11 @@ class="week" id="wN">`, locate the `<div class="week-notes">…</div>` inside
 
 The engine's `actuals_html` is already rendered HTML — drop it in verbatim. If
 the delimiters already exist, replace only what is between them. This is
-deterministic: re-running with the same data must produce zero diff here.
+deterministic: re-running with the same data must produce zero diff here. Each
+logged **run** also gets a thin `.act-zonebar` row beneath it — a proportional
+stacked bar of its real time-in-zone (Z1–Z5 minutes from the `hr_seconds`
+histogram), so the avg-HR `Zone` label no longer hides the Z3/Z4 a trail run
+actually banked. (Strength sessions get no bar.)
 
 ### C4. Write the coach block for each week with data
 
@@ -347,8 +367,12 @@ final week — from the profile). Be direct, specific, and encouraging; never ge
   when prescribing sessions — match vert/distance targets to routes they can actually
   run from home, and to the gear they have.
 - **Check polarized discipline** — the plan is ~80% easy / ~20% hard, minimal
-  Z3. Use the `polarized` percentages. Easy runs drifting into Z3 is the most
-  common base-phase mistake; call it out.
+  Z3. Prefer `polarized_time` (real time-in-zone) over `polarized` (avg-HR /
+  distance) on any week with trail/vert runs: the average labels a climbing run
+  "Z2" while its time-in-zone is mostly Z3, so `polarized` reads falsely clean.
+  Easy runs drifting into Z3 is the most common base-phase mistake; with the
+  zone bars you can now see it per run — call it out, but treat Z3 on a steep
+  long climb as partly race-specific and watch the sustained Z4 instead.
 - **Cite the data**: volume vs plan (`km_pct`), elevation, `avg_hr`,
   consistency, specific runs from `activities[]`.
 - **Use `plan_days[]` for schedule facts**: before writing phrases like
@@ -457,6 +481,38 @@ Insert verbatim before `</style>` on first run:
 .gz-green  { color: #2ecc8a; }
 .gz-orange { color: #f07030; }
 .gz-red    { color: #d03050; }
+.act-zonebar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: .05rem 0 .3rem;
+  padding: 0 .1rem;
+}
+.act-zonebar .zbar {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--surface2);
+}
+.act-zonebar .zseg {
+  height: 100%;
+  flex-basis: 0;
+}
+.act-zonebar .zseg.z1 { background: #3a7bd5; }
+.act-zonebar .zseg.z2 { background: #2ecc8a; }
+.act-zonebar .zseg.z3 { background: #f0c040; }
+.act-zonebar .zseg.z4 { background: #f07030; }
+.act-zonebar .zseg.z5 { background: #d03050; }
+.act-zonebar .zb-txt {
+  flex: 0 0 auto;
+  font-size: .54rem;
+  letter-spacing: .03em;
+  color: var(--muted);
+  white-space: nowrap;
+}
 .coach {
   margin-top: 0.5rem;
   background: var(--surface2);

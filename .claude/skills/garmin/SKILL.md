@@ -32,7 +32,10 @@ For each activity in the range it downloads **both** formats into the year folde
 under the configured archive (`YYYY-MM-DD-HH-MM_<Type>.fit` and `.tcx`),
 **skipping any file already on disk**, then rebuilds the monthly
 `running/data/<YYYY-MM>.csv` summaries from the `.fit` files via the Garmin FIT
-SDK. `.tcx` files are archive-only; the CSVs the coach reads are built from
+SDK. Each row also carries an `hr_seconds` column — a `bpm:secs|…` histogram
+built from the per-second HR record stream — which the coach engine buckets into
+time-in-zone (so a `--no-download` rebuild is enough to backfill it on existing
+`.fit`). `.tcx` files are archive-only; the CSVs the coach reads are built from
 `.fit`. The script bootstraps its own venv (`.claude/skills/garmin/.venv`) on
 first run.
 
