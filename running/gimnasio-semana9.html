@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gimnasio Semana 9 — Fuerza + Vert</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏃%3C/text%3E%3C/svg%3E">
+  <script>(function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { } })()</script>
+  <link rel="stylesheet" href="theme.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+    :root {
+      /* Bridge theme.css tokens → local aliases */
+      --bg: var(--bg-page);
+      --surface: var(--bg-card);
+      --surface2: var(--bg-sunken);
+      --border: var(--border-soft);
+      --text: var(--text-strong);
+      --muted: var(--text-muted);
+    }
+
+    :root[data-theme="light"] {
+      --gym: #7040d0;
+      --gym-bg: #f3eeff;
+      --gym-tint: #f8f5ff;
+      --gym-border: #7040d033;
+      --warn: #b02040;
+      --warn-bg: #fdf2f2;
+      --good: #1a9e63;
+      --good-bg: #e8f5ef;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .06);
+      --shadow-strong: 0 2px 8px rgba(112, 64, 208, .1);
+    }
+
+    :root[data-theme="dark"] {
+      --gym: #9b6dff;
+      --gym-bg: #1a1225;
+      --gym-tint: #181028;
+      --gym-border: #9b6dff44;
+      --warn: #e04060;
+      --warn-bg: #2a0d14;
+      --good: #2ecc8a;
+      --good-bg: #0d1f17;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .3);
+      --shadow-strong: 0 2px 12px rgba(155, 109, 255, .15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem 1.2rem 4rem;
+      font-size: 112%;
+      transition: background .2s, color .2s;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--gym);
+      color: var(--gym);
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 2rem;
+      max-width: 1100px;
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 5rem);
+      letter-spacing: .04em;
+      line-height: .92;
+      color: var(--text);
+    }
+
+    .title span {
+      color: var(--gym);
+    }
+
+    .subtitle {
+      margin-top: .5rem;
+      font-size: .8rem;
+      letter-spacing: .14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1rem;
+    }
+
+    .stat-pill {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .35rem .7rem;
+      font-size: .68rem;
+      letter-spacing: .06em;
+      color: var(--muted);
+    }
+
+    .stat-pill strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .stat-pill.hi {
+      border-color: var(--gym-border);
+      background: var(--gym-bg);
+    }
+
+    .stat-pill.hi strong {
+      color: var(--gym);
+    }
+
+    /* Warmup card */
+    .warmup-card {
+      background: var(--gym-bg);
+      border: 1px solid var(--gym-border);
+      border-left: 3px solid var(--gym);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      margin: 1.5rem 0 2rem;
+      max-width: 1100px;
+    }
+
+    .warmup-label {
+      font-size: .65rem;
+      letter-spacing: .15em;
+      color: var(--gym);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: .4rem;
+    }
+
+    .warmup-body {
+      font-size: .82rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: .74rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 2rem 0 .8rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Exercise grid */
+    .exercises {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: .9rem;
+      margin-bottom: 2rem;
+    }
+
+    .exercise {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.2rem 1rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .exercise::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--gym);
+    }
+
+    .exercise:hover {
+      border-color: var(--gym-border);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .ex-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .7rem;
+      margin-bottom: .8rem;
+      gap: .8rem;
+    }
+
+    .ex-num-name {
+      display: flex;
+      gap: .6rem;
+      align-items: baseline;
+    }
+
+    .ex-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gym);
+      line-height: 1;
+    }
+
+    .ex-name {
+      font-size: .92rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+      padding-top: .2rem;
+    }
+
+    .ex-sets {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: var(--gym);
+      white-space: nowrap;
+      letter-spacing: .03em;
+      padding-top: .25rem;
+    }
+
+    .ex-label {
+      font-size: .58rem;
+      letter-spacing: .14em;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: .8rem;
+      margin-bottom: .35rem;
+    }
+
+    .ex-label:first-of-type {
+      margin-top: 0;
+    }
+
+    ul.cues {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul.cues li {
+      font-size: .72rem;
+      line-height: 1.45;
+      padding-left: .85rem;
+      position: relative;
+      margin-bottom: .15rem;
+      color: var(--text);
+    }
+
+    ul.cues li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      top: .05rem;
+      color: var(--gym);
+      font-size: .65rem;
+    }
+
+    ul.cues li strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .ex-watch {
+      background: var(--warn-bg);
+      border-left: 2px solid var(--warn);
+      padding: .5rem .7rem;
+      font-size: .66rem;
+      line-height: 1.4;
+      border-radius: 3px;
+      margin-top: auto;
+      color: var(--text);
+    }
+
+    .ex-watch strong {
+      color: var(--warn);
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 720px) {
+      .footer {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .footer-card.expected {
+      border-left: 3px solid var(--good);
+    }
+
+    .footer-card.warn {
+      border-left: 3px solid var(--warn);
+    }
+
+    .footer-title {
+      font-size: .62rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: .6rem;
+    }
+
+    .footer-card.expected .footer-title {
+      color: var(--good);
+    }
+
+    .footer-card.warn .footer-title {
+      color: var(--warn);
+    }
+
+    .footer-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-list li {
+      font-size: .72rem;
+      line-height: 1.5;
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: .25rem;
+      color: var(--text);
+    }
+
+    .footer-card.expected .footer-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--good);
+      font-weight: 700;
+    }
+
+    .footer-card.warn .footer-list li::before {
+      content: '⚠';
+      position: absolute;
+      left: 0;
+      color: var(--warn);
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="index.html" style="display:inline-block;margin-bottom:1rem;font-size:.7rem;letter-spacing:.1em;color:var(--muted);text-decoration:none">‹ Running</a>
+  <button class="theme-toggle" onclick="toggleTheme()"><span class="sun">☀</span><span class="moon">☾</span></button>
+
+  <header>
+    <div class="title">GIMNASIO<br>SEMANA <span>9</span></div>
+    <div class="subtitle">Fuerza + Vert · Pico del bloque base · Nico</div>
+    <div class="stats-row">
+      <div class="stat-pill">Frecuencia <strong>2× / semana</strong></div>
+      <div class="stat-pill">Días <strong>Mar + Jue</strong></div>
+      <div class="stat-pill">Duración <strong>~45 min</strong></div>
+      <div class="stat-pill hi">Cuando <strong>Después de correr</strong></div>
+      <div class="stat-pill">Series <strong>3 por ejercicio</strong></div>
+      <div class="stat-pill">Descanso <strong>90s entre series</strong></div>
+    </div>
+  </header>
+
+  <div class="warmup-card">
+    <div class="warmup-label">⚡ Calentamiento · 5 min</div>
+    <div class="warmup-body">
+      Bici o trote suave 5 min → 10 balanceos de pierna en cada dirección por pierna → 10 sentadillas con peso corporal.
+      <strong>Semana pico del bloque base</strong> — la tirada larga sube a 15 km / 1000 m y la semana 10 es descarga.
+      <strong>No subas cargas esta semana:</strong> mantén los pesos de la 8 y deja que la carrera sea la prioridad. El
+      gimnasio aquí <strong>sostiene</strong>, no progresa — todo el foco en la bajada lenta, que es lo que protege los
+      cuádriceps y el Aquiles en los 1000 m de descenso del fin de semana.
+    </div>
+  </div>
+
+  <div class="section-label">Ejercicios · Fuerza + Vert</div>
+
+  <div class="exercises">
+
+    <!-- 1 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">1</div>
+          <div class="ex-name">Sentadilla<br>Búlgara</div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            pierna</span></div>
+      </div>
+
+      <div class="ex-label">Posición</div>
+      <ul class="cues">
+        <li>Pie trasero sobre banco, cordones abajo</li>
+        <li>Pie delantero adelantado — rodilla no pasa la punta</li>
+      </ul>
+
+      <div class="ex-label">Ejecución</div>
+      <ul class="cues">
+        <li>Bajar hasta muslo ≈ paralelo al suelo</li>
+        <li>Torso ligeramente inclinado adelante</li>
+        <li>Empuja con todo el pie, sobre todo el talón</li>
+        <li><strong>Semana 9: mantén 12 kg</strong> — semana pico, no subas carga; prioriza un control impecable con la
+          carrera ya exigente</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Ojo:</strong> rodilla cayendo hacia dentro · peso en pierna trasera · pie delantero
+        demasiado cerca. La carga no debe romper la técnica — baja el peso antes que el control</div>
+    </div>
+
+    <!-- 2 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">2</div>
+          <div class="ex-name">Elevación de Talón<br>Unilateral</div>
+        </div>
+        <div class="ex-sets">3 × 12<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            pierna</span></div>
+      </div>
+
+      <div class="ex-label">Posición</div>
+      <ul class="cues">
+        <li>Metatarso en el borde de un escalón, talón al aire</li>
+        <li>Apoyo para equilibrio, no para sostenerte</li>
+      </ul>
+
+      <div class="ex-label">Ejecución</div>
+      <ul class="cues">
+        <li>Subir al máximo, apretar arriba 1 seg</li>
+        <li><strong>Bajar en 3 segundos</strong> — excéntrica lenta</li>
+        <li>Talón por debajo del escalón para rango completo</li>
+        <li><strong>Semana 9: mantén 8 kg, alarga la excéntrica a 4s</strong> — los 1000 m de bajada son los más del bloque, el Aquiles necesita el trabajo lento</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Ojo:</strong> bajar rápido — frena más de lo que crees que hace falta. Es prep para
+        el Aquiles en las cuestas largas</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">3</div>
+          <div class="ex-name">Puente de Glúteos<br>a Una Pierna</div>
+        </div>
+        <div class="ex-sets">3 × 10<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            pierna</span></div>
+      </div>
+
+      <div class="ex-label">Posición</div>
+      <ul class="cues">
+        <li>De espaldas, una rodilla flexionada, talón cerca del culo</li>
+        <li>La otra pierna estirada o con la rodilla recogida al pecho</li>
+      </ul>
+
+      <div class="ex-label">Ejecución</div>
+      <ul class="cues">
+        <li><strong>Semana 9: mantén los 8 kg</strong> sobre la cadera de apoyo — consolida la carga de la 8, sin subir
+          en semana pico</li>
+        <li>Empuja con el talón de la pierna de apoyo, sube la cadera</li>
+        <li>Caderas niveladas — no dejes caer el lado libre</li>
+        <li>Aprieta el glúteo, mantén 2 seg arriba</li>
+        <li>Costillas abajo — no arquear la zona lumbar</li>
+        <li>Si el peso rompe la nivelación de la cadera, vuelve a peso corporal — la forma manda</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Ojo:</strong> la cadera del lado libre se hunde o gira → baja el rango y nivela
+        antes de seguir. Empuje desde el glúteo, nunca desde la lumbar</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">4</div>
+          <div class="ex-name">Dead<br>Bug</div>
+        </div>
+        <div class="ex-sets">3 × 10<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            lado</span></div>
+      </div>
+
+      <div class="ex-label">Posición</div>
+      <ul class="cues">
+        <li>De espaldas, brazos rectos hacia el techo</li>
+        <li>Rodillas a 90° sobre caderas (mesa)</li>
+      </ul>
+
+      <div class="ex-label">Ejecución</div>
+      <ul class="cues">
+        <li><strong>Lumbar pegada al suelo</strong> — la clave</li>
+        <li>Extiende lentamente brazo + pierna opuestos</li>
+        <li>Sin tocar el suelo, vuelve, cambia de lado</li>
+        <li>Espalda plana &gt; rango de movimiento</li>
+        <li><strong>Sigue sin peso:</strong> progresa con tempo 3–4 seg por rep y exhalando fuerte, no con carga</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Ojo:</strong> es control anti-extensión, no fuerza — añadir peso recluta el psoas y
+        arquea la espalda. Espalda arqueando al extender pierna → baja menos</div>
+    </div>
+
+    <!-- 5 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">5</div>
+          <div class="ex-name">Plancha<br>Lateral</div>
+        </div>
+        <div class="ex-sets">3 × 30s<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            lado</span></div>
+      </div>
+
+      <div class="ex-label">Posición</div>
+      <ul class="cues">
+        <li>Plancha lateral sobre antebrazo</li>
+        <li>Cuerpo en línea recta de cabeza a pies</li>
+        <li>Caderas alineadas, no giradas ni hundidas</li>
+        <li>Pierna de abajo en el suelo, pierna de arriba apilada encima</li>
+      </ul>
+
+      <div class="ex-label">Ejecución</div>
+      <ul class="cues">
+        <li>Contrae oblicuos y core, mantén línea recta</li>
+        <li>Respira, no aguantes la respiración</li>
+        <li><strong>Semana 9: mantén los 30 seg firmes</strong> si la cadera no cae</li>
+        <li>Reduce tiempo si las caderas caen — forma &gt; duración</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Ojo:</strong> caderas cayendo o rotando — corta el tiempo antes de romper la forma</div>
+    </div>
+
+    <!-- 6 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">6</div>
+          <div class="ex-name">Step-up Alto<br>+ Bajada Excéntrica</div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            pierna</span></div>
+      </div>
+
+      <div class="ex-label">Posición</div>
+      <ul class="cues">
+        <li>Usa el cajón de salto — altura a media espinilla / rodilla</li>
+        <li>Pie entero apoyado arriba, no solo la punta</li>
+      </ul>
+
+      <div class="ex-label">Ejecución</div>
+      <ul class="cues">
+        <li><strong>Sube</strong> empujando con el talón de la pierna de arriba, sin impulso de la de abajo</li>
+        <li><strong>Impulso de rodilla arriba</strong> — imita el gesto del power-hike en cuesta</li>
+        <li>Rodilla alineada con el pie — no hacia dentro</li>
+        <li><strong>Baja en 3 segundos</strong> — la excéntrica lenta prepara los cuádriceps para las bajadas del trail</li>
+        <li><strong>Semana 9: cajón alto, bajada de 4s controlada</strong> — la semana de más descenso del bloque; la excéntrica lenta es el seguro de las rodillas</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Ojo:</strong> el valor está en la bajada lenta y en el cajón más alto, no en subir
+        rápido. Dolor de rodilla → baja la altura o reduce el rango</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-card expected">
+      <div class="footer-title">✓ Esperable esta semana</div>
+      <ul class="footer-list">
+        <li>Cuádriceps trabajados tras el step-up — son los que frenan en los 1000 m de bajada del sábado</li>
+        <li>Piernas algo cargadas entrando al sábado — por eso el gimnasio es Mar/Jue, con margen antes de la tirada larga</li>
+        <li>Es semana pico: prioriza llegar fresco a la larga de 15 km / 1000 m por encima de cualquier marca de gimnasio</li>
+        <li>La semana 10 es descarga — si algo va justo, esta semana se sostiene, no se fuerza</li>
+      </ul>
+    </div>
+    <div class="footer-card warn">
+      <div class="footer-title">⚠ Señales de alarma · parar y revisar</div>
+      <ul class="footer-list">
+        <li>Dolor agudo (vs ardor muscular) en cualquier sitio</li>
+        <li>Dolor lumbar tras dead bugs / puentes → mala activación, no añadas carga</li>
+        <li>Dolor de rodilla en búlgara o step-up → revisa alineación o baja altura/peso</li>
+        <li>Molestia en Aquiles &gt; 48h → reduce volumen de gemelo</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('theme', html.dataset.theme); } catch (e) { }
+    }
+  </script>
+</body>
+
+</html>
