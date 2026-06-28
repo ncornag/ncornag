@@ -1643,11 +1643,11 @@
     </div>
   </div>
 
-  <div class="week recovery-week current open" id="w6">
+  <div class="week recovery-week" id="w6">
     <div class="week-header" onclick="toggle('w6')">
       <div class="week-num">6</div>
       <div class="week-summary">
-        <div class="week-title">Recovery Week 🔽 <span class="current-badge">Current</span></div>
+        <div class="week-title">Recovery Week 🔽 <span class="done-badge">Done ✓</span></div>
         <div class="week-date">Jun 15–21 · 3 runs · 1 gym</div>
       </div>
       <div class="week-stats">
@@ -1737,11 +1737,11 @@
   <!-- PHASE 2: AEROBIC BASE -->
   <div class="phase">AEROBIC BASE <span class="phase-sub">W7–12 · Jun–Aug</span></div>
 
-  <div class="week" id="w7">
+  <div class="week current open" id="w7">
     <div class="week-header" onclick="toggle('w7')">
       <div class="week-num">7</div>
       <div class="week-summary">
-        <div class="week-title">Real Elevation Begins</div>
+        <div class="week-title">Real Elevation Begins <span class="current-badge">Current</span></div>
         <div class="week-date">Jun 22–28 · 5 sessions · 2 gym</div>
       </div>
       <div class="week-stats">
@@ -1753,39 +1753,45 @@
     <div class="week-body">
       <!-- sync:days:w7 -->
       <div class="days">
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym A</div>
           <div class="day-type">Strength</div>
         </div>
-        <div class="day trail-hike">
+        <div class="day trail-hike logged">
           <div class="day-label">Wed</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">7km</div>
           <div class="day-elev">200m</div>
           <div class="day-type">Hill</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Thu</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym B</div>
           <div class="day-type">Strength</div>
         </div>
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Fri</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2</div>
         </div>
-        <div class="day trail-hike">
+        <div class="day trail-hike logged">
           <div class="day-label">Sat</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">12km</div>
           <div class="day-elev">300m</div>
@@ -1802,6 +1808,28 @@
       <div class="week-notes"><strong>Vert steps up here.</strong> Wed = hill reps on your local climb (~200m total,
         power-hike up / jog down). Saturday is 12km on real trail with <strong>~300m of climbing</strong> — steeper
         ground, your route, hike the steep pitches. Practice hiking technique — this is a SKILL session.</div>
+      <!-- sync:actuals:w7 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">4 runs · 2 gyms · 28.8 km · 798 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 22</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">146</span><span class="act-zone z2">Z2</span><span class="act-pace">7:19/km</span><span class="act-cal">318</span><span class="act-maxhr">159</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">860 mm</span><span class="act-vratio gz-red">11.3%</span><span class="act-vosc gz-orange">98.9 mm</span><span class="act-gct gz-orange">283 ms</span><span class="act-temp">31°</span></div>
+        <div class="act-row"><span class="act-when">Tue 23</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">96</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">100</span><span class="act-maxhr">126</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Wed 24</span><span class="act-ico">🏃</span><span class="act-km">6.2 km</span><span class="act-vert">272 m</span><span class="act-hr">145</span><span class="act-zone z2">Z2</span><span class="act-pace">11:05/km</span><span class="act-cal">556</span><span class="act-maxhr">170</span><span class="act-cad gz-red">100 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Thu 25</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">91</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">101</span><span class="act-maxhr">121</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Fri 26</span><span class="act-ico">🏃</span><span class="act-km">5.1 km</span><span class="act-vert">11 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:22/km</span><span class="act-cal">318</span><span class="act-maxhr">163</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">855 mm</span><span class="act-vratio gz-red">11.1%</span><span class="act-vosc gz-green">96.1 mm</span><span class="act-gct gz-orange">286 ms</span><span class="act-temp">33°</span></div>
+        <div class="act-row"><span class="act-when">Sat 27</span><span class="act-ico">🏃</span><span class="act-km">12.4 km</span><span class="act-vert">508 m</span><span class="act-hr">151</span><span class="act-zone z2">Z2</span><span class="act-pace">8:52/km</span><span class="act-cal">911</span><span class="act-maxhr">178</span><span class="act-cad gz-red">130 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">31°</span></div>
+      </div>
+      <!-- /sync:actuals:w7 -->
+      <!-- sync:coach:w7 -->
+      <div class="coach" data-hash="9f4e425a7b60">
+        <div class="coach-head">🧭 Coach</div>
+        <div class="coach-body">
+          <p><strong>The vert ramp landed clean — exactly the green light I was watching for.</strong> Week 7 was the first real load week and you cleared it: <strong>28.8 km (103% of plan) and 798 m of climbing against a 500 m target</strong>, the full six-session week in without a niggle. Wednesday's hill went up power-hiked (272 m at HR 145), and Saturday delivered a <strong>12.4 km / 508 m</strong> long trail — your biggest combined distance-and-vert day of the block. The open question from the deload, how the 500 m would feel, is answered: over plan, and you recovered fine.</p>
+          <p><strong>But the zone labels need reading honestly.</strong> The chart tags each run by its average HR, so the trail days read as a flat Z2 — that is an averaging artifact, not the real story. Saturday averaged 151 (your VT1), but the time-in-zone was roughly <strong>23 min Z2 / 56 min Z3 / 15 min Z4</strong>: that long run was a Z3 grind with a genuine threshold chunk, not the easy aerobic day the badge implies. Your <strong>flat Monday and Friday runs are the true Z2</strong> (1068 and 1090 on the efficiency chart, both better than Week 1) — and those are the ones that must stay genuinely easy. A Z3 climb is largely race-specific — Dements is a Z3 effort over 3808 m of ascent — so I am not fighting it; but the <strong>15 minutes of Z4 is the part to trim</strong>: ease the steepest pitches and brake gently on the descents so the long day stays a sustainable grind, not a threshold session.</p>
+          <p><strong>Week 8 brings your first back-to-back.</strong> Same frame — easy Z2 Monday and Friday, Gym A Tuesday and Gym B Thursday, a 7 km / 250 m hill Wednesday — but Saturday's 12 km / 350 m is now chased by a <strong>short 4 km / 150 m Sunday on tired legs</strong>. The point of that double is aerobic fatigue-resistance, not more intensity, so run the Sunday as the <strong>easiest effort of the week</strong> and hike any climb gently. The gym keeps building: the single-leg bridge held up, so it steps to <strong>+8 kg</strong>, and the slow eccentric step-downs matter more than ever with the extra descending. <strong>Smart beats heroic</strong> — you are ahead of the vert curve, so the job now is managing effort, not adding it.</p>
+        </div>
+      </div>
+      <!-- /sync:coach:w7 -->
     </div>
   </div>
 
@@ -3132,8 +3160,8 @@
       { label: '3', km: 21, elev: 0, color: '#1a9e63', done: true },
       { label: '4', km: 22, elev: 0, color: '#1a9e63', done: true },
       { label: '5', km: 23, elev: 80, color: '#2a9a6a', done: true },
-      { label: '6', km: 17, elev: 30, color: '#2a5fb5', reco: true, current: true },
-      { label: '7', km: 28, elev: 500, color: '#1e8050' },
+      { label: '6', km: 17, elev: 30, color: '#2a5fb5', reco: true, done: true },
+      { label: '7', km: 28, elev: 500, color: '#1e8050', current: true },
       { label: '8', km: 33, elev: 750, color: '#1e8050' },
       { label: '9', km: 38, elev: 1000, color: '#1e8050' },
       { label: '10', km: 25, elev: 500, color: '#2a5fb5', reco: true },
@@ -3166,7 +3194,8 @@
       3: { km: 21.0, elev: 26 },
       4: { km: 22.0, elev: 100 },
       5: { km: 25.8, elev: 220 },
-      6: { km: 23.8, elev: 138 }
+      6: { km: 23.8, elev: 138 },
+      7: { km: 28.8, elev: 798 }
     };
 
     weeks.forEach((w, i) => {
@@ -3224,7 +3253,11 @@
       {"label": "Mon 15", "week": 6, "hre": 1045, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 27°"},
       {"label": "Fri 19", "week": 6, "hre": 1117, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 29°"},
       {"label": "Fri 19", "week": 6, "hre": 477, "color": "#2ecc8a", "flagged": false, "flag": "17 m D+ · 28°"},
-      {"label": "Sat 20", "week": 6, "hre": 1165, "color": "#2ecc8a", "flagged": true, "flag": "107 m D+ · 30°"}
+      {"label": "Sat 20", "week": 6, "hre": 1165, "color": "#2ecc8a", "flagged": true, "flag": "107 m D+ · 30°"},
+      {"label": "Mon 22", "week": 7, "hre": 1068, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 31°"},
+      {"label": "Wed 24", "week": 7, "hre": 1607, "color": "#2ecc8a", "flagged": true, "flag": "272 m D+ · 32°"},
+      {"label": "Fri 26", "week": 7, "hre": 1090, "color": "#2ecc8a", "flagged": false, "flag": "11 m D+ · 33°"},
+      {"label": "Sat 27", "week": 7, "hre": 1339, "color": "#2ecc8a", "flagged": true, "flag": "508 m D+ · 31°"}
     ];
 
     (() => {
@@ -3289,7 +3322,7 @@
     // /sync:hre
 
     // sync:gymlinks
-    const gymFiles = { 3: "gimnasio-semana3.html", 4: "gimnasio-semana4.html", 5: "gimnasio-semana5.html", 6: "gimnasio-semana6.html", 7: "gimnasio-semana7.html" };
+    const gymFiles = { 3: "gimnasio-semana3.html", 4: "gimnasio-semana4.html", 5: "gimnasio-semana5.html", 6: "gimnasio-semana6.html", 7: "gimnasio-semana7.html", 8: "gimnasio-semana8.html" };
     document.querySelectorAll('.week[id]').forEach(wk => {
       const n = parseInt(wk.id.slice(1), 10);
       const file = gymFiles[n];
