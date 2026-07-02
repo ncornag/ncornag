@@ -8,7 +8,11 @@
 
 - log_dir: /Users/ncornag/Library/CloudStorage/GoogleDrive-ncornag@gmail.com/My Drive/personal/running/log
 - plan_file: dements-2026-plan.html
-- gym_prefix: gimnasio-semana
+- gym_prefix: gym-week
+
+## Language
+
+- language: English
 
 ## Athlete
 

@@ -56,6 +56,25 @@ append the log, verify).
 
 Steps C1–C8 edit the plan file. Do the movements in order.
 
+### A0. Confirm the athlete's language
+
+Check the profile's `## Language` section (`running/data/user.md`) for a
+`language:` field. If it is present, use that language for the rest of this
+session — your chat replies, the coach block prose (C4), gym-table content, and
+`coach-log.md` entries (see Feedback log). If it is **absent**, this is the
+athlete's first session: ask which language they'd like before doing anything
+else, then write their answer into a new `## Language` section in
+`running/data/user.md`:
+
+```
+## Language
+
+- language: <name>
+```
+
+From then on every session reads it silently — never ask again unless the
+athlete asks to change it.
+
 ### A1. Sync Garmin, then run the engine
 
 First **invoke the `garmin` skill** to refresh the data, with start date
@@ -329,16 +348,18 @@ Maintain per-week gym tables as the plan advances — just-in-time, not all 26 a
   has a file in `running/`. Past gym weeks are **frozen** — only revisit one to address a
   niggle the athlete reported.
 - **Template:** copy the structure and CSS of the current foundation table
-  (`<gym_prefix>3-5.html` (e.g. `gimnasio-semana3-5.html`)): theme bootstrap, `GIMNASIO SEMANA N` title, phase
-  subtitle, stat pills, warmup card, exercise grid (`.exercise` with `.cues` and
-  `.ex-watch`), and the expected/warning footer. Include the back-to-index link
+  (`<gym_prefix>3-5.html`, e.g. `gym-week3-5.html`): theme bootstrap, a stacked
+  two-line title in the profile's language (e.g. `GYM<br>WEEK N` in English,
+  `GIMNASIO<br>SEMANA N` in Spanish), phase subtitle, stat pills, warmup card,
+  exercise grid (`.exercise` with `.cues` and `.ex-watch`), and the
+  expected/warning footer. Include the back-to-index link
   (`<a href="index.html">‹ Running</a>` right after `<body>`).
 - **Progression:** evolve content by phase — foundation (bodyweight, form) → strength
   (add load) → vert/power (step-ups, eccentric descents) → taper (reduce volume) — and by
   athlete feedback (e.g. swap an exercise that aggravates a joint).
 - **Dedup → ranges:** if a week's programme is identical to the previous week's, do **not**
   create a new file. Name the shared file `<gym_prefix><N-M>.html` (e.g.
-  `<gym_prefix>3-5.html` (e.g. `gimnasio-semana3-5.html`) covers weeks 3–5). When a later week diverges, split: shrink the
+  `<gym_prefix>3-5.html`, e.g. `gym-week3-5.html`, covers weeks 3–5). When a later week diverges, split: shrink the
   range and create the new file. The files must tile the gym weeks without overlap.
 - **Linking:** after creating, renaming, or splitting a gym file, re-run the engine and
   re-apply the `// sync:gymlinks` block (C1) and the index gym card so links stay correct.
@@ -354,6 +375,7 @@ Maintain per-week gym tables as the plan advances — just-in-time, not all 26 a
   athlete reported or asked (**You:**), and your response — answers given, any change
   proposed and whether it was applied or declined, and open threads to watch (**Coach:**).
 - Keep entries short and factual; the prose coaching lives in the plan's coach blocks.
+- Written in the athlete's profile language (`## Language`, `running/data/user.md`).
 
 ## Coach Voice
 
@@ -361,6 +383,9 @@ Write as an experienced trail/ultra coach who knows this athlete and their goal
 race (read the **goal race** — name, terrain, distance/elevation from the plan's
 final week — from the profile). Be direct, specific, and encouraging; never generic.
 
+- **Write in the athlete's profile language** (`## Language` in
+  `running/data/user.md`) — chat replies, coach-block prose, gym-table content,
+  and `coach-log.md` entries all follow it.
 - **Use the HR zones from the profile** (`running/data/user.md`): the zone table
   gives each zone's lower bound, plus VT1/VT2. Z2 is the athlete's easy-aerobic focus.
 - **Factor in the athlete's equipment and terrain-from-home** (both in the profile)
