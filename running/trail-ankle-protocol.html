@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trail-Ready Ankles — Home Routine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E4E8DD;
+    --paper-2:#EBEEE4;
+    --ink:#17251C;
+    --forest:#2F4A38;
+    --moss:#6E8B5E;
+    --contour:#B7C0A8;
+    --blaze:#C85A2E;
+    --line:#C9CFBE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;overflow:hidden;padding:64px 0 48px;border-bottom:1px solid var(--line)}
+  .hero__topo{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.55}
+  .hero .wrap{position:relative;z-index:1}
+  .eyebrow{
+    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--forest);font-weight:700;
+  }
+  h1{
+    font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(38px,9vw,68px);line-height:.98;letter-spacing:-.02em;
+    margin:14px 0 16px;color:var(--ink);
+  }
+  h1 .alt{color:var(--forest)}
+  .lede{font-size:clamp(16px,2.4vw,19px);max-width:52ch;color:#33413a}
+
+  /* trailhead sign */
+  .signpost{
+    margin-top:30px;border:1.5px solid var(--forest);border-radius:4px;
+    background:rgba(235,238,228,.7);backdrop-filter:blur(2px);
+    display:grid;grid-template-columns:1fr;
+  }
+  .signpost__row{
+    display:grid;grid-template-columns:96px 1fr;gap:16px;
+    padding:12px 16px;border-bottom:1px solid var(--line);align-items:baseline;
+  }
+  .signpost__row:last-child{border-bottom:0}
+  .signpost__k{
+    font-family:"Space Mono",monospace;font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--blaze);
+  }
+  .signpost__v{font-size:14.5px;color:#2b3830}
+
+  /* elevation divider */
+  .elev{display:block;width:100%;height:34px;color:var(--moss)}
+
+  /* ---------- WAYPOINTS ---------- */
+  main{padding:40px 0 24px}
+  .station{
+    padding:34px 0;border-top:1px solid var(--line);
+  }
+  .station:first-child{border-top:0}
+  .stn__head{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+  .marker{
+    flex:0 0 auto;width:52px;height:52px;position:relative;
+    display:grid;place-items:center;
+  }
+  .marker svg{position:absolute;inset:0;width:100%;height:100%;color:var(--moss)}
+  .marker span{
+    position:relative;font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:20px;color:var(--forest);
+  }
+  .stn__meta{display:flex;flex-direction:column}
+  .stn__tag{
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--blaze);font-weight:700;
+  }
+  .stn__name{
+    font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(21px,4vw,27px);line-height:1.1;letter-spacing:-.01em;margin-top:2px;
+  }
+
+  /* video poster card */
+  .video{
+    position:relative;display:block;aspect-ratio:16/9;margin:18px 0;
+    border-radius:6px;overflow:hidden;background:#0d130f;
+    border:1px solid var(--line);text-decoration:none;
+  }
+  .video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .video::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(13,19,15,.6),rgba(13,19,15,.05) 46%);
+  }
+  .play{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+    width:62px;height:62px;border-radius:50%;background:var(--blaze);
+    display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.38);
+  }
+  .play svg{width:23px;height:23px;color:#fff;margin-left:3px}
+  .watch{
+    position:absolute;left:14px;bottom:11px;z-index:2;
+    font-family:"Space Mono",monospace;font-size:11.5px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:#fff;
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .video img,.play{transition:transform .35s ease}
+    .video:hover img{transform:scale(1.045)}
+    .video:hover .play{transform:translate(-50%,-50%) scale(1.09)}
+  }
+
+  /* data readout */
+  .readout{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 16px}
+  .chip{
+    font-family:"Space Mono",monospace;font-size:12px;font-weight:700;
+    letter-spacing:.03em;padding:6px 11px;border-radius:3px;
+    background:var(--forest);color:var(--paper-2);
+  }
+  .chip--ghost{background:transparent;color:var(--forest);border:1px solid var(--moss)}
+
+  .cues{list-style:none;display:grid;gap:9px}
+  .cues li{position:relative;padding-left:22px;font-size:15.5px;color:#2b3830}
+  .cues li::before{
+    content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;
+    border:2px solid var(--blaze);border-radius:50%;
+  }
+  .note{
+    margin-top:14px;font-size:13.5px;color:#4a5850;font-style:italic;
+    padding-left:14px;border-left:2px solid var(--contour);
+  }
+  .note b{font-style:normal;color:var(--forest)}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line);padding:30px 0 46px;margin-top:14px}
+  .foot__note{
+    font-family:"Space Mono",monospace;font-size:12px;color:#5a6960;
+    letter-spacing:.02em;line-height:1.7;
+  }
+  .foot__note b{color:var(--blaze)}
+  a{color:var(--forest)}
+  :focus-visible{outline:2.5px solid var(--blaze);outline-offset:3px;border-radius:2px}
+
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(14px);animation:rise .7s ease forwards}
+    @keyframes rise{to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="hero__topo" viewBox="0 0 820 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <g id="hill">
+        <path d="M0,-100 C60,-96 112,-46 100,8 C90,58 46,106 -10,100 C-66,94 -106,44 -100,-16 C-94,-72 -56,-98 0,-100 Z"/>
+      </g>
+    </defs>
+    <g fill="none" stroke="currentColor" stroke-width="1.4">
+      <g transform="translate(150,120)">
+        <use href="#hill" transform="scale(2.1)"/>
+        <use href="#hill" transform="scale(1.72)"/>
+        <use href="#hill" transform="scale(1.36)"/>
+        <use href="#hill" transform="scale(1.02)"/>
+        <use href="#hill" transform="scale(.7)"/>
+        <use href="#hill" transform="scale(.4)"/>
+      </g>
+      <g transform="translate(640,270) rotate(18)">
+        <use href="#hill" transform="scale(2.4)"/>
+        <use href="#hill" transform="scale(1.95)"/>
+        <use href="#hill" transform="scale(1.52)"/>
+        <use href="#hill" transform="scale(1.12)"/>
+        <use href="#hill" transform="scale(.74)"/>
+        <use href="#hill" transform="scale(.4)"/>
+      </g>
+    </g>
+  </svg>
+
+  <div class="wrap reveal">
+    <p class="eyebrow">Home Routine · Trail Running</p>
+    <h1>Trail-Ready<br><span class="alt">Ankles</span></h1>
+    <p class="lede">Five waypoints for lateral stability, proprioception, and the strength to hold your footing on uneven ground.</p>
+
+    <div class="signpost">
+      <div class="signpost__row">
+        <span class="signpost__k">Strength</span>
+        <span class="signpost__v">2–3×/week, on non-hard-running days</span>
+      </div>
+      <div class="signpost__row">
+        <span class="signpost__k">Balance</span>
+        <span class="signpost__v">Daily — low-fatigue, do it while brushing your teeth</span>
+      </div>
+      <div class="signpost__row">
+        <span class="signpost__k">Trail rule</span>
+        <span class="signpost__v">Build load gradually. Sharp pain → stop and see a physio.</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<svg class="elev" viewBox="0 0 820 34" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,30 L70,18 L130,24 L200,8 L270,20 L340,4 L420,16 L500,6 L580,22 L660,12 L740,26 L820,14"
+        fill="none" stroke="currentColor" stroke-width="1.5"/>
+</svg>
+
+<main class="wrap">
+
+  <!-- 01 -->
+  <section class="station">
+    <div class="stn__head">
+      <div class="marker">
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="26" cy="26" r="17" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/></svg>
+        <span>01</span>
+      </div>
+      <div class="stn__meta">
+        <span class="stn__tag">Waypoint 01 · Gastrocnemius · Soleus · Achilles</span>
+        <h2 class="stn__name">Calf Raises — slow single-leg + bent-knee</h2>
+      </div>
+    </div>
+    <a class="video" href="https://www.youtube.com/watch?v=50r_oShcFoA" target="_blank" rel="noopener" aria-label="Watch: calf raises, straight vs bent knee, on YouTube">
+      <img src="https://img.youtube.com/vi/50r_oShcFoA/hqdefault.jpg" alt="Calf raise demonstration">
+      <span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span class="watch">Watch on YouTube</span>
+    </a>
+    <div class="readout">
+      <span class="chip">3 × 15 / leg</span>
+      <span class="chip chip--ghost">straight-leg</span>
+      <span class="chip chip--ghost">+ bent-knee</span>
+    </div>
+    <ul class="cues">
+      <li>Full range — the heel drops <b>below</b> the step at the bottom, not just to floor level.</li>
+      <li>Lower slowly (3–4s). Keep every rep pain-free.</li>
+      <li>Add a bent-knee version to hit the soleus, your workhorse on long climbs and descents.</li>
+    </ul>
+    <p class="note">Progression: once bodyweight is easy, <b>add load</b> — a loaded backpack works well.</p>
+  </section>
+
+  <!-- 02 -->
+  <section class="station">
+    <div class="stn__head">
+      <div class="marker">
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="26" cy="26" r="17" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/></svg>
+        <span>02</span>
+      </div>
+      <div class="stn__meta">
+        <span class="stn__tag">Waypoint 02 · Peroneals · Stabilizers</span>
+        <h2 class="stn__name">Resistance Band — four directions</h2>
+      </div>
+    </div>
+    <a class="video" href="https://www.youtube.com/watch?v=bSgoNvcZGG4" target="_blank" rel="noopener" aria-label="Watch: 4-way ankle resistance band routine on YouTube">
+      <img src="https://img.youtube.com/vi/bSgoNvcZGG4/hqdefault.jpg" alt="Resistance band ankle exercise demonstration">
+      <span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span class="watch">Watch on YouTube</span>
+    </a>
+    <div class="readout">
+      <span class="chip">2 × 15 / direction</span>
+      <span class="chip chip--ghost">plantar · dorsi · inv · ever</span>
+    </div>
+    <ul class="cues">
+      <li>Work all four: point, pull-up, turn-in, and turn-out.</li>
+      <li><b>Eversion is the priority</b> — it builds the peroneals that protect against a rolled ankle.</li>
+      <li>Slow and controlled. Don't let the band snap your foot back; move only the ankle.</li>
+    </ul>
+  </section>
+
+  <!-- 03 -->
+  <section class="station">
+    <div class="stn__head">
+      <div class="marker">
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="26" cy="26" r="17" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/></svg>
+        <span>03</span>
+      </div>
+      <div class="stn__meta">
+        <span class="stn__tag">Waypoint 03 · Proprioception</span>
+        <h2 class="stn__name">Single-Leg Balance</h2>
+      </div>
+    </div>
+    <a class="video" href="https://www.youtube.com/watch?v=3qmC9QkM0OA" target="_blank" rel="noopener" aria-label="Watch: single-leg balance for runners on YouTube">
+      <img src="https://img.youtube.com/vi/3qmC9QkM0OA/hqdefault.jpg" alt="Single-leg balance demonstration">
+      <span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span class="watch">Watch on YouTube</span>
+    </a>
+    <div class="readout">
+      <span class="chip">30–60s / leg</span>
+      <span class="chip chip--ghost">daily</span>
+    </div>
+    <ul class="cues">
+      <li>Barefoot is best. Root the foot into the ground — big toe, little toe, heel.</li>
+      <li>It's fine to wobble; that's the reflexive stabilization training itself.</li>
+    </ul>
+    <p class="note">Progression: eyes closed → then stand on a cushion or folded towel to mimic uneven trail.</p>
+  </section>
+
+  <!-- 04 -->
+  <section class="station">
+    <div class="stn__head">
+      <div class="marker">
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="26" cy="26" r="17" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/></svg>
+        <span>04</span>
+      </div>
+      <div class="stn__meta">
+        <span class="stn__tag">Waypoint 04 · Posterior chain · Balance under load</span>
+        <h2 class="stn__name">Single-Leg Romanian Deadlift</h2>
+      </div>
+    </div>
+    <a class="video" href="https://www.youtube.com/watch?v=Zfr6wizR8rs" target="_blank" rel="noopener" aria-label="Watch: single-leg RDL tutorial on YouTube">
+      <img src="https://img.youtube.com/vi/Zfr6wizR8rs/hqdefault.jpg" alt="Single-leg Romanian deadlift demonstration">
+      <span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span class="watch">Watch on YouTube</span>
+    </a>
+    <div class="readout">
+      <span class="chip">3 × 8 / leg</span>
+      <span class="chip chip--ghost">bodyweight</span>
+    </div>
+    <ul class="cues">
+      <li>Hips <b>back</b>, not down — it's a hinge, not a squat.</li>
+      <li>Keep the pelvis square; don't let the free hip rotate open.</li>
+      <li>Reach the back leg straight behind you as a counterbalance, back flat.</li>
+    </ul>
+  </section>
+
+  <!-- 05 -->
+  <section class="station">
+    <div class="stn__head">
+      <div class="marker">
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="26" cy="26" r="17" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/></svg>
+        <span>05</span>
+      </div>
+      <div class="stn__meta">
+        <span class="stn__tag">Waypoint 05 · Reactive lateral control</span>
+        <h2 class="stn__name">Lateral Hops — stick the landing</h2>
+      </div>
+    </div>
+    <a class="video" href="https://www.youtube.com/watch?v=Zgq7uf6DDRY" target="_blank" rel="noopener" aria-label="Watch: lateral hops with stick landing on YouTube">
+      <img src="https://img.youtube.com/vi/Zgq7uf6DDRY/hqdefault.jpg" alt="Lateral hop demonstration">
+      <span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span class="watch">Watch on YouTube</span>
+    </a>
+    <div class="readout">
+      <span class="chip">3 × 10–15 / leg</span>
+      <span class="chip chip--ghost">soft landings</span>
+    </div>
+    <ul class="cues">
+      <li>Small side-to-side hops — control beats distance (a metre is plenty).</li>
+      <li>Land soft with a slightly bent knee, and <b>hold the landing a second</b> before the next.</li>
+      <li>This trains the lateral control that flat-road running never develops.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="foot__note">
+      ROUTE // 5 waypoints · strength <b>2–3×/wk</b> · balance <b>daily</b><br>
+      Progress load only when form holds. New or significant ankle history → check with a physio first.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
