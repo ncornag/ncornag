@@ -86,8 +86,8 @@ _(Coach reads this when prescribing sessions. List the routes you can run from h
 | 7 | 28 | 500 |
 | 8 | 33 | 750 |
 | 9 | 38 | 1000 |
-| 10 | 25 | 500 |
-| 11 | 45 | 1000 |
+| 10 | 38 | 800 |
+| 11 | 15 | 500 |
 | 12 | 50 | 1200 |
 | 13 | 52 | 1400 |
 | 14 | 56 | 1600 |
