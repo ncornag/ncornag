@@ -365,22 +365,37 @@ Maintain per-week gym tables as the plan advances — just-in-time, not all 26 a
   the candidates it returns — name, target, equipment, score. **Never accept
   the top score blindly**: token overlap can rank a wrong exercise highest
   (e.g. "hip raise (bent knee)" outscores real calf-raise variants for
-  "Calf Raise Bent-Knee" — a different movement entirely). Only proceed on a
-  candidate you are confident, from its name and target muscle, is the same
-  movement. On a confident match, run `python3
-  .claude/skills/coach/exercise-media.py fetch <id> <slug>` (`<slug>` = the
-  exercise's own name, kebab-cased, e.g. `dead-bug`) to vendor its thumbnail
-  + GIF into `running/assets/exercises/`, then add `<img class="ex-media"
-  src="assets/exercises/<slug>.gif" alt="<name> demo" loading="lazy">`
-  full-width immediately after `.ex-header` (not inside it — the thumbnail
-  reads too small next to the exercise name), followed by `<div
-  class="ex-target">Target: <muscle></div>`.
+  "Calf Raise Bent-Knee" — a different movement entirely, wrong target
+  muscle). Judge each candidate from its name and target muscle, not its
+  score, and place it in one of three buckets:
+  - **Confident match** (same movement): run `python3
+    .claude/skills/coach/exercise-media.py fetch <id> <slug>` (`<slug>` = the
+    exercise's own name, kebab-cased, e.g. `dead-bug`) to vendor its
+    thumbnail + GIF into `running/assets/exercises/`, then add `<img
+    class="ex-media" src="assets/exercises/<slug>.gif" alt="<name> demo"
+    loading="lazy">` full-width immediately after `.ex-header` (not inside
+    it — the thumbnail reads too small next to the exercise name), followed
+    by `<div class="ex-target">Target: <muscle></div>`.
+  - **No confident match, but a same-family movement exists** (same target
+    muscle/pattern, different equipment or setup — e.g. a seated calf raise
+    standing in for a step-edge bent-knee calf raise): fetch and add it the
+    same way, but mark it approximate — add `ex-media-approx` alongside
+    `ex-media` on the `<img>` (dashed border, slightly dimmed), and insert
+    `<div class="ex-approx-note">Approximate reference (<what it actually
+    is>) — <one line on what differs></div>` between the image and the
+    `.ex-target` line. The `alt` text should name the real dataset exercise
+    and say "closest available reference, not an exact match".
+  - **No match at all, or every candidate targets a different muscle/movement
+    family** (like "hip raise (bent knee)" for a calf raise): leave the card
+    exactly as-is, silently — do not force an approximate label onto an
+    unrelated exercise. This dataset skews toward equipped gym-machine names
+    and misses several of this plan's trail-specific bodyweight/isometric
+    moves; that is expected, not an error.
+
   Add `<div class="media-attribution">Exercise demo images © Gym visual —
   https://gymvisual.com/</div>` once per page, right after the `.exercises`
-  grid closes, the first time any card on that page gets a demo image. **No
-  confident match → leave the card exactly as-is, silently** — this dataset
-  skews toward equipped gym-machine names and misses several of this plan's
-  trail-specific bodyweight/isometric moves; that is expected, not an error.
+  grid closes, the first time any card on that page gets a demo image
+  (confident or approximate).
 - **Dedup → ranges:** if a week's programme is identical to the previous week's, do **not**
   create a new file. Name the shared file `<gym_prefix><N-M>.html` (e.g.
   `<gym_prefix>3-5.html`, e.g. `gym-week3-5.html`, covers weeks 3–5). When a later week diverges, split: shrink the
