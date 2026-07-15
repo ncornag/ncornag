@@ -2,6 +2,7 @@
 """Plain-assert tests for exercise-media.py helpers. Run: python3 test-exercise-media.py"""
 import importlib.util
 import os
+import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location(
@@ -44,10 +45,40 @@ def test_slugify_kebab_cases_the_name():
     assert em.slugify("One-Arm Bent-Over Row") == "one-arm-bent-over-row"
 
 
+def test_media_paths_derives_relative_and_absolute_paths():
+    paths = em.media_paths("/repo", "dead-bug")
+    assert paths["image_rel"] == "assets/exercises/dead-bug.jpg"
+    assert paths["gif_rel"] == "assets/exercises/dead-bug.gif"
+    assert paths["image_abs"] == "/repo/running/assets/exercises/dead-bug.jpg"
+    assert paths["gif_abs"] == "/repo/running/assets/exercises/dead-bug.gif"
+
+
+def test_fetch_media_skips_files_that_already_exist():
+    with tempfile.TemporaryDirectory() as d:
+        paths = em.media_paths(d, "dead-bug")
+        os.makedirs(paths["dir"], exist_ok=True)
+        with open(paths["image_abs"], "wb") as f:
+            f.write(b"cached-jpg")
+        with open(paths["gif_abs"], "wb") as f:
+            f.write(b"cached-gif")
+        record = {"id": "0276", "name": "dead bug", "image": "images/x.jpg",
+                   "gif_url": "videos/x.gif", "attribution": "© Gym visual"}
+        result = em.fetch_media(record, "dead-bug", d)
+        with open(paths["image_abs"], "rb") as f:
+            assert f.read() == b"cached-jpg"
+        with open(paths["gif_abs"], "rb") as f:
+            assert f.read() == b"cached-gif"
+        assert result == {"image": "assets/exercises/dead-bug.jpg",
+                           "gif": "assets/exercises/dead-bug.gif",
+                           "attribution": "© Gym visual"}
+
+
 if __name__ == "__main__":
     test_normalize_tokens_lowercases_and_strips_punctuation()
     test_score_candidates_exact_match_scores_one()
     test_score_candidates_excludes_disjoint_names()
     test_score_candidates_ranks_partial_overlap_below_exact()
     test_slugify_kebab_cases_the_name()
+    test_media_paths_derives_relative_and_absolute_paths()
+    test_fetch_media_skips_files_that_already_exist()
     print("OK")
