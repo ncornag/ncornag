@@ -41,6 +41,8 @@ changes (B1).
 | the plan file (profile `plan_file`) | The plan — the file you edit. |
 | `running/running-zones.html` | A rendered view of the athlete's lab HR zones (source of truth is the profile). |
 | the gym files (profile `gym_prefix`) | Per-week gym tables, `<gym_prefix><N>.html` (range-named when identical, e.g. `<gym_prefix>3-5.html`). |
+| `.claude/skills/coach/data/exercises.json` | Vendored snapshot of the [exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset) (id/name/target/muscle_group/secondary_muscles/equipment/media paths) — used to match an exercise name to a demo GIF + target muscle. Refresh manually per Notes; never engine-generated. |
+| `.claude/skills/coach/exercise-media.py` | Matching/vendoring engine for exercise demo media — `search` (fuzzy match, judge the result yourself), `fetch` (vendor image+GIF for a confirmed match). Run it, use its JSON. |
 | `running/data/<YYYY-MM>.csv` | Activity exports (refreshed by the `garmin` skill, read by the engine). |
 
 Read the athlete's age, injury history, and guiding **principle** from the profile
@@ -351,12 +353,33 @@ Maintain per-week gym tables as the plan advances — just-in-time, not all 26 a
   (`<gym_prefix>3-5.html`, e.g. `gym-week3-5.html`): theme bootstrap, a stacked
   two-line title in the profile's language (e.g. `GYM<br>WEEK N` in English,
   `GIMNASIO<br>SEMANA N` in Spanish), phase subtitle, stat pills, warmup card,
-  exercise grid (`.exercise` with `.cues` and `.ex-watch`), and the
+  exercise grid (`.exercise` with `.cues`, `.ex-watch`, and optionally
+  `.ex-media`/`.ex-target` — see "Demo media" below), and the
   expected/warning footer. Include the back-to-index link
   (`<a href="index.html">‹ Running</a>` right after `<body>`).
 - **Progression:** evolve content by phase — foundation (bodyweight, form) → strength
   (add load) → vert/power (step-ups, eccentric descents) → taper (reduce volume) — and by
   athlete feedback (e.g. swap an exercise that aggravates a joint).
+- **Demo media:** after writing an exercise's cues, run `python3
+  .claude/skills/coach/exercise-media.py search "<exercise name>"` and read
+  the candidates it returns — name, target, equipment, score. **Never accept
+  the top score blindly**: token overlap can rank a wrong exercise highest
+  (e.g. "hip raise (bent knee)" outscores real calf-raise variants for
+  "Calf Raise Bent-Knee" — a different movement entirely). Only proceed on a
+  candidate you are confident, from its name and target muscle, is the same
+  movement. On a confident match, run `python3
+  .claude/skills/coach/exercise-media.py fetch <id> <slug>` (`<slug>` = the
+  exercise's own name, kebab-cased, e.g. `dead-bug`) to vendor its thumbnail
+  + GIF into `running/assets/exercises/`, then add `<img class="ex-media"
+  src="assets/exercises/<slug>.gif" alt="<name> demo" loading="lazy">` next
+  to the exercise name in `.ex-num-name`, and `<div
+  class="ex-target">Target: <muscle></div>` immediately after `.ex-header`.
+  Add `<div class="media-attribution">Exercise demo images © Gym visual —
+  https://gymvisual.com/</div>` once per page, right after the `.exercises`
+  grid closes, the first time any card on that page gets a demo image. **No
+  confident match → leave the card exactly as-is, silently** — this dataset
+  skews toward equipped gym-machine names and misses several of this plan's
+  trail-specific bodyweight/isometric moves; that is expected, not an error.
 - **Dedup → ranges:** if a week's programme is identical to the previous week's, do **not**
   create a new file. Name the shared file `<gym_prefix><N-M>.html` (e.g.
   `<gym_prefix>3-5.html`, e.g. `gym-week3-5.html`, covers weeks 3–5). When a later week diverges, split: shrink the
@@ -654,3 +677,12 @@ Insert verbatim before `</style>` on first run:
   in the actuals panel. When coaching a week with a gym session, read that week's gym file
   (`weeks[].gym_file` from the engine) for the exercise list and cues so feedback is
   specific to what the athlete actually did.
+- `.claude/skills/coach/data/exercises.json` is a **vendored snapshot**, not
+  engine output — refresh it only when you need newer dataset coverage: `curl
+  -sL https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/data/exercises.json
+  -o /tmp/exercises-full.json`, then trim each record to
+  `id`/`name`/`target`/`muscle_group`/`secondary_muscles`/`equipment`/`image`/`gif_url`/`attribution`
+  and overwrite the vendored file. `running/assets/exercises/*.jpg`/`*.gif`
+  are real vendored image data (© Gym visual — see the dataset's
+  [NOTICE.md](https://github.com/hasaneyldrm/exercises-dataset/blob/main/NOTICE.md))
+  — never regenerated or deleted by the engine.
