@@ -28,8 +28,9 @@ ROOT=(
 rm -rf dist
 mkdir -p dist/running
 cp -R "${ROOT[@]}" dist/
-# /running: ship only the rendered pages and their stylesheet.
+# /running: ship only the rendered pages, their stylesheet, and vendored assets.
 cp running/*.html running/theme.css dist/running/
+cp -R running/assets dist/running/
 
 echo "Staged public site into dist/:"
 find dist -mindepth 1 | sort
