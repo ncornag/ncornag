@@ -371,9 +371,10 @@ Maintain per-week gym tables as the plan advances — just-in-time, not all 26 a
   .claude/skills/coach/exercise-media.py fetch <id> <slug>` (`<slug>` = the
   exercise's own name, kebab-cased, e.g. `dead-bug`) to vendor its thumbnail
   + GIF into `running/assets/exercises/`, then add `<img class="ex-media"
-  src="assets/exercises/<slug>.gif" alt="<name> demo" loading="lazy">` next
-  to the exercise name in `.ex-num-name`, and `<div
-  class="ex-target">Target: <muscle></div>` immediately after `.ex-header`.
+  src="assets/exercises/<slug>.gif" alt="<name> demo" loading="lazy">`
+  full-width immediately after `.ex-header` (not inside it — the thumbnail
+  reads too small next to the exercise name), followed by `<div
+  class="ex-target">Target: <muscle></div>`.
   Add `<div class="media-attribution">Exercise demo images © Gym visual —
   https://gymvisual.com/</div>` once per page, right after the `.exercises`
   grid closes, the first time any card on that page gets a demo image. **No
