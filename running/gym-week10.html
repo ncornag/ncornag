@@ -305,6 +305,30 @@
       font-weight: 600;
     }
 
+    .ex-media {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .ex-target {
+      font-size: .62rem;
+      letter-spacing: .04em;
+      color: var(--muted);
+      margin-bottom: .6rem;
+    }
+
+    .media-attribution {
+      font-size: .58rem;
+      color: var(--muted);
+      text-align: right;
+      margin: -1rem 0 1rem;
+    }
+
     /* Footer */
     .footer {
       display: grid;
@@ -454,12 +478,14 @@
       <div class="ex-header">
         <div class="ex-num-name">
           <div class="ex-num">2</div>
+          <img class="ex-media" src="assets/exercises/single-leg-calf-raise.gif" alt="Single-Leg Calf Raise demo" loading="lazy">
           <div class="ex-name">Single-Leg<br>Calf Raise</div>
         </div>
         <div class="ex-sets">3 × 8<br><span
             style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
             leg</span></div>
       </div>
+      <div class="ex-target">Target: calves</div>
 
       <div class="ex-label">Position</div>
       <ul class="cues">
@@ -485,12 +511,14 @@
       <div class="ex-header">
         <div class="ex-num-name">
           <div class="ex-num">3</div>
+          <img class="ex-media" src="assets/exercises/single-leg-glute-bridge.gif" alt="Single-Leg Glute Bridge demo" loading="lazy">
           <div class="ex-name">Single-Leg<br>Glute Bridge</div>
         </div>
         <div class="ex-sets">3 × 8<br><span
             style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
             leg</span></div>
       </div>
+      <div class="ex-target">Target: glutes</div>
 
       <div class="ex-label">Position</div>
       <ul class="cues">
@@ -518,12 +546,14 @@
       <div class="ex-header">
         <div class="ex-num-name">
           <div class="ex-num">4</div>
+          <img class="ex-media" src="assets/exercises/dead-bug.gif" alt="Dead Bug demo" loading="lazy">
           <div class="ex-name">Dead<br>Bug</div>
         </div>
         <div class="ex-sets">3 × 8<br><span
             style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
             side</span></div>
       </div>
+      <div class="ex-target">Target: abs</div>
 
       <div class="ex-label">Position</div>
       <ul class="cues">
@@ -612,12 +642,14 @@
       <div class="ex-header">
         <div class="ex-num-name">
           <div class="ex-num">7</div>
+          <img class="ex-media" src="assets/exercises/one-arm-bent-over-row.gif" alt="One-Arm Bent-Over Row demo" loading="lazy">
           <div class="ex-name">One-Arm<br>Bent-Over Row</div>
         </div>
         <div class="ex-sets">3 × 8<br><span
             style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
             arm</span></div>
       </div>
+      <div class="ex-target">Target: upper back</div>
 
       <div class="ex-label">Position</div>
       <ul class="cues">
@@ -668,6 +700,8 @@
     </div>
 
   </div>
+
+  <div class="media-attribution">Exercise demo images © Gym visual — https://gymvisual.com/</div>
 
   <div class="footer">
     <div class="footer-card expected">
