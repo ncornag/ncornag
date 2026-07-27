@@ -76,6 +76,7 @@ import csv
 import io
 import math
 import re
+import xml.etree.ElementTree as ET
 import zipfile
 from collections import defaultdict
 from datetime import date, datetime, timezone
@@ -219,8 +220,15 @@ def download_all(start: date, end: date, no_prompt: bool = False) -> int:
             dest = year_dir / f"{base}{ext}"
             if dest.exists():
                 continue                      # already downloaded
-            blob = client.download_activity(a["activityId"], dl_fmt=fmt)
-            dest.write_bytes(post(blob))
+            try:
+                blob = client.download_activity(a["activityId"], dl_fmt=fmt)
+                data = post(blob)
+            except Exception as exc:              # noqa: BLE001 - one bad export
+                # e.g. phone-recorded activities whose ORIGINAL zip holds only a
+                # .gpx; skip that file so the rest of the sync still runs.
+                print(f"  skip {dest.name}: {exc}")
+                continue
+            dest.write_bytes(data)
             print(f"  downloaded {dest.name}")
             new += 1
     print(f"Downloaded {new} new file(s)")
@@ -303,6 +311,107 @@ def fit_to_row(path: Path) -> dict | None:
     return row
 
 
+TCX_NS = "{http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2}"
+
+
+def tcx_ascent(alts: list[float]) -> int:
+    """Total ascent from an altitude stream: 3-point moving average, then sum
+    the rises that clear a 1.5 m hysteresis threshold.
+
+    TCX carries no total ascent, so it has to be derived. Smoothing + hysteresis
+    is needed because GPS-only altitude jitters by metres. These constants were
+    tuned against the three barometric hikes of 2026-07 whose .fit reports the
+    real ascent (257 / 498 / 269 m): this yields 248 / 504 / 270, a 1.7% mean
+    error, and 654 m on the GPS-only 2026-07-22 hike where Garmin says 690."""
+    if len(alts) < 2:
+        return 0
+    k = 3
+    sm = [sum(alts[max(0, i - k):i + k + 1]) / len(alts[max(0, i - k):i + k + 1])
+          for i in range(len(alts))]
+    total, ref = 0.0, sm[0]
+    for a in sm[1:]:
+        if a - ref >= 1.5:
+            total += a - ref
+            ref = a
+        elif a < ref:
+            ref = a
+    return round(total)
+
+
+def tcx_to_row(path: Path) -> dict | None:
+    """Decode one .tcx into the same row shape fit_to_row produces.
+
+    Fallback for activities Garmin only holds as GPX/TCX (phone-recorded ones
+    ship no .fit), so they still reach the coach. Read-only: the .tcx archive is
+    never modified. Fewer columns than the .fit path — TCX has no running
+    dynamics or temperature — and ascent is derived, not measured."""
+    try:
+        root = ET.parse(path).getroot()
+    except Exception as exc:                  # noqa: BLE001 - report and skip
+        print(f"  parse failed for {path.name}: {exc}")
+        return None
+    laps = root.iter(TCX_NS + "Lap")
+
+    def text(el, tag):
+        found = el.find(TCX_NS + tag)
+        return found.text if found is not None else None
+
+    seconds = distance = calories = 0.0
+    for lap in laps:
+        seconds += float(text(lap, "TotalTimeSeconds") or 0)
+        distance += float(text(lap, "DistanceMeters") or 0)
+        calories += float(text(lap, "Calories") or 0)
+
+    points = []                               # (timestamp, altitude, heart rate)
+    for tp in root.iter(TCX_NS + "Trackpoint"):
+        t = text(tp, "Time")
+        if not t:
+            continue
+        hr_el = tp.find(f"{TCX_NS}HeartRateBpm/{TCX_NS}Value")
+        alt = text(tp, "AltitudeMeters")
+        points.append((datetime.fromisoformat(t.replace("Z", "+00:00")),
+                       float(alt) if alt else None,
+                       int(hr_el.text) if hr_el is not None else None))
+    if not points:
+        print(f"  no trackpoints in {path.name}; skipping")
+        return None
+    points.sort()
+
+    # Same crediting rule as the .fit path: each interval counts toward the HR
+    # at its start, gaps over 15 s are pauses.
+    hist: dict[int, float] = {}
+    for (t0, _, hr0), (t1, _, _) in zip(points, points[1:]):
+        dt = (t1 - t0).total_seconds()
+        if hr0 and 0 < dt <= 15:
+            hist[hr0] = hist.get(hr0, 0.0) + dt
+
+    row = {
+        "source_file": path.name,
+        "activity_type": path.stem.split("_")[-1],
+        "start_time": points[0][0].astimezone(timezone.utc)
+                                  .strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+        "total_timer_time": round(seconds, 3),
+        "total_distance": round(distance, 2),
+        "total_calories": round(calories),
+        "total_ascent": tcx_ascent([a for _, a, _ in points if a is not None]),
+    }
+    if seconds:
+        row["enhanced_avg_speed"] = round(distance / seconds, 3)
+    hrs = [hr for _, _, hr in points if hr]
+    if hrs:
+        row["max_heart_rate"] = max(hrs)
+    if hist:
+        row["avg_heart_rate"] = round(
+            sum(bpm * secs for bpm, secs in hist.items()) / sum(hist.values()))
+        row["hr_seconds"] = "|".join(
+            f"{bpm}:{round(secs)}" for bpm, secs in sorted(hist.items()))
+    alts = [a for _, a, _ in points if a is not None]
+    if alts:
+        row["altitude_min"] = round(min(alts), 2)
+        row["altitude_max"] = round(max(alts), 2)
+    return row
+
+
 def month_header(rows: list[dict]) -> list[str]:
     """Union of all fields across a month's rows: lead columns first (in fixed
     order, only those actually present), then the rest alphabetically."""
@@ -313,23 +422,32 @@ def month_header(rows: list[dict]) -> list[str]:
 
 
 def build_csvs(start: date, end: date) -> None:
-    """Rebuild running/data/YYYY-MM.csv from .fit files in the log folders."""
+    """Rebuild running/data/YYYY-MM.csv from the log folders.
+
+    .fit is authoritative; a .tcx is read only when its .fit sibling is absent
+    (phone-recorded activities Garmin exports as GPX, never FIT)."""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     rows_by_month: dict[str, list] = defaultdict(list)
-    fname_re = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-\d{2}-\d{2}_.+\.fit$",
+    fname_re = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-\d{2}-\d{2}_.+\.(fit|tcx)$",
                           re.IGNORECASE)
 
     for year_dir in sorted(LOG_DIR.glob("[0-9][0-9][0-9][0-9]")):
-        for fit in sorted(year_dir.glob("*.fit")):
-            m = fname_re.match(fit.name)
+        for src in sorted(year_dir.glob("*.fit")) + sorted(year_dir.glob("*.tcx")):
+            m = fname_re.match(src.name)
             if not m:
                 continue
             d = date(int(m[1]), int(m[2]), int(m[3]))
             if d < start or d > end:
                 continue
-            row = fit_to_row(fit)
+            if src.suffix.lower() == ".tcx":
+                if src.with_suffix(".fit").exists():
+                    continue                  # .fit already covered this one
+                print(f"  no .fit for {src.stem}; reading the .tcx instead")
+                row = tcx_to_row(src)
+            else:
+                row = fit_to_row(src)
             if row:
-                rows_by_month[f"{m[1]}-{m[2]}"].append((fit.name, row))
+                rows_by_month[f"{m[1]}-{m[2]}"].append((src.name, row))
 
     for month, items in sorted(rows_by_month.items()):
         items.sort(key=lambda t: t[0])        # filenames sort chronologically

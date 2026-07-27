@@ -35,9 +35,16 @@ under the configured archive (`YYYY-MM-DD-HH-MM_<Type>.fit` and `.tcx`),
 SDK. Each row also carries an `hr_seconds` column — a `bpm:secs|…` histogram
 built from the per-second HR record stream — which the coach engine buckets into
 time-in-zone (so a `--no-download` rebuild is enough to backfill it on existing
-`.fit`). `.tcx` files are archive-only; the CSVs the coach reads are built from
-`.fit`. The script bootstraps its own venv (`.claude/skills/garmin/.venv`) on
+`.fit`). The script bootstraps its own venv (`.claude/skills/garmin/.venv`) on
 first run.
+
+`.fit` is authoritative, but some activities have none — phone-recorded ones ship
+a GPX-only archive, so the `.fit` download is skipped with a `skip … zip
+contained no .fit file` line (one bad export never aborts the run). For those the
+builder falls back to the `.tcx`, which yields fewer columns (no running dynamics
+or temperature) and a **derived** total ascent: the altitude stream is smoothed
+and summed with a hysteresis threshold, ±5% against Garmin's own figure. The
+`.tcx` archive is only ever read, never modified.
 
 ## Run modes
 
