@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un día completo · Marató dels Dements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C0E;
+  --surface:#14161A;
+  --surface-2:#1B1E24;
+  --line:#252A32;
+  --line-soft:#1E222A;
+  --ink:#E9E7E2;
+  --ink-2:#9AA0A9;
+  --ink-3:#6B7079;
+  --z-easy:#3FA79E;
+  --z-quality:#DFA23A;
+  --z-long:#DD5B52;
+  --display:'Bebas Neue',Impact,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="light"]{
+  --bg:#F2F1EE; --surface:#FFFFFF; --surface-2:#F7F6F3;
+  --line:#DAD8D3; --line-soft:#E6E4DF;
+  --ink:#16181C; --ink-2:#585E67; --ink-3:#8A9099;
+  --z-easy:#1F7D75; --z-quality:#A97613; --z-long:#B33C34;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--mono);font-weight:300;
+  font-size:13px;line-height:1.65;
+  padding:32px 20px 64px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto}
+
+.head{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+.eyebrow{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:10px;
+}
+h1{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(38px,7vw,64px);line-height:.92;
+  letter-spacing:.01em;margin-bottom:14px;
+}
+h1 em{font-style:normal;color:var(--ink-3)}
+.meta{
+  display:flex;flex-wrap:wrap;gap:6px 26px;
+  font-size:11px;color:var(--ink-2);
+}
+.meta b{color:var(--ink);font-weight:500}
+
+section{margin-top:44px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px}
+h2{
+  font-family:var(--display);font-weight:400;
+  font-size:26px;letter-spacing:.03em;
+}
+.sec-note{font-size:11px;color:var(--ink-3)}
+
+/* ---- day types ---- */
+.days{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.day{
+  background:var(--surface);border:1px solid var(--line);
+  border-top:2px solid var(--accent);
+  padding:18px 16px 16px;
+}
+.day.easy{--accent:var(--z-easy)}
+.day.quality{--accent:var(--z-quality)}
+.day.long{--accent:var(--z-long)}
+.day-tag{
+  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:8px;
+}
+.day-name{font-family:var(--display);font-size:24px;letter-spacing:.03em;margin-bottom:2px}
+.day-sub{font-size:10.5px;color:var(--ink-3);margin-bottom:16px;line-height:1.5}
+.macros{display:grid;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.macro{
+  display:flex;justify-content:space-between;align-items:baseline;
+  background:var(--surface);padding:7px 10px;
+}
+.macro span{font-size:10px;color:var(--ink-3);letter-spacing:.06em}
+.macro b{font-size:13px;font-weight:500}
+.macro i{font-style:normal;font-size:10px;color:var(--ink-3);margin-left:5px}
+.kcal{
+  margin-top:12px;padding-top:11px;border-top:1px solid var(--line-soft);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.kcal span{font-size:10px;color:var(--ink-3);letter-spacing:.14em;text-transform:uppercase}
+.kcal b{font-family:var(--display);font-size:22px;letter-spacing:.02em;color:var(--accent)}
+
+/* ---- recipe ---- */
+.recipe{display:grid;grid-template-columns:1fr 1.2fr;gap:14px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);padding:18px}
+.panel-title{
+  font-family:var(--display);font-weight:400;font-size:19px;
+  letter-spacing:.04em;margin-bottom:2px;
+}
+.panel-sub{font-size:10px;color:var(--ink-3);letter-spacing:.08em;margin-bottom:16px}
+
+.servings{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:10px 12px;margin-bottom:16px;
+  background:var(--surface-2);border:1px solid var(--line);
+}
+.servings-l{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.stepper{display:flex;align-items:center;gap:2px}
+.stepper button{
+  width:28px;height:28px;cursor:pointer;
+  background:var(--surface);color:var(--ink-2);
+  border:1px solid var(--line);
+  font-family:var(--mono);font-size:15px;line-height:1;
+}
+.stepper button:hover{color:var(--z-easy);border-color:var(--z-easy)}
+.stepper button:focus-visible{outline:2px solid var(--z-easy);outline-offset:1px}
+.stepper input{
+  width:46px;height:28px;text-align:center;
+  background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-left:0;border-right:0;
+  font-family:var(--display);font-size:19px;letter-spacing:.04em;
+  -moz-appearance:textfield;
+}
+.stepper input::-webkit-outer-spin-button,
+.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stepper input:focus-visible{outline:2px solid var(--z-easy);outline-offset:-1px}
+.ing-group{margin-bottom:15px}
+.ing-group:last-child{margin-bottom:0}
+.ing-group h5{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--z-easy);font-weight:400;margin-bottom:6px;
+  padding-bottom:5px;border-bottom:1px solid var(--line-soft);
+}
+.ing{display:flex;justify-content:space-between;gap:12px;padding:3.5px 0;font-size:11.5px;color:var(--ink-2)}
+.ing b{color:var(--ink);font-weight:500;white-space:nowrap}
+.ing.opt span::after{content:' · opcional';color:var(--ink-3);font-size:10px}
+
+.step{display:flex;gap:13px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.step:last-of-type{border-bottom:0}
+.step-n{
+  font-family:var(--display);font-size:19px;line-height:1;
+  color:var(--ink-3);min-width:22px;padding-top:2px;
+}
+.step-b{flex:1}
+.step-t{font-size:12px;font-weight:500;margin-bottom:2px;display:flex;justify-content:space-between;gap:10px}
+.step-t em{font-style:normal;color:var(--z-quality);font-size:10.5px;white-space:nowrap}
+.step-d{font-size:11px;color:var(--ink-2)}
+
+.yield{
+  margin-top:14px;padding:11px 13px;background:var(--surface-2);
+  border-left:2px solid var(--z-easy);
+}
+.yield-t{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.yield-r{display:flex;gap:18px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2)}
+.yield-r b{color:var(--ink);font-weight:500}
+.yield p{font-size:11px;color:var(--ink-2);margin-top:8px}
+.yield p b{color:var(--ink);font-weight:500}
+
+
+/* ---- shopping list ---- */
+.shop{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.aisles{display:grid;gap:15px}
+.aisle h5{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--acc,var(--z-easy));font-weight:400;margin-bottom:6px;
+  padding-bottom:5px;border-bottom:1px solid var(--line-soft);
+}
+.buy{
+  display:flex;align-items:baseline;gap:9px;
+  padding:4px 0;font-size:11.5px;color:var(--ink-2);cursor:pointer;
+}
+.buy input{
+  appearance:none;-webkit-appearance:none;
+  width:11px;height:11px;flex:0 0 11px;
+  border:1px solid var(--line);background:var(--bg);
+  cursor:pointer;position:relative;top:1px;
+}
+.buy input:checked{background:var(--acc,var(--z-easy));border-color:var(--acc,var(--z-easy))}
+.buy input:focus-visible{outline:2px solid var(--acc,var(--z-easy));outline-offset:2px}
+.buy-n{flex:1}
+.buy b{color:var(--ink);font-weight:500;white-space:nowrap}
+.buy input:checked ~ .buy-n,
+.buy input:checked ~ b{text-decoration:line-through;color:var(--ink-3);font-weight:300}
+.buy small{display:block;font-size:9.5px;color:var(--ink-3);letter-spacing:.02em}
+.shop-note{
+  margin-top:14px;padding:11px 13px;background:var(--surface-2);
+  border-left:2px solid var(--z-long);font-size:11px;color:var(--ink-2);
+}
+.shop-note b{color:var(--ink);font-weight:500}
+
+/* ---- meal cards ---- */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);padding:18px 18px 16px}
+.card h3{
+  font-family:var(--display);font-weight:400;font-size:19px;
+  letter-spacing:.04em;margin-bottom:3px;
+}
+.card .when{font-size:10px;color:var(--ink-3);letter-spacing:.08em;margin-bottom:14px}
+ul.items{list-style:none}
+ul.items li{
+  display:flex;justify-content:space-between;gap:14px;
+  padding:6px 0;border-bottom:1px dotted var(--line-soft);
+  font-size:12px;
+}
+ul.items li:last-child{border-bottom:0}
+ul.items li b{font-weight:500;color:var(--ink);white-space:nowrap}
+.tally{
+  margin-top:12px;padding:9px 11px;background:var(--surface-2);
+  font-size:11px;color:var(--ink-2);display:flex;gap:16px;flex-wrap:wrap;
+}
+.tally b{color:var(--ink);font-weight:500}
+
+/* ---- fuel table ---- */
+.fuel{width:100%;border-collapse:collapse;font-size:12px}
+.fuel th{
+  text-align:left;font-weight:400;font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);
+  padding:0 12px 9px;border-bottom:1px solid var(--line);
+}
+.fuel td{padding:13px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+.fuel tr:last-child td{border-bottom:0}
+.fuel .sess{width:22%}
+.sess-name{font-family:var(--display);font-size:17px;letter-spacing:.03em;line-height:1.15}
+.sess-name::before{
+  content:'';display:inline-block;width:7px;height:7px;
+  background:var(--c);margin-right:8px;vertical-align:middle;
+}
+tr.easy{--c:var(--z-easy)} tr.quality{--c:var(--z-quality)} tr.long{--c:var(--z-long)}
+.sess-sub{font-size:10px;color:var(--ink-3);margin-top:3px}
+.fuel td b{font-weight:500}
+.fuel .dim{color:var(--ink-3)}
+
+/* ---- timeline ---- */
+.tl{position:relative;padding-left:96px}
+.tl::before{
+  content:'';position:absolute;left:78px;top:6px;bottom:6px;
+  width:1px;background:linear-gradient(var(--z-quality),var(--z-long),var(--z-easy));
+}
+.tl-row{position:relative;padding:0 0 24px}
+.tl-row:last-child{padding-bottom:0}
+.tl-time{
+  position:absolute;left:-96px;top:0;width:62px;text-align:right;
+  font-size:12px;font-weight:500;color:var(--ink);
+}
+.tl-row::before{
+  content:'';position:absolute;left:-22px;top:6px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--bg);border:1.5px solid var(--dot,var(--ink-3));
+}
+.tl-row.hi::before{background:var(--dot);}
+.tl-title{font-size:12.5px;font-weight:500;margin-bottom:3px}
+.tl-body{font-size:11.5px;color:var(--ink-2);max-width:70ch}
+.tl-body b{color:var(--ink);font-weight:500}
+
+/* ---- callouts ---- */
+.callout{
+  background:var(--surface);border:1px solid var(--line);
+  border-left:2px solid var(--edge,var(--ink-3));
+  padding:16px 18px;
+}
+.callout h4{
+  font-family:var(--display);font-weight:400;font-size:17px;
+  letter-spacing:.04em;margin-bottom:7px;
+}
+.callout p{font-size:11.5px;color:var(--ink-2);max-width:80ch}
+.callout p + p{margin-top:8px}
+.callout b{color:var(--ink);font-weight:500}
+.stack{display:grid;gap:12px}
+
+footer{
+  margin-top:52px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:10px;color:var(--ink-3);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+
+@media(max-width:880px){
+  .days{grid-template-columns:1fr}
+  .grid-2,.recipe,.shop{grid-template-columns:1fr}
+  .fuel,.fuel tbody,.fuel tr,.fuel td{display:block;width:100%}
+  .fuel thead{display:none}
+  .fuel tr{border-bottom:1px solid var(--line);padding:14px 0}
+  .fuel tr:last-child{border-bottom:0}
+  .fuel td{padding:4px 0;border:0}
+  .fuel td::before{
+    content:attr(data-l);display:block;
+    font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:2px;
+  }
+  .fuel .sess td::before{content:none}
+  .tl{padding-left:64px}
+  .tl::before{left:50px}
+  .tl-time{left:-64px;width:40px;font-size:11px}
+  .tl-row::before{left:-16px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  body{background:#fff;padding:0}
+  .day,.card,.callout,.panel,.step{break-inside:avoid}
+  .stepper button{display:none}
+  .buy input{border-color:#999}
+  .stepper input{border:0;font-size:22px}
+  section{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <div class="eyebrow">Plan nutricional · construido sobre el bol mediterráneo</div>
+  <h1>Un día completo<br><em>Specific Build · W13–18</em></h1>
+  <div class="meta">
+    <div>Objetivo <b>Marató dels Dements</b></div>
+    <div><b>7 nov 2026</b> · 42,5 km · 3.800 m D+</div>
+    <div>VT1 <b>151 ppm</b> · VT2 <b>173 ppm</b></div>
+    <div>VO₂máx <b>44,4</b></div>
+    <div><b>62 kg</b></div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head">
+    <h2>Los tres tipos de día</h2>
+    <div class="sec-note">el bol es una comida dentro del día, no el día entero</div>
+  </div>
+  <div class="days">
+
+    <div class="day easy">
+      <div class="day-tag">Zona 2 · ≤ 151 ppm</div>
+      <div class="day-name">Día suave</div>
+      <div class="day-sub">Rodaje Z2 de 60–75 min, fuerza, o descanso completo.</div>
+      <div class="macros">
+        <div class="macro"><span>Carbohidrato</span><b>340 g<i>5,5 g/kg</i></b></div>
+        <div class="macro"><span>Proteína</span><b>112 g<i>1,8 g/kg</i></b></div>
+        <div class="macro"><span>Grasa</span><b>74 g<i>1,2 g/kg</i></b></div>
+      </div>
+      <div class="kcal"><span>Total</span><b>≈ 2.500</b></div>
+    </div>
+
+    <div class="day quality">
+      <div class="day-tag">Umbral · 165–173 ppm</div>
+      <div class="day-name">Día de calidad</div>
+      <div class="day-sub">Series a VT2, tempo o cuestas. 75–90 min con calentamiento.</div>
+      <div class="macros">
+        <div class="macro"><span>Carbohidrato</span><b>465 g<i>7,5 g/kg</i></b></div>
+        <div class="macro"><span>Proteína</span><b>112 g<i>1,8 g/kg</i></b></div>
+        <div class="macro"><span>Grasa</span><b>68 g<i>1,1 g/kg</i></b></div>
+      </div>
+      <div class="kcal"><span>Total</span><b>≈ 2.900</b></div>
+    </div>
+
+    <div class="day long">
+      <div class="day-tag">Tirada larga · Z1–Z2</div>
+      <div class="day-name">Día largo</div>
+      <div class="day-sub">3–4 h de trail con desnivel. El día que más se falla por defecto.</div>
+      <div class="macros">
+        <div class="macro"><span>Carbohidrato</span><b>620 g<i>10 g/kg</i></b></div>
+        <div class="macro"><span>Proteína</span><b>124 g<i>2,0 g/kg</i></b></div>
+        <div class="macro"><span>Grasa</span><b>75 g<i>1,2 g/kg</i></b></div>
+      </div>
+      <div class="kcal"><span>Total</span><b>≈ 3.700</b></div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>El bol · la receta</h2>
+    <div class="sec-note">una tanda = 5 raciones · sin pescado · ajustada a tu suplementación</div>
+  </div>
+  <div class="recipe">
+
+    <div class="panel">
+      <div class="panel-title">Ingredientes</div>
+      <div class="panel-sub">Cantidades para la tanda completa</div>
+
+      <div class="servings">
+        <label class="servings-l" for="servings">Raciones por tanda</label>
+        <div class="stepper">
+          <button type="button" data-step="-1" aria-label="Quitar una ración">&minus;</button>
+          <input id="servings" type="number" min="1" max="24" step="1" value="5" inputmode="numeric" aria-label="Número de raciones">
+          <button type="button" data-step="1" aria-label="Añadir una ración">+</button>
+        </div>
+      </div>
+
+      <div class="ing-group">
+        <h5>Base cocida</h5>
+        <div class="ing"><span>Arroz integral, farro o cebada perlada</span><b data-base="300" data-unit="g">300 g</b></div>
+        <div class="ing"><span>Lentejas pardinas secas (o garbanzos)</span><b data-base="200" data-unit="g">200 g</b></div>
+        <div class="ing"><span>Hoja de laurel</span><b data-base="1" data-unit="">1</b></div>
+      </div>
+
+      <div class="ing-group">
+        <h5>Proteína</h5>
+        <div class="ing"><span>Muslos de pollo deshuesados y sin piel</span><b data-base="500" data-unit="g">500 g</b></div>
+        <div class="ing"><span>Huevos grandes</span><b data-base="5" data-unit="">5</b></div>
+      </div>
+
+      <div class="ing-group">
+        <h5>Verduras asadas</h5>
+        <div class="ing"><span>Brócoli en ramilletes</span><b data-base="400" data-unit="g">400 g</b></div>
+        <div class="ing"><span>Boniato en dados</span><b data-base="500" data-unit="g">500 g</b></div>
+        <div class="ing"><span>Pimientos rojos en tiras</span><b data-base="2" data-unit="">2</b></div>
+        <div class="ing"><span>Zanahorias en rodajas gruesas</span><b data-base="3" data-unit="">3</b></div>
+      </div>
+
+      <div class="ing-group">
+        <h5>Crudos · se cortan cada día</h5>
+        <div class="ing"><span>Tomates maduros</span><b data-base="3" data-unit="">3</b></div>
+        <div class="ing"><span>Espinacas baby o rúcula</span><b data-base="120" data-unit="g">120 g</b></div>
+        <div class="ing"><span>Lombarda en juliana fina</span><b data-base="200" data-unit="g">200 g</b></div>
+        <div class="ing"><span>Cebolla roja</span><b data-base="1" data-unit="">1</b></div>
+      </div>
+
+      <div class="ing-group">
+        <h5>Aliño y remate</h5>
+        <div class="ing"><span>Aceite de oliva virgen extra</span><b data-base="8" data-unit="cda">8 cdas</b></div>
+        <div class="ing"><span>Dientes de ajo</span><b data-base="4" data-unit="">4</b></div>
+        <div class="ing"><span>Limones</span><b data-base="2" data-unit="">2</b></div>
+        <div class="ing"><span>Pimentón dulce</span><b data-base="2" data-unit="cdta">2 cdtas</b></div>
+        <div class="ing"><span>Comino molido</span><b data-base="1" data-unit="cdta">1 cdta</b></div>
+        <div class="ing"><span>Sal</span><b data-base="1.5" data-unit="cdta">1½ cdtas</b></div>
+        <div class="ing"><span>Pimienta negra molida</span><b data-base="0.5" data-unit="cdta">½ cdta</b></div>
+        <div class="ing"><span>Yogur natural o kéfir</span><b data-base="600" data-unit="g">600 g</b></div>
+        <div class="ing opt"><span>Nueces peladas</span><b data-base="80" data-unit="g">80 g</b></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="panel-title">Elaboración</div>
+        <div class="panel-sub">Los pasos 1 a 5 van en paralelo · unos 50 min en total</div>
+
+        <div class="step">
+          <div class="step-n">1</div>
+          <div class="step-b">
+            <div class="step-t"><span>Cocer el cereal</span><em>40 min</em></div>
+            <div class="step-d">Enjuagar el arroz y cocerlo en abundante agua con sal hasta que esté tierno pero con mordida. Escurrir y extenderlo en una bandeja para que se enfríe rápido: amontonado se apelmaza y aguanta menos días.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">2</div>
+          <div class="step-b">
+            <div class="step-t"><span>Cocer la legumbre</span><em>25 min</em></div>
+            <div class="step-d">En otra olla, las lentejas con el laurel en agua sin sal, hasta tiernas pero enteras. Salar solo al final. Escurrir y enfriar aparte del cereal.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">3</div>
+          <div class="step-b">
+            <div class="step-t"><span>Asar las verduras</span><em>35 min · 200 °C</em></div>
+            <div class="step-d">Mezclar brócoli, boniato, pimiento y zanahoria con 4 cucharadas de aceite, el pimentón, el comino, media cucharadita de sal y la pimienta. Repartir en una bandeja sin amontonar y remover a media cocción.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">4</div>
+          <div class="step-b">
+            <div class="step-t"><span>Cocer los huevos</span><em>9 min</em></div>
+            <div class="step-d">A agua fría al sacarlos. Guardarlos con cáscara: se conservan mucho mejor y se pelan al montar el bol.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">5</div>
+          <div class="step-b">
+            <div class="step-t"><span>Hacer el pollo</span><em>20 min</em></div>
+            <div class="step-d">Salpimentar y dorar en sartén bien caliente con una cucharada de aceite, primero un lado sin tocarlo y luego el otro. Reposar cinco minutos antes de trocear.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">6</div>
+          <div class="step-b">
+            <div class="step-t"><span>Preparar el aliño</span></div>
+            <div class="step-d">Machacar el ajo con una pizca de sal y mezclar con el zumo de un limón, el resto del aceite y un poco de agua hasta emulsionar. En un bote aparte, nunca sobre la comida.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">7</div>
+          <div class="step-b">
+            <div class="step-t"><span>Guardar por separado</span></div>
+            <div class="step-d">Cereal, legumbre, verduras asadas y pollo en táperes, sin aliñar: cuatro días en nevera. Los crudos se guardan enteros y se cortan cada día.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-n">8</div>
+          <div class="step-b">
+            <div class="step-t"><span>Montar el bol</span></div>
+            <div class="step-d">Calentar la base. Encima, el huevo pelado, la verdura cruda del día y las nueces. Aliñar, exprimir un gajo de limón y servir el yogur al lado. Este es el momento de tomar el multivitamínico.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="yield">
+        <div class="yield-t">Por ración · 1 de <span id="yield-n">5</span></div>
+        <div class="yield-r">
+          <span>≈ <b>1.100 kcal</b></span>
+          <span>CHO <b>119 g</b></span>
+          <span>Prot <b>50 g</b></span>
+          <span>Grasa <b>46 g</b></span>
+        </div>
+        <p><b>Variante día largo:</b> suma a la ración 60 g de arroz en crudo ya cocido, o 100 g de pan. Sube a ≈ 1.320 kcal y 165 g de CHO.</p>
+        <p><b>Cocina dos veces por semana.</b> El arroz y el pollo cocidos no deberían pasar de cuatro días en nevera.</p>
+        <p><b>Rota la salsa, no los ingredientes.</b> Tahini con limón, romesco, yogur con ajo, harissa. Mismo plato, cuatro comidas distintas: eso es lo que lo hace sostenible una semana entera.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>Lista de la compra</h2>
+    <div class="sec-note">por pasillo · el bloque del bol sigue al selector de raciones</div>
+  </div>
+  <div class="shop">
+
+    <div class="panel" style="--acc:var(--z-easy)">
+      <div class="panel-title">El bol · una tanda</div>
+      <div class="panel-sub">Escala con el selector de arriba</div>
+      <div class="aisles">
+
+        <div class="aisle">
+          <h5>Frutería y verdulería</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Brócoli</span><b data-base="400" data-unit="g">400 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Boniato</span><b data-base="500" data-unit="g">500 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Pimiento rojo</span><b data-base="2" data-unit="">2</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Zanahoria</span><b data-base="3" data-unit="">3</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Tomate maduro</span><b data-base="3" data-unit="">3</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Espinacas baby o rúcula</span><b data-base="120" data-unit="g">120 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Lombarda</span><b data-base="200" data-unit="g">200 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Cebolla roja</span><b data-base="1" data-unit="">1</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Limón</span><b data-base="2" data-unit="">2</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Ajo</span><b data-base="4" data-unit="">4</b><small>dientes · una cabeza sobra</small></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Carnicería</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Muslo de pollo deshuesado y sin piel</span><b data-base="500" data-unit="g">500 g</b></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Huevos y refrigerados</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Huevos grandes</span><b data-base="5" data-unit="">5</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Yogur natural o kéfir</span><b data-base="600" data-unit="g">600 g</b></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Despensa</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Arroz integral, farro o cebada perlada</span><b data-base="300" data-unit="g">300 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Lentejas pardinas o garbanzos</span><b data-base="200" data-unit="g">200 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Nueces peladas</span><b data-base="80" data-unit="g">80 g</b><small>opcional</small></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Aceite y especias</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Aceite de oliva virgen extra</span><b data-base="8" data-unit="cda">8 cdas</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Pimentón dulce, comino, laurel</span><b>—</b><small>duran meses, se compran una vez</small></label>
+        </div>
+
+      </div>
+      <div class="shop-note">
+        <b>Una tanda de 5 te cubre 5 días.</b> Para la semana entera pon el selector a <b>7</b> y compra de una vez. Luego cocina en dos veces —una tanda de 4 y otra de 3— porque el arroz y el pollo no deberían pasar de cuatro días en nevera. Las dos tandas son por conservación, no por cantidad.
+      </div>
+    </div>
+
+    <div class="panel" style="--acc:var(--z-quality)">
+      <div class="panel-title">Desayuno y avituallamiento</div>
+      <div class="panel-sub">Fijo para 7 días · no escala con el selector</div>
+      <div class="aisles">
+
+        <div class="aisle">
+          <h5>Desayuno</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Copos de avena</span><b>500 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Leche entera o bebida de soja</span><b>1,5 L</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Yogur griego natural</span><b>500 g</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Plátanos</span><b>12</b><small>desayuno, pre-entreno y pre-tirada</small></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Canela</span><b>—</b></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Pre-entreno y pre-tirada</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Pan blanco de barra</span><b>2</b><small>no integral: hace falta poca fibra</small></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Miel o mermelada</span><b>1 tarro</b></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Durante y después</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Geles o barritas de carbohidrato</span><b>8–10</b><small>210 g de CHO por tirada larga</small></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Sales o bebida isotónica</span><b>para 4–5 L</b><small>500–800 mg de sodio por hora</small></label>
+        </div>
+
+        <div class="aisle">
+          <h5>Cena</h5>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Pasta o patata</span><b>1 kg</b></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Proteína a elegir</span><b>4–5 raciones</b><small>huevos, pollo, ternera, legumbre</small></label>
+          <label class="buy"><input type="checkbox"><span class="buy-n">Verdura para saltear o cocer</span><b>1 kg</b></label>
+        </div>
+
+      </div>
+      <div class="shop-note">
+        <b>Lo que no está aquí ya lo tomas:</b> el magnesio con potasio, el omega-3 y el multivitamínico cubren lo que la lista no trae.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>Por qué la receta es así</h2>
+    <div class="sec-note">las decisiones que no se ven en la lista de la compra</div>
+  </div>
+  <div class="stack">
+    <div class="callout" style="--edge:var(--z-easy)">
+      <h4>Sin pescado, y aun así completo</h4>
+      <p>El omega-3 lo cubren tus 1.000 mg diarios y la B12 el multivitamínico, con 20 µg (800 % VRN). Por eso no hay ni lino ni semillas de calabaza en la lista: el lino estaba solo por el omega-3, y las pipas por magnesio y zinc, que entre el multi y tu suplemento van más que cubiertos. <b>Comprueba en la etiqueta si esos 1.000 mg son de aceite o de EPA+DHA</b>: en el primer caso el aporte real ronda los 300 mg.</p>
+    </div>
+    <div class="callout" style="--edge:var(--z-easy)">
+      <h4>El yogur sí es obligatorio</h4>
+      <p>Es el hueco que tu multivitamínico no tapa: solo aporta 75 mg de calcio, un 9 % del VRN. Con la carga de impacto de este bloque y un objetivo de 3.800 m D+, el calcio diario no es un detalle menor. El yogur o el kéfir son la fuente principal de todo el plan.</p>
+    </div>
+    <div class="callout" style="--edge:var(--z-quality)">
+      <h4>El limón no es decoración</h4>
+      <p>El hierro de las lentejas es no hemo y se absorbe mucho mejor con vitamina C en la misma comida. El limón exprimido al final y el tomate crudo hacen ese trabajo; si los cueces, se pierde. Tomar aquí el multivitamínico suma otros 150 mg de vitamina C, que es justo para lo que el fabricante indica tomarlo con comida.</p>
+    </div>
+    <div class="callout" style="--edge:var(--ink-3)">
+      <h4>Magnesio y hierro acumulados</h4>
+      <p><b>Magnesio:</b> 375 mg de tu suplemento más 100 mg del multi son ~475 mg diarios de origen suplementario. No es peligroso, pero por encima de ~350 mg suele aparecer soltura intestinal, y eso en tirada larga se nota. Si te pasa, parte el suplemento o pásalo a días alternos.</p>
+      <p><b>Hierro:</b> 18 mg diarios (129 % VRN) más lentejas, pollo y huevo es bastante para un hombre sin déficit diagnosticado. Sin alarmas, pero merece una ferritina en la próxima analítica y comentarlo con tu médico.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>Desayuno</h2>
+    <div class="sec-note">fijo todos los días · cambia solo antes de tirada larga</div>
+  </div>
+  <div class="grid-2">
+
+    <div class="card">
+      <h3>Base</h3>
+      <div class="when">Días suaves y de calidad</div>
+      <ul class="items">
+        <li>Copos de avena <b>70 g</b></li>
+        <li>Leche entera o bebida de soja <b>200 ml</b></li>
+        <li>Plátano <b>1</b></li>
+        <li>Yogur griego natural <b>100 g</b></li>
+        <li>Canela, café <b>a gusto</b></li>
+      </ul>
+      <div class="tally"><span>≈ <b>590 kcal</b></span><span>CHO <b>90 g</b></span><span>Prot <b>27 g</b></span></div>
+    </div>
+
+    <div class="card">
+      <h3>Pre-tirada larga</h3>
+      <div class="when">2,5–3 h antes de salir · baja fibra</div>
+      <ul class="items">
+        <li>Pan blanco (no integral) <b>120 g</b></li>
+        <li>Miel o mermelada <b>40 g</b></li>
+        <li>Plátano maduro <b>1</b></li>
+        <li>Yogur bebible o leche <b>200 ml</b></li>
+        <li>Café <b>si lo toleras</b></li>
+      </ul>
+      <div class="tally"><span>≈ <b>670 kcal</b></span><span>CHO <b>130 g</b> · 2,1 g/kg</span><span>Prot <b>17 g</b></span></div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>Avituallamiento por sesión</h2>
+    <div class="sec-note">antes · durante · después</div>
+  </div>
+  <table class="fuel">
+    <thead>
+      <tr><th class="sess">Sesión</th><th>Antes</th><th>Durante</th><th>Después</th></tr>
+    </thead>
+    <tbody>
+      <tr class="easy">
+        <td class="sess">
+          <div class="sess-name">Z2 ≤ 75'</div>
+          <div class="sess-sub">rodaje suave</div>
+        </td>
+        <td data-l="Antes"><span class="dim">Nada obligatorio.</span> Si sales en ayunas y notas que se cae, un plátano.</td>
+        <td data-l="Durante"><b>Solo agua.</b> Por debajo de 75 min no hay que reponer nada.</td>
+        <td data-l="Después">La comida normal en las 2 h siguientes. Sin prisa.</td>
+      </tr>
+      <tr class="quality">
+        <td class="sess">
+          <div class="sess-name">Calidad</div>
+          <div class="sess-sub">series VT2 · tempo</div>
+        </td>
+        <td data-l="Antes"><b>90 min antes:</b> 1,5 g/kg ≈ <b>92 g CHO</b>. Pan blanco 80 g + miel 30 g + plátano.</td>
+        <td data-l="Durante">Si pasa de 75 min: <b>30–40 g CHO/h</b>. Un gel o bebida isotónica basta.</td>
+        <td data-l="Después"><b>En 30–60 min:</b> 1 g/kg ≈ <b>62 g CHO</b> + <b>25 g de proteína</b>.</td>
+      </tr>
+      <tr class="long">
+        <td class="sess">
+          <div class="sess-name">Tirada larga</div>
+          <div class="sess-sub">3–4 h · desnivel</div>
+        </td>
+        <td data-l="Antes"><b>2,5–3 h antes:</b> desayuno pre-tirada, <b>130 g CHO</b>, baja fibra.</td>
+        <td data-l="Durante"><b>60 g CHO/h</b> ahora, subiendo a <b>90 g/h</b>. Este número no se escala por peso: ver nota abajo.</td>
+        <td data-l="Después"><b>En las 2 h:</b> 1,2 g/kg ≈ <b>75 g CHO</b> + <b>30 g de proteína</b>. Aquí entra el bol con el arroz extra.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>Día largo, hora a hora</h2>
+    <div class="sec-note">salida 7:00 · 3 h 30 min de tirada</div>
+  </div>
+  <div class="tl">
+
+    <div class="tl-row hi" style="--dot:var(--z-quality)">
+      <div class="tl-time">04:15</div>
+      <div class="tl-title">Desayuno pre-tirada</div>
+      <div class="tl-body">Pan blanco, miel, plátano, leche. <b>130 g de CHO.</b> Sí, es incómodamente pronto: si prefieres dormir, recorta a 90 min antes y baja a 1,5 g/kg quitando el pan a la mitad.</div>
+    </div>
+
+    <div class="tl-row" style="--dot:var(--ink-3)">
+      <div class="tl-time">06:45</div>
+      <div class="tl-title">Últimos 100 ml y sal</div>
+      <div class="tl-body">Bebida con electrolitos antes de salir. En julio esto no es opcional.</div>
+    </div>
+
+    <div class="tl-row hi" style="--dot:var(--z-long)">
+      <div class="tl-time">07:00</div>
+      <div class="tl-title">Salida · primer avituallamiento a los 40 min</div>
+      <div class="tl-body">No esperes a tener hambre ni sed. <b>Empieza a comer en el minuto 40</b> y no pares. Reloj, no sensación.</div>
+    </div>
+
+    <div class="tl-row" style="--dot:var(--z-long)">
+      <div class="tl-time">cada 20'</div>
+      <div class="tl-title">20 g de CHO · 180 ml de líquido</div>
+      <div class="tl-body">Tres tomas por hora = <b>60 g/h</b>. Alterna gel, barrita y bebida para no saturarte de una sola textura. <b>Sodio: 500–800 mg/h</b>, y hasta 1.000 mg/h si aprieta el calor.</div>
+    </div>
+
+    <div class="tl-row" style="--dot:var(--z-long)">
+      <div class="tl-time">10:30</div>
+      <div class="tl-title">Fin de tirada</div>
+      <div class="tl-body">Total ingerido en ruta: <b>210 g de CHO</b> y <b>1,9 L</b> de líquido. Anótalo: es un dato de entreno como el desnivel.</div>
+    </div>
+
+    <div class="tl-row hi" style="--dot:var(--z-easy)">
+      <div class="tl-time">11:00</div>
+      <div class="tl-title">Recuperación inmediata</div>
+      <div class="tl-body">Batido o bocadillo: <b>75 g de CHO + 30 g de proteína</b> dentro de la primera hora. La ventana importa de verdad cuando el día siguiente también toca entrenar.</div>
+    </div>
+
+    <div class="tl-row hi" style="--dot:var(--z-easy)">
+      <div class="tl-time">14:00</div>
+      <div class="tl-title">El bol, en versión día largo</div>
+      <div class="tl-body">Ración normal más <b>60 g de arroz en crudo</b> ya cocido, o 100 g de pan al lado. Aquí es donde toca el multivitamínico.</div>
+    </div>
+
+    <div class="tl-row" style="--dot:var(--ink-3)">
+      <div class="tl-time">21:00</div>
+      <div class="tl-title">Cena</div>
+      <div class="tl-body">Pasta o patata, proteína, verdura cocida. Nada exótico el día que has metido 3–4 h de montaña.</div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>Cuatro cosas que se rompen primero</h2>
+  </div>
+  <div class="stack">
+
+    <div class="callout" style="--edge:var(--z-quality)">
+      <h4>Los g/h en carrera no se escalan por peso</h4>
+      <p>Casi todo en esta ficha sale de tu peso corporal. <b>Los 60–90 g/h durante la tirada, no.</b> Ese límite lo pone la capacidad de absorción del intestino, no tu masa: el transportador de glucosa se satura en torno a los 60 g/h en cualquiera, y solo se sube de ahí sumando fructosa por otra vía. Si escalas ese número a tu peso te quedas corto de combustible justo el día que más falta hace.</p>
+    </div>
+
+    <div class="callout" style="--edge:var(--z-long)">
+      <h4>El bol no va antes de correr</h4>
+      <p>Es el plato con más fibra de tu semana: legumbre, verdura asada, crudos y fruto seco. Perfecto para recuperar, malo en las 3 h previas a una tirada larga. <b>El bol siempre después.</b> Antes, hidrato simple y bajo residuo.</p>
+    </div>
+
+    <div class="callout" style="--edge:var(--z-quality)">
+      <h4>Tu suplemento de potasio no es un electrolito de entreno</h4>
+      <p>375 mg de potasio y 375 mg de magnesio al día son para la ingesta basal. En una tirada de 3 h con calor puedes perder cerca de <b>1 L de sudor por hora</b> con 800–1.200 mg de sodio por litro. <b>Eso se repone con sal o bebida isotónica durante</b>, no con la cápsula de la mañana.</p>
+    </div>
+
+    <div class="callout" style="--edge:var(--ink-3)">
+      <h4>La señal de que te estás quedando corto no es el hambre</h4>
+      <p>Es el estancamiento: sesiones que antes salían y ahora no, recuperación lenta, sueño peor, resfriados encadenados, y un VT1 que no se mueve pese a las semanas. Si aparecen dos o tres de esos a la vez en fase de construcción, lo primero que hay que revisar es la ingesta, no el plan de entreno.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Nico · 62 kg · Marató dels Dements 2026</div>
+  <div>Orientación general de nutrición deportiva. No sustituye a un dietista-nutricionista ni a tu médico.</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var BASE = 5;
+  var input = document.getElementById('servings');
+  var amounts = document.querySelectorAll('b[data-base]');
+  var yieldN = document.getElementById('yield-n');
+
+  function round(v, unit){
+    if(unit === 'g' || unit === 'ml'){
+      if(v >= 100) return Math.round(v / 10) * 10;
+      if(v >= 20)  return Math.round(v / 5) * 5;
+      return Math.max(1, Math.round(v));
+    }
+    if(unit === 'cda' || unit === 'cdta') return Math.max(0.5, Math.round(v * 2) / 2);
+    return Math.max(1, Math.round(v));
+  }
+
+  function label(v, unit){
+    if(unit === 'cda' || unit === 'cdta'){
+      var w = Math.floor(v), half = (v - w) >= 0.5;
+      var n = w === 0 ? '½' : (half ? w + '½' : String(w));
+      var plural = (v > 1) ? unit + 's' : unit;
+      return n + ' ' + plural;
+    }
+    if(unit) return v + ' ' + unit;
+    return String(v);
+  }
+
+  function render(){
+    var n = parseInt(input.value, 10);
+    if(isNaN(n) || n < 1) return;
+    n = Math.min(n, 24);
+    var f = n / BASE;
+    for(var i = 0; i < amounts.length; i++){
+      var el = amounts[i];
+      var unit = el.getAttribute('data-unit');
+      el.textContent = label(round(parseFloat(el.getAttribute('data-base')) * f, unit), unit);
+    }
+    yieldN.textContent = n;
+  }
+
+  input.addEventListener('input', render);
+  input.addEventListener('blur', function(){
+    var n = parseInt(input.value, 10);
+    if(isNaN(n) || n < 1) n = 1;
+    input.value = Math.min(n, 24);
+    render();
+  });
+
+  var btns = document.querySelectorAll('.stepper button');
+  for(var j = 0; j < btns.length; j++){
+    btns[j].addEventListener('click', function(){
+      var n = (parseInt(input.value, 10) || BASE) + parseInt(this.getAttribute('data-step'), 10);
+      input.value = Math.max(1, Math.min(n, 24));
+      render();
+    });
+  }
+})();
+</script>
+</body>
+</html>
