@@ -68,6 +68,13 @@ _(Coach reads this when prescribing sessions. List the routes you can run from h
 ## Training principles
 
 - principle: smart beats heroic
+- gym_frequency: 2 full strength sessions every week
+
+Strength volume is never cut to make room for run volume — the athlete's own
+experience is that two full sessions a week are what keep him healthy, and that
+holds for build weeks too. When the week runs out of days, stack the second
+session on the easiest running day rather than dropping it or downgrading it to
+a maintenance circuit.
 
 (The plan is polarized ~80% easy / ~20% hard, minimal Z3. Vert specificity, power-hike practice, eccentric descents, back-to-back long days.)
 
