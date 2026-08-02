@@ -48,6 +48,10 @@ Z1 running. Recovery weeks come from reduced volume and frequency, not a lower z
 
 (Distance and elevation are the last row of the Training plan table below — 42.5 km, 3808 m D+; the race is plan week 26.)
 
+Registration qualifier is **already satisfied** by races run in 2025 — no qualifier race is
+needed in this block. Week 16 was originally written as a qualifier race week; it is free to
+be used as a training week.
+
 ## Equipment
 
 - Home gym (jump box, kettlebelts)
@@ -81,7 +85,7 @@ a maintenance circuit.
 ## Training plan
 
 - plan_start: 2026-05-11
-- hilly_elev: 30
+- hilly_elev: 50
 
 | week | km | elev |
 | 1 | 25 | 0 |
@@ -99,7 +103,7 @@ a maintenance circuit.
 | 13 | 54 | 1400 |
 | 14 | 57 | 1600 |
 | 15 | 32 | 500 |
-| 16 | 45 | 1500 |
+| 16 | 47 | 1700 |
 | 17 | 35 | 700 |
 | 18 | 62 | 2250 |
 | 19 | 38 | 800 |

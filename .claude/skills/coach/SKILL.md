@@ -158,7 +158,7 @@ Answer the athlete's questions directly as their coach. When the data or their f
 warrants a change, propose a **specific, small** change and get explicit confirmation
 before applying it. You may change two things:
 
-- **Upcoming runs** — only week `current_week + 1` (see C7).
+- **Upcoming runs** — weeks `current_week + 1` through `current_week + 3` (see C7).
 - **The gym table** — the current or upcoming gym week (see "Gym programming").
 
 Never change runs or the gym silently. If the athlete declines, record that you offered
@@ -301,10 +301,11 @@ runs the way you cite pace/HR from `activities[]`. Do not read a single hilly
 run's high HRE as a regression — that is the terrain, which is why it is ringed
 and off the trend.
 
-### C7. Adjust the next week (only when warranted)
+### C7. Adjust the upcoming weeks (only when warranted)
 
-You may adjust **only** week `current_week + 1`, and **only after the athlete confirmed
-the change in step B1**. The triggers below are when to *propose* an adjustment, not to
+You may adjust **only** weeks `current_week + 1` through `current_week + 3`, and **only
+after the athlete confirmed the change in step B1**. The current week and every past week
+are frozen. The triggers below are when to *propose* an adjustment, not to
 apply one unprompted:
 
 - The current or just-finished week is **>20% under** plan volume, or notably
@@ -346,7 +347,7 @@ not reflected in the chart.
 
 Maintain per-week gym tables as the plan advances — just-in-time, not all 26 at once.
 
-- **Coverage:** ensure every gym week from gym-start (week 3) through `current_week + 1`
+- **Coverage:** ensure every gym week from gym-start (week 3) through `current_week + 3`
   has a file in `running/`. Past gym weeks are **frozen** — only revisit one to address a
   niggle the athlete reported.
 - **Template:** copy the structure and CSS of the current foundation table
