@@ -2413,11 +2413,11 @@
   <!-- PHASE 3: SPECIFIC BUILD -->
   <div class="phase">SPECIFIC BUILD <span class="phase-sub">W13–18 · Aug–Sep</span></div>
 
-  <div class="week current open" id="w13">
+  <div class="week" id="w13">
     <div class="week-header" onclick="toggle('w13')">
       <div class="week-num">13</div>
       <div class="week-summary">
-        <div class="week-title">Add Z4 Intervals <span class="current-badge">Current</span></div>
+        <div class="week-title">Add Z4 Intervals <span class="done-badge">Done ✓</span></div>
         <div class="week-date">Aug 3–9 · Threshold work begins</div>
       </div>
       <div class="week-stats">
@@ -2429,46 +2429,53 @@
     <div class="week-body">
       <!-- sync:days:w13 -->
       <div class="days">
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">8km</div>
           <div class="day-type">Z2 + Gym A</div>
         </div>
-        <div class="day z4">
+        <div class="day z4 logged">
           <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🔥</div>
           <div class="day-km">9km</div>
           <div class="day-type">Z4 intervals</div>
         </div>
-        <div class="day rec">
+        <div class="day rec logged">
           <div class="day-label">Wed</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Recovery</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Thu</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym</div>
           <div class="day-type">Strength</div>
         </div>
-        <div class="day trail-hike">
+        <div class="day trail-hike logged">
           <div class="day-label">Fri</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">8km</div>
           <div class="day-elev">400m</div>
           <div class="day-type">Descents</div>
         </div>
-        <div class="day trail-hike">
+        <div class="day trail-hike logged">
           <div class="day-label">Sat</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">18km</div>
           <div class="day-elev">800m</div>
           <div class="day-type">Long mtn</div>
         </div>
-        <div class="day trail-z2">
+        <div class="day trail-z2 logged">
           <div class="day-label">Sun</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">6km</div>
           <div class="day-elev">200m</div>
@@ -2481,25 +2488,45 @@
         Gym A stacks onto Monday's easy 8km (run first, lift after). Friday is now a <strong>descent session</strong>:
         hike the ups easy, run the downs committed but controlled. Fri–Sat–Sun is three trail days in a row — if the
         week bites, soften Friday (5km/200m) first and Tuesday's intervals (3×6min) second, never Saturday.</div>
+      <!-- sync:actuals:w13 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">6 runs · 2 gyms · 52.0 km · 1619 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 3</span><span class="act-ico">🏃</span><span class="act-km">8.1 km</span><span class="act-vert">32 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:10/km</span><span class="act-cal">517</span><span class="act-maxhr">160</span><span class="act-cad gz-orange">162 spm</span><span class="act-stride">863 mm</span><span class="act-vratio gz-red">10.4%</span><span class="act-vosc gz-green">91.0 mm</span><span class="act-gct gz-orange">283 ms</span><span class="act-temp">30°</span></div>
+        <div class="act-zonebar" title="Z1 3m · Z2 45m · Z3 10m"><span class="zbar"><span class="zseg z1" style="flex-grow:155"></span><span class="zseg z2" style="flex-grow:2726"></span><span class="zseg z3" style="flex-grow:576"></span></span><span class="zb-txt">Z1&nbsp;3 · Z2&nbsp;45 · Z3&nbsp;10&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Mon 3</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">95</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">205</span><span class="act-maxhr">131</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">31°</span></div>
+        <div class="act-row"><span class="act-when">Tue 4</span><span class="act-ico">🏃</span><span class="act-km">8.5 km</span><span class="act-vert">11 m</span><span class="act-hr">156</span><span class="act-zone z3">Z3</span><span class="act-pace">6:51/km</span><span class="act-cal">549</span><span class="act-maxhr">174</span><span class="act-cad gz-orange">158 spm</span><span class="act-stride">916 mm</span><span class="act-vratio gz-orange">8.7%</span><span class="act-vosc gz-blue">80.7 mm</span><span class="act-gct gz-green">272 ms</span><span class="act-temp">31°</span></div>
+        <div class="act-zonebar" title="Z1 4m · Z2 18m · Z3 13m · Z4 22m"><span class="zbar"><span class="zseg z1" style="flex-grow:270"></span><span class="zseg z2" style="flex-grow:1104"></span><span class="zseg z3" style="flex-grow:765"></span><span class="zseg z4" style="flex-grow:1337"></span></span><span class="zb-txt">Z1&nbsp;4 · Z2&nbsp;18 · Z3&nbsp;13 · Z4&nbsp;22&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Wed 5</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">5 m</span><span class="act-hr">148</span><span class="act-zone z2">Z2</span><span class="act-pace">7:14/km</span><span class="act-cal">317</span><span class="act-maxhr">160</span><span class="act-cad gz-orange">160 spm</span><span class="act-stride">861 mm</span><span class="act-vratio gz-red">11.3%</span><span class="act-vosc gz-orange">98.3 mm</span><span class="act-gct gz-orange">285 ms</span><span class="act-temp">32°</span></div>
+        <div class="act-zonebar" title="Z1 2m · Z2 27m · Z3 7m"><span class="zbar"><span class="zseg z1" style="flex-grow:106"></span><span class="zseg z2" style="flex-grow:1631"></span><span class="zseg z3" style="flex-grow:435"></span></span><span class="zb-txt">Z1&nbsp;2 · Z2&nbsp;27 · Z3&nbsp;7&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Thu 6</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">79</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">336</span><span class="act-maxhr">134</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Fri 7</span><span class="act-ico">🏃</span><span class="act-km">8.7 km</span><span class="act-vert">402 m</span><span class="act-hr">150</span><span class="act-zone z2">Z2</span><span class="act-pace">8:57/km</span><span class="act-cal">674</span><span class="act-maxhr">169</span><span class="act-cad gz-red">124 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">31°</span></div>
+        <div class="act-zonebar" title="Z1 6m · Z2 32m · Z3 36m · Z4 3m"><span class="zbar"><span class="zseg z1" style="flex-grow:371"></span><span class="zseg z2" style="flex-grow:1935"></span><span class="zseg z3" style="flex-grow:2149"></span><span class="zseg z4" style="flex-grow:199"></span></span><span class="zb-txt">Z1&nbsp;6 · Z2&nbsp;32 · Z3&nbsp;36 · Z4&nbsp;3&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Sat 8</span><span class="act-ico">🏃</span><span class="act-km">15.6 km</span><span class="act-vert">964 m</span><span class="act-hr">139</span><span class="act-zone z2">Z2</span><span class="act-pace">11:59/km</span><span class="act-cal">1264</span><span class="act-maxhr">167</span><span class="act-cad gz-red">102 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">29°</span></div>
+        <div class="act-zonebar" title="Z1 67m · Z2 78m · Z3 40m · Z4 3m"><span class="zbar"><span class="zseg z1" style="flex-grow:4026"></span><span class="zseg z2" style="flex-grow:4652"></span><span class="zseg z3" style="flex-grow:2370"></span><span class="zseg z4" style="flex-grow:207"></span></span><span class="zb-txt">Z1&nbsp;67 · Z2&nbsp;78 · Z3&nbsp;40 · Z4&nbsp;3&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Sun 9</span><span class="act-ico">🏃</span><span class="act-km">6.1 km</span><span class="act-vert">205 m</span><span class="act-hr">149</span><span class="act-zone z2">Z2</span><span class="act-pace">7:29/km</span><span class="act-cal">440</span><span class="act-maxhr">175</span><span class="act-cad gz-red">148 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">28°</span></div>
+        <div class="act-zonebar" title="Z1 4m · Z2 20m · Z3 19m · Z4 2m"><span class="zbar"><span class="zseg z1" style="flex-grow:211"></span><span class="zseg z2" style="flex-grow:1223"></span><span class="zseg z3" style="flex-grow:1131"></span><span class="zseg z4" style="flex-grow:149"></span></span><span class="zb-txt">Z1&nbsp;4 · Z2&nbsp;20 · Z3&nbsp;19 · Z4&nbsp;2&nbsp;min</span></div>
+      </div>
+      <!-- /sync:actuals:w13 -->
       <!-- sync:coach:w13 -->
-      <div class="coach" data-hash="nodata">
+      <div class="coach" data-hash="2d84c8461068">
         <div class="coach-head">🧭 Coach</div>
         <div class="coach-body">
-          <p><strong>The sharpest load step of the plan lands here: Z4 debut on Tuesday plus three consecutive trail days Fri–Sat–Sun.</strong> The order of protection is fixed — Saturday's 18 km / 800 m is the priority, Sunday's B2B teaches fatigue-resistance, and Friday is the flex. If the legs report heavy by Thursday, cut Friday to 5 km / 200 m or drop it entirely; never trade the long day to save the hill day.</p>
-          <p>Friday also changes character: it's now a <strong>descent session</strong> — hike the climbs easy, run the downhills committed but controlled. Eccentric load is the point: the 3,808 m of Dements descent will be run on the quads you build in these six weeks.</p>
-          <p><strong>Gym holds at two full sessions, Monday and Thursday.</strong> Six running days leave no free day, so Gym A now stacks onto Monday's easy 8 km rather than being cut down to a maintenance circuit — <strong>run first, lift after</strong>, which keeps the hard days hard and the easy days genuinely easy. That puts a full lower-body session 24 h before Tuesday's first Z4 workout, and that is a deliberate trade: a slightly blunted interval session is a far cheaper cost than loading split squats and step-ups on legs already emptied by intervals. If Tuesday's legs are flat, <strong>shorten the intervals to 3×6 min</strong> — the point of the debut is learning the effort, not proving it. Monday and Thursday sit 72 h apart, better spacing than the Tue/Thu you have been running.</p>
-          <p><strong>One carry-over from week 12: Sunday's back-to-back is capped at 151.</strong> It ran to 29 min Z3 and 6.5 min Z4 last week, the day after a 2h37 mountain day — no harm done, but Saturday steps to 18 km / 800 m this week and the Sunday cannot be a second hard session. Slow, short, tired legs on purpose. Everything else is unchanged: <strong>you go into this week off 46.3 km at 103% of plan with the fuelling solved</strong>, which is exactly the platform the Z4 debut wants.</p>
+          <p><strong>The sharpest week in the plan, and you took all seven days of it: 52.0 km / 1,619 m — 96% of the kilometres and 116% of the vert.</strong> That is the second complete week in a row and the biggest vert week of the block so far. Both of the questions this week existed to answer came back positive.</p>
+          <p><strong>The Z4 debut is answered: 4×6 min as written, 22 minutes in zone 4, max 174 — "hard but doable."</strong> I had flagged a risk when Gym A moved to Monday, 24 h ahead of it, and said openly it was a trade I had chosen; the trade cost nothing. Efficiency on that run was <strong>1069 beats/km, the same as your easy flat days</strong>, which is not what a blunted session looks like. <strong>Gym A stays on Monday permanently</strong> — that thread is closed.</p>
+          <p><strong>Saturday was the real milestone: 15.64 km / 964 m in 3h07 at 139 bpm.</strong> It came out shorter and much steeper than the 18 km / 800 m written, because that is what the terrain gave — and steeper is the better error. It is <strong>your longest time on feet of the whole block</strong> (past week 12's 2h37) at a <strong>62 m/km vert ratio, the closest yet to the race's 90</strong>, and 67 minutes of it sat in Z1 with only 3 minutes of Z4. That is power-hiking discipline over three hours in 29°. <strong>And Sunday's cap finally held — 6.07 km at 149, under the 151 line</strong>, after two weeks where the back-to-back quietly became a tempo run. Friday's descents added 402 m with 36 minutes of Z3; the week's honest split was <strong>66 easy / 27 tempo / 7 hard</strong>, and nearly all of that Z3 is climbing, which is the race, not drift.</p>
+          <p><strong>The one thing to carry forward is the calves.</strong> You loaded the soleus raise to 6 kg in the same week that Friday, Saturday and Sunday delivered <strong>1,571 metres of descending</strong> — and they are still sore. Muscle belly, not tendon, so it is ordinary soreness from a new stimulus and not a warning sign. But week 14 asks for another 1,400 m of downhill across Friday and Saturday, so <strong>both calf raises drop to bodyweight for one week</strong> — the mountain is supplying that load, and 6 kg returns in the week 15 deload. Smart beats heroic.</p>
         </div>
       </div>
       <!-- /sync:coach:w13 -->
     </div>
   </div>
 
-  <div class="week" id="w14">
+  <div class="week current open" id="w14">
     <div class="week-header" onclick="toggle('w14')">
       <div class="week-num">14</div>
       <div class="week-summary">
-        <div class="week-title">Big Vert Day</div>
+        <div class="week-title">Big Vert Day <span class="current-badge">Current</span></div>
         <div class="week-date">Aug 10–16 · 20km/1000m on Sat</div>
       </div>
       <div class="week-stats">
@@ -2511,8 +2538,9 @@
     <div class="week-body">
       <!-- sync:days:w14 -->
       <div class="days">
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">8km</div>
           <div class="day-type">Z2 + Gym A</div>
@@ -2564,13 +2592,22 @@
         <strong>descent session</strong>, not strides: hike the ups, run the downs controlled — 400m is roughly what your
         local +35m hill costs over 9km. Monday holds at 8km — the duration lever pauses on big-vert weeks so the long day
         owns the recovery budget. <strong>Sunday B2B is capped at 151</strong> and stays 6km.</div>
+      <!-- sync:actuals:w14 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">1 run · 8.3 km · 32 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 10</span><span class="act-ico">🏃</span><span class="act-km">8.3 km</span><span class="act-vert">32 m</span><span class="act-hr">145</span><span class="act-zone z2">Z2</span><span class="act-pace">6:37/km</span><span class="act-cal">525</span><span class="act-maxhr">154</span><span class="act-cad gz-green">170 spm</span><span class="act-stride">887 mm</span><span class="act-vratio gz-orange">9.5%</span><span class="act-vosc gz-green">86.2 mm</span><span class="act-gct gz-green">267 ms</span><span class="act-temp">29°</span></div>
+        <div class="act-zonebar" title="Z1 3m · Z2 51m · Z3 1m"><span class="zbar"><span class="zseg z1" style="flex-grow:155"></span><span class="zseg z2" style="flex-grow:3067"></span><span class="zseg z3" style="flex-grow:61"></span></span><span class="zb-txt">Z1&nbsp;3 · Z2&nbsp;51 · Z3&nbsp;1&nbsp;min</span></div>
+      </div>
+      <!-- /sync:actuals:w14 -->
       <!-- sync:coach:w14 -->
-      <div class="coach" data-hash="nodata">
+      <div class="coach" data-hash="f2b05f52f148">
         <div class="coach-head">🧭 Coach</div>
         <div class="coach-body">
-          <p><strong>First four-figure vert day: 20 km / 1,000 m.</strong> You chose 20 over the 22 that was written, and it is the better call — the same thousand metres in less distance makes it <strong>50 m/km instead of 45</strong>, closer to the race's 90 m/km, and takes twenty-odd minutes off a day that will otherwise run deep into 30°+ heat. More vert, less baking. Poles if you'll race with them, fuel from the first hour exactly as you did on the 2h37, and hold the pre-dawn start.</p>
-          <p><strong>Friday returns to a descent session — 9 km / 400 m, not 6 km of strides.</strong> The week is called Big Vert Day and its day grid only added up to 1,200 m, less than week 13; the Friday descent is what was missing, and with it the week lands exactly on its 57 km / 1,600 m baseline. Nine kilometres rather than six because that is what 400 m costs on your local +35 m hill — you banked 424 m over 9.9 km on Jul 29, so this is a proven session, not a guess. Tuesday's Z4 already carries the week's speed, so nothing is lost by dropping the strides. Eccentric load is the whole point: <strong>the 3,808 m of Dements descent will be run on the quads you build in these weeks.</strong></p>
-          <p><strong>Gym holds at two full sessions, Monday and Thursday</strong> — Gym A stacked onto Monday's easy 8 km, run first and lift after, same shape as week 13 and now the standing rule. <strong>Sunday trims to 6 km and is capped at 151.</strong> Twice now the back-to-back has turned into a tempo run; after a 20 km / 1,000 m Saturday that stops being free. Tired legs moving easy is the session — nothing more. Smart beats heroic.</p>
+          <p><strong>Monday opened the week with the most efficient run of your entire block: 8.27 km at 145 bpm, 6:37/km — 959 beats per kilometre.</strong> The previous best was 1007, set in June over 5 km. This one is longer, in 29°, and comes two big vert weeks deep. Two minutes of the whole run sat above Z2. <strong>Your aerobic engine is still improving while the vert load climbs</strong> — that is exactly the signal a specific block is supposed to produce, and it is worth naming.</p>
+          <p><strong>First four-figure vert day: 20 km / 1,000 m on Saturday.</strong> You chose 20 over the 22 that was written and it was the right call — the same thousand metres in less distance makes it <strong>50 m/km instead of 45</strong>, and takes twenty-odd minutes off a day that runs deep into 30°+ heat. Friday is a descent session, 9 km / 400 m, hike the ups and run the downs controlled. Poles if you'll race with them, fuel from the first hour exactly as you did on the 3h07, and hold the pre-dawn start on both days. <strong>Sunday stays 6 km capped at 151</strong> — you held that cap last week for the first time, so hold it again.</p>
+          <p><strong>One change to the gym: both calf raises are bodyweight this week.</strong> Your calves are sore from the 6 kg you added last week landing on top of 1,571 m of descending, and Friday plus Saturday deliver another 1,400 m. That descending <em>is</em> the calf session — adding kilos on top of it buys nothing and risks the one tissue this plan cannot afford to lose. Sets, reps and the slow eccentric all stay; only the weight comes off, and 6 kg returns in the week 15 deload. Everything else holds at week 13's loads.</p>
+          <p><strong>Sleep and heat are your two named constraints, and neither changes a session — both change how you run it.</strong> Run the same distance slower rather than shorter; heat costs pace, not training value. If the legs report heavy by Thursday, the valve is written into the card and has not changed: <strong>soften Friday to 5 km / 200 m first, never Saturday.</strong></p>
         </div>
       </div>
       <!-- /sync:coach:w14 -->
@@ -2732,8 +2769,8 @@
     <div class="week-header" onclick="toggle('w17')">
       <div class="week-num">17</div>
       <div class="week-summary">
-        <div class="week-title">Post-Race Recovery + Rebuild</div>
-        <div class="week-date">Aug 31–Sep 6</div>
+        <div class="week-title">Recovery + Rebuild</div>
+        <div class="week-date">Aug 31–Sep 6 · Absorb the 25km day</div>
       </div>
       <div class="week-stats">
         <div class="week-km">35km</div>
@@ -2754,19 +2791,19 @@
           <div class="day-label">Tue</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
-          <div class="day-type">Z1</div>
+          <div class="day-type">Z2 + Gym A</div>
         </div>
-        <div class="day gym">
+        <div class="day rest">
           <div class="day-label">Wed</div>
-          <div class="day-icon">💪</div>
-          <div class="day-km">Light</div>
-          <div class="day-type">60%</div>
+          <div class="day-icon">💤</div>
+          <div class="day-km">—</div>
+          <div class="day-type">Rest</div>
         </div>
         <div class="day rec">
           <div class="day-label">Thu</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
-          <div class="day-type">Z1</div>
+          <div class="day-type">Z2 + Gym B</div>
         </div>
         <div class="day rest">
           <div class="day-label">Fri</div>
@@ -2785,12 +2822,39 @@
           <div class="day-label">Sun</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">7km</div>
-          <div class="day-type">Recovery</div>
+          <div class="day-elev">100m</div>
+          <div class="day-type">B2B easy</div>
         </div>
       </div>
       <!-- /sync:days:w17 -->
-      <div class="week-notes">Recovery from race effort. Mon full rest mandatory. Saturday returns to long mountain
-        training.</div>
+      <div class="week-notes"><strong>Absorb week 16’s 25km / 1500m, then rebuild.</strong> Monday is a full rest
+        day and it is not optional. <strong>Tuesday and Thursday are Z2, not Z1</strong> — Z2 is your floor for every
+        easy run, and this week earns its recovery from three rest days, not from a lower zone. <strong>Gym stays at
+        two full sessions</strong>, Gym A and Gym B stacked after the two easy runs — the frequency never deloads,
+        the load does. Saturday returns to a real mountain day at a gentle 33m/km, and Sunday is a short
+        back-to-back. Week 18 is the biggest week of the block (62km / 2250m) — arrive at it rested.</div>
+      <!-- sync:coach:w17 -->
+      <div class="coach" data-hash="nodata">
+        <div class="coach-head">🧭 Coach</div>
+        <div class="coach-body">
+          <p><strong>This week was written for a race you are no longer running, so it has been rebuilt.</strong> The
+          “post-race” framing is gone; what stays is the job — absorb week 16’s 25 km / 1,500 m, the biggest single
+          day of the plan, and arrive at week 18 (62 km / 2,250 m, the biggest week of the block) genuinely rested.
+          Monday is a complete rest day and I mean complete.</p>
+          <p><strong>Tuesday and Thursday were still written as Z1. They are Z2 now.</strong> This is the last week in
+          the plan that carried the old Z1 recovery runs — you told me in June that you cannot hold Z1 while running
+          and that Z2 is your floor, and that has been a standing rule since. The recovery in this week comes from
+          <strong>three full rest days and 35 kilometres</strong>, not from chasing a heart rate you can’t hold.</p>
+          <p><strong>The gym goes from one light session to two full ones</strong>, stacked after Tuesday’s and
+          Thursday’s easy 5 km — run first, lift after, the same shape that has worked since week 13. Loads come back
+          to week 14’s: <strong>12 kg on the split squat, bridge and row, 6 kg on both calf raises.</strong> Your
+          kettlebells stop at 12 kg for single-leg work, so those movements keep progressing through reps and tempo,
+          not kilos — the next bell is 20 kg and that is a 67% jump nobody should take. <strong>Saturday is 18 km /
+          600 m at 33 m/km, deliberately gentler than the last three Saturdays</strong>, and Sunday is a short
+          back-to-back on tired legs. Smart beats heroic.</p>
+        </div>
+      </div>
+      <!-- /sync:coach:w17 -->
     </div>
   </div>
 
@@ -3471,8 +3535,8 @@
       { label: '10', km: 38, elev: 800, color: '#1e8050', done: true },
       { label: '11', km: 15, elev: 500, color: '#2a5fb5', reco: true, done: true },
       { label: '12', km: 45, elev: 1000, color: '#1e8050', done: true },
-      { label: '13', km: 54, elev: 1400, color: '#c85a10', current: true },
-      { label: '14', km: 57, elev: 1600, color: '#c85a10' },
+      { label: '13', km: 54, elev: 1400, color: '#c85a10', done: true },
+      { label: '14', km: 57, elev: 1600, color: '#c85a10', current: true },
       { label: '15', km: 32, elev: 500, color: '#2a5fb5', reco: true },
       { label: '16', km: 47, elev: 1700, color: '#c85a10' },
       { label: '17', km: 35, elev: 700, color: '#2a5fb5', reco: true },
@@ -3504,7 +3568,9 @@
       9: { km: 18.2, elev: 320 },
       10: { km: 38.0, elev: 1132 },
       11: { km: 42.1, elev: 1854 },
-      12: { km: 46.3, elev: 1127 }
+      12: { km: 46.3, elev: 1127 },
+      13: { km: 52.0, elev: 1619 },
+      14: { km: 8.3, elev: 32 }
     };
 
     weeks.forEach((w, i) => {
@@ -3561,7 +3627,6 @@
       {"label": "Sat 13", "week": 5, "hre": 1186, "color": "#2ecc8a", "flagged": true, "flag": "141 m D+ · 29°"},
       {"label": "Mon 15", "week": 6, "hre": 1045, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 27°"},
       {"label": "Fri 19", "week": 6, "hre": 1117, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 29°"},
-      {"label": "Fri 19", "week": 6, "hre": 477, "color": "#2ecc8a", "flagged": false, "flag": "17 m D+ · 28°"},
       {"label": "Sat 20", "week": 6, "hre": 1165, "color": "#2ecc8a", "flagged": true, "flag": "107 m D+ · 30°"},
       {"label": "Mon 22", "week": 7, "hre": 1068, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 31°"},
       {"label": "Wed 24", "week": 7, "hre": 1607, "color": "#2ecc8a", "flagged": true, "flag": "272 m D+ · 32°"},
@@ -3589,7 +3654,14 @@
       {"label": "Wed 29", "week": 12, "hre": 1571, "color": "#2ecc8a", "flagged": true, "flag": "424 m D+ · 29°"},
       {"label": "Fri 31", "week": 12, "hre": 1051, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 31°"},
       {"label": "Sat 1", "week": 12, "hre": 1432, "color": "#2ecc8a", "flagged": true, "flag": "633 m D+ · 30°"},
-      {"label": "Sun 2", "week": 12, "hre": 1016, "color": "#f0c040", "flagged": false, "flag": "31 m D+ · 33°"}
+      {"label": "Sun 2", "week": 12, "hre": 1016, "color": "#f0c040", "flagged": false, "flag": "31 m D+ · 33°"},
+      {"label": "Mon 3", "week": 13, "hre": 1061, "color": "#2ecc8a", "flagged": false, "flag": "32 m D+ · 30°"},
+      {"label": "Tue 4", "week": 13, "hre": 1069, "color": "#f0c040", "flagged": false, "flag": "11 m D+ · 31°"},
+      {"label": "Wed 5", "week": 13, "hre": 1071, "color": "#2ecc8a", "flagged": false, "flag": "5 m D+ · 32°"},
+      {"label": "Fri 7", "week": 13, "hre": 1342, "color": "#2ecc8a", "flagged": true, "flag": "402 m D+ · 31°"},
+      {"label": "Sat 8", "week": 13, "hre": 1666, "color": "#2ecc8a", "flagged": true, "flag": "964 m D+ · 29°"},
+      {"label": "Sun 9", "week": 13, "hre": 1115, "color": "#2ecc8a", "flagged": true, "flag": "205 m D+ · 28°"},
+      {"label": "Mon 10", "week": 14, "hre": 959, "color": "#2ecc8a", "flagged": false, "flag": "32 m D+ · 29°"}
     ];
 
     (() => {
@@ -3599,8 +3671,15 @@
       const xs = hreRuns.map((_, i) => i);
       const ys = hreRuns.map(r => r.hre);
       const yMin = Math.min(...ys), yMax = Math.max(...ys);
-      const yLo = Math.floor((yMin - 20) / 20) * 20;
-      const yHi = Math.ceil((yMax + 20) / 20) * 20;
+      // Domain hugs the data (8% breathing room) so the dots use the full height.
+      const yPad = (yMax - yMin) * 0.08 || 20;
+      const yLo = yMin - yPad, yHi = yMax + yPad;
+      // Tick spacing is chosen, not fixed: a hardcoded step crowds the axis into
+      // an unreadable smear as the HRE range widens. Snap to a 1/2/5 × 10^k step
+      // that yields ~6 gridlines whatever the spread.
+      const rawStep = (yHi - yLo) / 6;
+      const yMag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+      const yStep = [1, 2, 5, 10].map(m => m * yMag).find(s => s >= rawStep) || 10 * yMag;
       const n = hreRuns.length;
       const px = i => padL + (n <= 1 ? (W - padL - padR) / 2 : (i / (n - 1)) * (W - padL - padR));
       const py = v => padT + (1 - (v - yLo) / (yHi - yLo)) * (H - padT - padB);
@@ -3621,7 +3700,7 @@
 
       // Y gridlines + labels.
       let grid = '';
-      for (let v = yLo; v <= yHi; v += 20) {
+      for (let v = Math.ceil(yLo / yStep) * yStep; v <= yHi; v += yStep) {
         const y = py(v).toFixed(1);
         grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--border)" stroke-width="0.5"/>`;
         grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-size="8" fill="var(--muted)">${v}</text>`;
@@ -3654,7 +3733,7 @@
     // /sync:hre
 
     // sync:gymlinks
-    const gymFiles = { 3: "gym-week3.html", 4: "gym-week4.html", 5: "gym-week5.html", 6: "gym-week6.html", 7: "gym-week7.html", 8: "gym-week8.html", 9: "gym-week9.html", 10: "gym-week10.html", 12: "gym-week12.html", 13: "gym-week13.html", 14: "gym-week14.html", 15: "gym-week15.html", 16: "gym-week16.html" };
+    const gymFiles = { 3: "gym-week3.html", 4: "gym-week4.html", 5: "gym-week5.html", 6: "gym-week6.html", 7: "gym-week7.html", 8: "gym-week8.html", 9: "gym-week9.html", 10: "gym-week10.html", 12: "gym-week12.html", 13: "gym-week13.html", 14: "gym-week14.html", 15: "gym-week15.html", 16: "gym-week16.html", 17: "gym-week17.html" };
     document.querySelectorAll('.week[id]').forEach(wk => {
       const n = parseInt(wk.id.slice(1), 10);
       const file = gymFiles[n];

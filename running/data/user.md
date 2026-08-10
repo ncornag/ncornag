@@ -54,9 +54,14 @@ be used as a training week.
 
 ## Equipment
 
-- Home gym (jump box, kettlebelts)
+- Home gym (jump box, kettlebells **6 kg / 12 kg / 20 kg**, resistance bands orange + green)
 - All terrain bicycle
 - Everything needed for a trail run
+
+There is **no 8 kg and no 16 kg** kettlebell. 12 kg is the working ceiling for
+single-leg lower-body work — the next bell is 20 kg, a 67% jump, so progression
+past 12 kg comes from reps and tempo, not load. Holding both bells (6 + 12 = 18 kg)
+is the only intermediate step available, and only for two-handed movements.
 
 _(Coach reads this when prescribing sessions. List shoes, watch / HR strap, poles, vest, and any treadmill or gym access.)_
 
