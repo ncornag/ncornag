@@ -295,6 +295,13 @@ flagged). Deterministic — zero diff when data is unchanged. The static
 container, legend, CSS, and explainer were added once (alongside the volume
 chart section); only the `// sync:hre` block changes per run.
 
+Beats per kilometre is only comparable **within one mode of locomotion**, so the
+engine drops any activity whose type is in `HRE_EXCLUDED_TYPES`
+(`StrengthTraining`, `Biking`). Cycling is the one that bites: it costs roughly
+half the heartbeats per km that running does, and a *flat* spin is not caught by
+the hilly ring, so it lands inside the trend fit and fakes an efficiency gain.
+Add a type to that set rather than special-casing a date.
+
 When coaching (C4), it is fair game to read the HRE trend: a falling trend over
 comparable (flat) runs is improving aerobic efficiency; cite specific low-HRE
 runs the way you cite pace/HR from `activities[]`. Do not read a single hilly

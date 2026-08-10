@@ -678,6 +678,13 @@ def render_chart_js(weeks):
 # for context only.
 HRE_HILLY_ELEV = None   # m D+ — set from the profile's hilly_elev in main()
 
+# Activity types that never belong on the HRE chart. Beats per kilometre is
+# only comparable within one mode of locomotion: cycling covers a kilometre for
+# roughly half the heartbeats running costs, so a bike ride is not a better run,
+# it is a different sport. Worse, a flat spin is not caught by the hilly ring,
+# so without this it lands *inside* the trend fit and fakes an efficiency gain.
+HRE_EXCLUDED_TYPES = {"StrengthTraining", "Biking"}
+
 # Zone color palette, mirrors the .act-zone.zN classes in the plan CSS.
 HRE_ZONE_COLOR = {
     "Z1": "#3a7bd5", "Z2": "#2ecc8a", "Z3": "#f0c040",
@@ -698,8 +705,15 @@ HRE_RENDER = r"""
       const xs = hreRuns.map((_, i) => i);
       const ys = hreRuns.map(r => r.hre);
       const yMin = Math.min(...ys), yMax = Math.max(...ys);
-      const yLo = Math.floor((yMin - 20) / 20) * 20;
-      const yHi = Math.ceil((yMax + 20) / 20) * 20;
+      // Domain hugs the data (8% breathing room) so the dots use the full height.
+      const yPad = (yMax - yMin) * 0.08 || 20;
+      const yLo = yMin - yPad, yHi = yMax + yPad;
+      // Tick spacing is chosen, not fixed: a hardcoded step crowds the axis into
+      // an unreadable smear as the HRE range widens. Snap to a 1/2/5 × 10^k step
+      // that yields ~6 gridlines whatever the spread.
+      const rawStep = (yHi - yLo) / 6;
+      const yMag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+      const yStep = [1, 2, 5, 10].map(m => m * yMag).find(s => s >= rawStep) || 10 * yMag;
       const n = hreRuns.length;
       const px = i => padL + (n <= 1 ? (W - padL - padR) / 2 : (i / (n - 1)) * (W - padL - padR));
       const py = v => padT + (1 - (v - yLo) / (yHi - yLo)) * (H - padT - padB);
@@ -720,7 +734,7 @@ HRE_RENDER = r"""
 
       // Y gridlines + labels.
       let grid = '';
-      for (let v = yLo; v <= yHi; v += 20) {
+      for (let v = Math.ceil(yLo / yStep) * yStep; v <= yHi; v += yStep) {
         const y = py(v).toFixed(1);
         grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--border)" stroke-width="0.5"/>`;
         grid += `<text x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end" font-size="8" fill="var(--muted)">${v}</text>`;
@@ -761,7 +775,7 @@ def render_hre_js(weeks):
     runs = []
     for w in weeks:
         for a in w["activities"]:
-            if a["type"] == "StrengthTraining" or a.get("hre") is None:
+            if a["type"] in HRE_EXCLUDED_TYPES or a.get("hre") is None:
                 continue
             hilly = a["elev"] >= HRE_HILLY_ELEV
             # Tooltip context: always show D+ and temp; the chart flags only
