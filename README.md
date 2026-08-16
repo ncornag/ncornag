@@ -30,7 +30,7 @@ My work revolves around **microservices architecture**, **domain-driven design**
 
 ### 🏢 Enterprise E-Commerce Platform
 
-**Lead Software Developer** | Stone Rooster Inc (Mar 2025 - Present)
+**Technical Architect** | Stone Rooster Inc (Mar 2025 - Present)
 
 Led the end-to-end design and implementation of a production-ready enterprise e-commerce platform, owning architecture and development of a complete microservices ecosystem built with **NestJS**, **TypeScript**, **MongoDB**, **Redis**, and **Kubernetes**.
 
