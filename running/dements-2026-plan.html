@@ -2630,11 +2630,11 @@
     </div>
   </div>
 
-  <div class="week recovery-week current open" id="w15">
+  <div class="week recovery-week" id="w15">
     <div class="week-header" onclick="toggle('w15')">
       <div class="week-num">15</div>
       <div class="week-summary">
-        <div class="week-title">Recovery Week 🔽 <span class="current-badge">Current</span></div>
+        <div class="week-title">Recovery Week 🔽 <span class="done-badge">Done ✓</span></div>
         <div class="week-date">Aug 17–23 · Before the biggest vert day</div>
       </div>
       <div class="week-stats">
@@ -2646,14 +2646,16 @@
     <div class="week-body">
       <!-- sync:days:w15 -->
       <div class="days">
-        <div class="day rec">
+        <div class="day rec logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">5km</div>
           <div class="day-type">Z2 + Gym A</div>
         </div>
-        <div class="day gym">
+        <div class="day gym logged">
           <div class="day-label">Tue</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">💪</div>
           <div class="day-km">Gym</div>
           <div class="day-type">Makeup</div>
@@ -2677,15 +2679,17 @@
           <div class="day-km">—</div>
           <div class="day-type">Rest</div>
         </div>
-        <div class="day trail-hike">
+        <div class="day trail-hike logged">
           <div class="day-label">Sat</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">⛰</div>
           <div class="day-km">15km</div>
           <div class="day-elev">350m</div>
           <div class="day-type">Easy</div>
         </div>
-        <div class="day rec">
+        <div class="day rec logged">
           <div class="day-label">Sun</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">6km</div>
           <div class="day-type">Recovery</div>
@@ -2700,39 +2704,60 @@
         — both are otherwise free. <strong>Monday is Z2, not Z1</strong> — Z2 is your floor for every easy run, and
         this week earns its recovery from the low kilometres and the two full rest days. Week 16 is the biggest
         vert day of the plan so far (25km/1500m) — arrive at it fresh and hungry.</div>
+      <!-- sync:actuals:w15 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">3 runs · 1 gym · 31.7 km · 899 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 17</span><span class="act-ico">🏃</span><span class="act-km">5.0 km</span><span class="act-vert">7 m</span><span class="act-hr">147</span><span class="act-zone z2">Z2</span><span class="act-pace">6:17/km</span><span class="act-cal">318</span><span class="act-maxhr">154</span><span class="act-cad gz-green">168 spm</span><span class="act-stride">944 mm</span><span class="act-vratio gz-orange">9.5%</span><span class="act-vosc gz-green">91.1 mm</span><span class="act-gct gz-green">258 ms</span><span class="act-temp">29°</span></div>
+        <div class="act-zonebar" title="Z1 2m · Z2 27m · Z3 2m"><span class="zbar"><span class="zseg z1" style="flex-grow:113"></span><span class="zseg z2" style="flex-grow:1632"></span><span class="zseg z3" style="flex-grow:146"></span></span><span class="zb-txt">Z1&nbsp;2 · Z2&nbsp;27 · Z3&nbsp;2&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Tue 18</span><span class="act-ico">💪</span><span class="act-km">gym</span><span class="act-vert">—</span><span class="act-hr">100</span><span class="act-zone z1">Z1</span><span class="act-pace">—</span><span class="act-cal">116</span><span class="act-maxhr">123</span><span class="act-cad ">—</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">32°</span></div>
+        <div class="act-row"><span class="act-when">Sat 22</span><span class="act-ico">🏃</span><span class="act-km">20.7 km</span><span class="act-vert">885 m</span><span class="act-hr">130</span><span class="act-zone z1">Z1</span><span class="act-pace">11:34/km</span><span class="act-cal">1512</span><span class="act-maxhr">175</span><span class="act-cad gz-red">96 spm</span><span class="act-stride">—</span><span class="act-vratio ">—</span><span class="act-vosc ">—</span><span class="act-gct ">—</span><span class="act-temp">28°</span></div>
+        <div class="act-zonebar" title="Z1 131m · Z2 84m · Z3 20m · Z4 4m"><span class="zbar"><span class="zseg z1" style="flex-grow:7877"></span><span class="zseg z2" style="flex-grow:5022"></span><span class="zseg z3" style="flex-grow:1196"></span><span class="zseg z4" style="flex-grow:244"></span></span><span class="zb-txt">Z1&nbsp;131 · Z2&nbsp;84 · Z3&nbsp;20 · Z4&nbsp;4&nbsp;min</span></div>
+        <div class="act-row"><span class="act-when">Sun 23</span><span class="act-ico">🏃</span><span class="act-km">6.0 km</span><span class="act-vert">7 m</span><span class="act-hr">147</span><span class="act-zone z2">Z2</span><span class="act-pace">7:04/km</span><span class="act-cal">390</span><span class="act-maxhr">156</span><span class="act-cad gz-orange">160 spm</span><span class="act-stride">884 mm</span><span class="act-vratio gz-red">11.3%</span><span class="act-vosc gz-orange">101.5 mm</span><span class="act-gct gz-green">272 ms</span><span class="act-temp">31°</span></div>
+        <div class="act-zonebar" title="Z1 1m · Z2 37m · Z3 4m"><span class="zbar"><span class="zseg z1" style="flex-grow:83"></span><span class="zseg z2" style="flex-grow:2244"></span><span class="zseg z3" style="flex-grow:228"></span></span><span class="zb-txt">Z1&nbsp;1 · Z2&nbsp;37 · Z3&nbsp;4&nbsp;min</span></div>
+      </div>
+      <!-- /sync:actuals:w15 -->
       <!-- sync:coach:w15 -->
-      <div class="coach" data-hash="nodata">
+      <div class="coach" data-hash="ceb17a05c0aa">
         <div class="coach-head">🧭 Coach</div>
         <div class="coach-body">
-          <p><strong>You have earned this week.</strong> Week 14 was the biggest of the entire 26-week block and you
-            delivered it whole — 56.9 km and 1,687 m, 100% of the kilometres and 105% of the vert, with a 20 km /
-            1,032 m Saturday that you called <strong>"strong, room to spare."</strong> Nothing here needs rescuing.
-            The only job of week 15 is to let that adaptation land before week 16 asks for 25 km and 1,500 m.</p>
-          <p><strong>The one change: Tuesday is now a gym makeup</strong> for the Thursday session your schedule ate
-            — at week 15's deload load, 2 sets and 6 kg, exactly like Monday and Thursday. Three sessions in a
-            recovery week sounds like a lot; it isn't, because Tuesday was a rest day and the running is down to 32
-            km with two rest days still standing. <strong>What you are making up is the frequency, not the
-            kilos</strong> — loading 12 kg two days after a four-figure vert day would fight the whole purpose of
-            the week. If Monday leaves the legs heavy, <strong>move it to Wednesday</strong>; if it still feels
-            wrong on Wednesday, drop it. A makeup is a bonus, never a debt.</p>
-          <p><strong>Sleep is now the session that matters most, and it is the one that isn't a workout.</strong>
-            You've named it three check-ins running, and this time you named the cause: late bedtimes plus broken
-            nights. A deload week with three rest-ish days is the cheapest possible place to fix it — <strong>pick a
-            bedtime and hold it for seven nights</strong>, and treat that as this week's hardest prescription.
-            Everything else here is easy on purpose: Saturday's 15 km / 350 m is time on feet, not a session, and
-            Sunday's 6 km stays genuinely slow. Arrive at week 16 rested and you get the biggest vert day of the
-            plan for free.</p>
+          <p><strong>The numbers do sum up — 31.7 km of 32, 99%.</strong> But they got there by a different route
+            than the plan drew: Thursday's 6 km / 150 m and its gym session never happened, and Saturday grew from
+            15 km / 350 m into <strong>20.7 km / 885 m</strong>. So the week landed at <strong>180% of its
+            vert</strong> on 99% of its kilometres. In a build week I'd call that a win; in a deload week it means
+            <strong>the rest you were supposed to bank went into one four-hour day instead</strong>. Not a mistake —
+            just worth naming before Saturday's 25 km / 1500 m.</p>
+          <p><strong>And you ran that Saturday exactly right — deliberately, by your own account, and the legs came out of it fine.</strong> 3h59 at an average of <strong>130 bpm</strong>
+            — fourteen beats under last week's 20 km — with <strong>2h11 of it below 135</strong> and only 24 minutes
+            above Z2 in the whole day. A cadence of 96 spm says what really happened: <strong>you hiked a large share
+            of it</strong>, which is precisely the skill Espadà will ask for. The week's real time-in-zone came out
+            <strong>90% easy / 8% moderate / 1% hard</strong> — the cleanest polarized week of the block. Meanwhile
+            <strong>Monday's flat 5 km at 6:17/km for 147 bpm is an HRE of 924 — the second-best flat run of the
+            entire 15 weeks</strong>, behind only week 14's Wednesday. The four most efficient flat runs you have
+            logged all come from the last two weeks.</p>
+          <p><strong>Sunday is the honest receipt.</strong> Same 147 average as Monday, on the same flat ground —
+            but <strong>7:04/km instead of 6:17</strong>, stride 884 mm instead of 944, ground contact 272 ms instead
+            of 258. That is a four-hour day in the legs, not a problem; it is what a big Saturday costs, and it
+            cleared by itself. <strong>The one real gap is strength — one session where the week asked for
+            three.</strong> Tuesday the 18th is logged and correct; I checked it against Garmin directly and the
+            week's four activities match one for one, so nothing was lost in the sync. Monday's Gym A and Thursday's
+            Gym B simply did not happen. <strong>Two full sessions a week is the one thing this plan never trades
+            away</strong>, so that is the gap to close in week 16, not the kilometres. <strong>Saturday's 25 km / 1500 m is the
+            biggest vert day of the block — 468 m more than you have ever climbed in a session.</strong> Run it by
+            the clock, not the map: <strong>hike everything steep from the first climb</strong>, keep the average
+            where you kept it this Saturday, and give yourself permission to turn for home at 5h30 whatever the
+            distance says.</p>
         </div>
       </div>
       <!-- /sync:coach:w15 -->
     </div>
   </div>
 
-  <div class="week" id="w16">
+  <div class="week current open" id="w16">
     <div class="week-header" onclick="toggle('w16')">
       <div class="week-num">16</div>
       <div class="week-summary">
-        <div class="week-title">Biggest Vert Day</div>
+        <div class="week-title">Biggest Vert Day <span class="current-badge">Current</span></div>
         <div class="week-date">Aug 24–30 · 25km/1500m on Sat</div>
       </div>
       <div class="week-stats">
@@ -2799,9 +2824,10 @@
       <div class="coach" data-hash="nodata">
         <div class="coach-head">🧭 Coach</div>
         <div class="coach-body">
-          <p><strong>This was the qualifier race week. It isn't any more — you already qualified last year, so the week is free.</strong> Left as written it was 45 km with four near-rest days built around a race you're not running: a wasted week in the middle of the specific block. Rebuilt, it becomes <strong>the biggest single day of the plan so far — 25 km / 1,500 m, solo</strong>. That is a 60 m/km vert ratio, up from week 14's 50, and the closest you will have come to the race's 90 m/km.</p>
-          <p><strong>Treat Saturday as the dress rehearsal.</strong> Race vest, poles if you'll carry them, the full nutrition plan you proved on the 2h37 in week 12 — this is the day to find out what breaks at four-plus hours, while there is still time to fix it. Pre-dawn start is not optional at these temperatures. Friday stays a complete rest day so you arrive at it genuinely fresh; that part of the old race week was right and it stays.</p>
-          <p><strong>Sunday is the real reclaim: 5 km / 200 m back-to-back.</strong> The race week threw it away on rest. Running easy on legs emptied by 1,500 m of descending is the single most Dements-specific thing you can practise, and it is exactly what you'll need at hour five on race day. Easy means easy — capped at 151, same rule as weeks 13 and 14. <strong>Gym holds at two full sessions, Monday and Thursday</strong>, with lower-body loads held: 1,500 m of braking is the week's strength stimulus.</p>
+          <p><strong>This was the qualifier race week. It isn't any more — you already qualified last year, so the week is free.</strong> Rebuilt, it becomes <strong>the biggest single day of the plan so far: 25 km / 1,500 m, solo</strong> — a 60 m/km vert ratio, up from week 14's 50, and the closest you will have come to the race's 90. That is <strong>468 m more climbing than you have ever done in one session</strong>, so it is a real step, not a routine long run.</p>
+          <p><strong>Week 15 says you are ready for it, and it says how to run it.</strong> You covered 20.7 km / 885 m in 3h59 at an average of 130 bpm, with 2h11 below 135 and a cadence of 96 spm — you hiked the steep and kept the whole day genuinely easy. <strong>Do exactly that again, for longer.</strong> Hike everything steep from the first climb, hold the average where you held it Saturday, and <strong>run the day by the clock, not the map: turn for home at 5h30 whatever the distance says.</strong> Arriving intact matters more than the number.</p>
+          <p><strong>Treat Saturday as the dress rehearsal.</strong> Race vest, poles if you'll carry them, the full nutrition plan you proved in week 12 — this is the day to find out what breaks past four hours while there is still time to fix it. Pre-dawn start is not optional at these temperatures, and Friday stays a complete rest day. <strong>Sunday is the real reclaim: 5 km / 200 m back-to-back</strong>, capped at 151 — running easy on legs emptied by 1,500 m of descending is the most Dements-specific thing in the week. <strong>And gym goes back to two full sessions, Monday and Thursday</strong>: week 15 logged only one, and strength frequency is the one thing this plan does not trade. Lower-body loads hold — Saturday's 1,500 m of braking is the week's real strength stimulus.</p>
+          <p><strong>One change downstream, agreed with you: week 17's Saturday goes from 18 km / 600 m to 20 km / 800 m</strong> (week total 35 → 37 km, 700 → 900 m). You were right that a recovery Saturday should not be softer than your week-15 deload Saturday, which was 20.66 km / 885 m. It stops at 800 m rather than 1,000 because <strong>vert is what costs recovery, not distance</strong>, and week 17 is the only absorption week between this Saturday and week 18's 62 km / 2,250 m. Nothing else in week 17 moves.</p>
         </div>
       </div>
       <!-- /sync:coach:w16 -->
@@ -2812,12 +2838,12 @@
     <div class="week-header" onclick="toggle('w17')">
       <div class="week-num">17</div>
       <div class="week-summary">
-        <div class="week-title">Recovery + Rebuild</div>
+        <div class="week-title">Recovery + Rebuild <span class="adjusted">adjusted</span></div>
         <div class="week-date">Aug 31–Sep 6 · Absorb the 25km day</div>
       </div>
-      <div class="week-stats">
-        <div class="week-km">35km</div>
-        <div class="week-elev">700m</div>
+      <div class="week-stats" data-plan-km="35" data-plan-elev="700">
+        <div class="week-km">37km</div>
+        <div class="week-elev">900m</div>
       </div>
       <div class="chevron">▼</div>
     </div>
@@ -2857,8 +2883,8 @@
         <div class="day trail-hike">
           <div class="day-label">Sat</div>
           <div class="day-icon">⛰</div>
-          <div class="day-km">18km</div>
-          <div class="day-elev">600m</div>
+          <div class="day-km">20km</div>
+          <div class="day-elev">800m</div>
           <div class="day-type">Long mtn</div>
         </div>
         <div class="day trail-z2">
@@ -2874,8 +2900,10 @@
         day and it is not optional. <strong>Tuesday and Thursday are Z2, not Z1</strong> — Z2 is your floor for every
         easy run, and this week earns its recovery from three rest days, not from a lower zone. <strong>Gym stays at
         two full sessions</strong>, Gym A and Gym B stacked after the two easy runs — the frequency never deloads,
-        the load does. Saturday returns to a real mountain day at a gentle 33m/km, and Sunday is a short
-        back-to-back. Week 18 is the biggest week of the block (62km / 2250m) — arrive at it rested.</div>
+        the load does. <strong>Saturday is 20km / 800m</strong> — raised from
+        18km/600m because your week-15 deload Saturday was already 20.66km / 885m, and a recovery Saturday should
+        not be softer than what you do on a light week. Still a gentle 40m/km, and Sunday is a short back-to-back.
+        Week 18 is the biggest week of the block (62km / 2250m) — arrive at it rested.</div>
       <!-- sync:coach:w17 -->
       <div class="coach" data-hash="nodata">
         <div class="coach-head">🧭 Coach</div>
@@ -2892,8 +2920,12 @@
           Thursday’s easy 5 km — run first, lift after, the same shape that has worked since week 13. Loads come back
           to week 14’s: <strong>12 kg on the split squat, bridge and row, 6 kg on both calf raises.</strong> Your
           kettlebells stop at 12 kg for single-leg work, so those movements keep progressing through reps and tempo,
-          not kilos — the next bell is 20 kg and that is a 67% jump nobody should take. <strong>Saturday is 18 km /
-          600 m at 33 m/km, deliberately gentler than the last three Saturdays</strong>, and Sunday is a short
+          not kilos — the next bell is 20 kg and that is a 67% jump nobody should take. <strong>Saturday is 20 km /
+          800 m at 40 m/km — raised from 18 km / 600 m at your request, and you were right to ask.</strong> Your
+          week-15 deload Saturday was 20.66 km / 885 m, so an 18 km / 600 m "recovery" day was softer than what you
+          already do on a light week; that was the plan being out of date with you. It stops at 800 m rather than
+          the 1,000 you proposed because <strong>vert is what costs recovery, not distance</strong>, and this is the
+          only absorption week between week 16's 1,500 m Saturday and week 18's 62 km. Sunday stays a short
           back-to-back on tired legs. Smart beats heroic.</p>
         </div>
       </div>
@@ -3580,8 +3612,8 @@
       { label: '12', km: 45, elev: 1000, color: '#1e8050', done: true },
       { label: '13', km: 54, elev: 1400, color: '#c85a10', done: true },
       { label: '14', km: 57, elev: 1600, color: '#c85a10', done: true },
-      { label: '15', km: 32, elev: 500, color: '#2a5fb5', reco: true, current: true },
-      { label: '16', km: 47, elev: 1700, color: '#c85a10' },
+      { label: '15', km: 32, elev: 500, color: '#2a5fb5', reco: true, done: true },
+      { label: '16', km: 47, elev: 1700, color: '#c85a10', current: true },
       { label: '17', km: 35, elev: 700, color: '#2a5fb5', reco: true },
       { label: '18', km: 62, elev: 2250, color: '#c85a10' },
       { label: '19', km: 38, elev: 800, color: '#2a5fb5', reco: true },
@@ -3613,7 +3645,8 @@
       11: { km: 42.1, elev: 1854 },
       12: { km: 46.3, elev: 1127 },
       13: { km: 52.0, elev: 1619 },
-      14: { km: 56.9, elev: 1687 }
+      14: { km: 56.9, elev: 1687 },
+      15: { km: 31.7, elev: 899 }
     };
 
     weeks.forEach((w, i) => {
@@ -3709,7 +3742,10 @@
       {"label": "Wed 12", "week": 14, "hre": 918, "color": "#2ecc8a", "flagged": false, "flag": "8 m D+ · 28°"},
       {"label": "Fri 14", "week": 14, "hre": 1332, "color": "#2ecc8a", "flagged": true, "flag": "397 m D+ · 29°"},
       {"label": "Sat 15", "week": 14, "hre": 1505, "color": "#2ecc8a", "flagged": true, "flag": "1032 m D+ · 30°"},
-      {"label": "Sun 16", "week": 14, "hre": 1126, "color": "#3a7bd5", "flagged": true, "flag": "203 m D+ · 29°"}
+      {"label": "Sun 16", "week": 14, "hre": 1126, "color": "#3a7bd5", "flagged": true, "flag": "203 m D+ · 29°"},
+      {"label": "Mon 17", "week": 15, "hre": 924, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 29°"},
+      {"label": "Sat 22", "week": 15, "hre": 1504, "color": "#3a7bd5", "flagged": true, "flag": "885 m D+ · 28°"},
+      {"label": "Sun 23", "week": 15, "hre": 1039, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 31°"}
     ];
 
     (() => {
@@ -3781,7 +3817,7 @@
     // /sync:hre
 
     // sync:gymlinks
-    const gymFiles = { 3: "gym-week3.html", 4: "gym-week4.html", 5: "gym-week5.html", 6: "gym-week6.html", 7: "gym-week7.html", 8: "gym-week8.html", 9: "gym-week9.html", 10: "gym-week10.html", 12: "gym-week12.html", 13: "gym-week13.html", 14: "gym-week14.html", 15: "gym-week15.html", 16: "gym-week16.html", 17: "gym-week17.html" };
+    const gymFiles = { 3: "gym-week3.html", 4: "gym-week4.html", 5: "gym-week5.html", 6: "gym-week6.html", 7: "gym-week7.html", 8: "gym-week8.html", 9: "gym-week9.html", 10: "gym-week10.html", 12: "gym-week12.html", 13: "gym-week13.html", 14: "gym-week14.html", 15: "gym-week15.html", 16: "gym-week16.html", 17: "gym-week17.html", 18: "gym-week18.html" };
     document.querySelectorAll('.week[id]').forEach(wk => {
       const n = parseInt(wk.id.slice(1), 10);
       const file = gymFiles[n];
