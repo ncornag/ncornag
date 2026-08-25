@@ -246,13 +246,37 @@ Immediately after each `<!-- /sync:actuals:wN -->`, maintain a coach block:
 
 **Idempotency:** if the block already exists and its `data-hash` attribute
 equals the week's `data_hash` from the JSON, leave it untouched. Only
-(re)write the block when the hash differs or the block is missing.
+(re)write the block when the hash differs, the block is missing, or the block
+does not match the shape below (e.g. a current-week block without its
+day-by-day section).
 
 Write `<CONTENT>` as the athlete's **trail-running coach** — see Coach Voice
-below. Write a full analysis for the current week and the most recently
-completed week; for older weeks a one or two sentence note is enough. The coach
-block prose silently incorporates the athlete's feedback from this session — do
+below. The block has a fixed shape:
+
+- **Current week:** one paragraph of at most 3 sentences (how the week is
+  going, the one thing to watch), then the day-by-day section.
+- **Most recently completed week:** one paragraph of at most 3 sentences.
+- **Older weeks:** one sentence.
+
+The prose silently incorporates the athlete's feedback from this session — do
 not add separate athlete-note markup.
+
+**Day-by-day section (current week, REQUIRED):** after the paragraph, one
+`<p>` per planned non-rest day from `plan_days[]`, in day order:
+
+```
+<p><strong>Tue</strong> — 6 km easy, Z2 (135–151 bpm), then 4–6 × 20 s strides
+(fast but relaxed, ~5K effort), 60–90 s easy jog between.</p>
+```
+
+Each line is the complete session prescription: distance, zone with its bpm
+range from the profile, vert if planned, and reps × duration + recovery for
+any quality work. Expand every day-chip shorthand (`Z2+strides`, `B2B easy`,
+`Long mtn`) into what the athlete actually does — a label never appears
+without its execution detail, and each line carries that day's own numbers,
+never a prior week's as a stand-in. Gym days name the session and its file
+("Gym B — gym-week16.html"). Days whose weekday is in `logged_days` end with
+"— done". Rest days are omitted.
 
 A `done` or `current` week with **no** logged data still gets a coach block
 (no actuals panel) flagging the missing data — silence on a missed week is bad
@@ -269,9 +293,14 @@ For every week, make the card match the JSON `status`:
 - `upcoming` → no status badge; no `current`/`open`.
 
 The status badge lives in `<div class="week-title">`. Replace any existing
-status badge (`done-badge`, `current-badge`). **Preserve** `race-badge` and
-`qualifier-badge` — those are not status badges. Keep `recovery-week` /
-`race-week` / `qualifier-week` classes untouched.
+status badge (`done-badge`, `current-badge`). **Preserve** `race-badge` — it
+is not a status badge. Keep `recovery-week` / `race-week` classes untouched.
+
+The profile marks the registration qualifier as already satisfied, so the
+qualifier is not part of this plan: when touching a week card, remove any
+`qualifier-badge`, `qualifier-week` class, or qualifier wording still on it,
+and never mention the qualifier in coach blocks, chat, or the log. The same
+applies to anything else the profile marks as not applicable.
 
 ### C6. Refresh the volume chart
 
@@ -453,10 +482,11 @@ final week — from the profile). Be direct, specific, and encouraging; never ge
   (type `z2`, `z4`, `strides`, `trail-z2`, `trail-hike`, `rec`) after the last
   logged activity's date; list gym days by day name; never infer schedule from
   prose. If `plan_days` is empty, omit schedule-specific claims.
-- Cover, in 3–6 sentences: how the week went, what was good, what to watch,
-  and concrete guidance for the weeks ahead. Reference the plan's guiding
-  principle (from the profile) and training-specific principles (vert specificity,
-  power-hike practice, eccentric descents, back-to-back long days) when relevant.
+- **Be brief.** The C4 shape caps prose at 3 sentences per week: pick the one
+  or two data points that matter and cut the rest — the day-by-day lines carry
+  the session detail. Reference the plan's guiding principle or a
+  training-specific principle (vert specificity, power-hike practice, eccentric
+  descents, back-to-back long days) only when it is the point being made.
 - Wrap key phrases in `<strong>`. If you adjusted the next week, state exactly
   what changed and why.
 
