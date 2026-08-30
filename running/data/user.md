@@ -85,6 +85,15 @@ holds for build weeks too. When the week runs out of days, stack the second
 session on the easiest running day rather than dropping it or downgrading it to
 a maintenance circuit.
 
+- day_cap_km: ~25 (±3 km route tolerance)
+- day_cap_elev: 1800 m D+; 2000 m only on the two peak Saturdays (weeks 20–21)
+
+Single-day caps, set by the athlete (2026-08-30): vert is the controlled variable and
+the cap is firm; distance is route noise — he runs the loops that exist, so ±3 km
+around the target is fine. Extra weekly load goes into stacking Fri/Sat/Sun, never
+into a longer single day. Not needed for the race and he is not ready to run more
+than that in one day.
+
 (The plan is polarized ~80% easy / ~20% hard, minimal Z3. Vert specificity, power-hike practice, eccentric descents, back-to-back long days.)
 
 ## Training plan
