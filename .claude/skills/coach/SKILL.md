@@ -377,7 +377,7 @@ not reflected in the chart.
   regions changed and the HTML is well-formed (tags balanced).
 - Append/update today's `running/coach-log.md` entry (see Feedback log).
 - Summarise for the user: weeks updated, key coach points, any adjustment made,
-  any gym-table change.
+  any gym-table change, and whether the current week's gym workout reached Garmin.
 
 ## Gym programming
 
@@ -440,6 +440,21 @@ Maintain per-week gym tables as the plan advances — just-in-time, not all 26 a
 - **Linking:** after creating, renaming, or splitting a gym file, re-run the engine and
   re-apply the `// sync:gymlinks` block (C1) and the index gym card so links stay correct.
   The engine derives the week→file map from the filenames — you do not hand-edit the map.
+- **Push to the watch:** once the gym file covering `current_week` is written and linked,
+  put that week on the athlete's watch through the `garmin` skill:
+
+  ```
+  python3 .claude/skills/garmin/upload-workout.py --week <current_week>
+  ```
+
+  It reads that week's page and creates — or updates in place — the Garmin workout named
+  `week <N>`. Push **only** `current_week`: that is the week the athlete is about to
+  train. Weeks written ahead (`+1`…`+3`) still change before they are trained, and past
+  weeks are frozen. Re-run it whenever that week's page changes; the same workout is
+  updated, so nothing scheduled on the Garmin calendar breaks. If it fails — no cached
+  Garmin token, or an exercise the skill cannot map to Garmin's catalogue — report it in
+  the C8 summary and move on. The HTML page is the source of truth; a missing watch
+  workout never blocks the run.
 
 ## Feedback log
 

@@ -5,27 +5,40 @@ without triggering that script's venv bootstrap. Pure stdlib."""
 import re
 from pathlib import Path
 
-_LOG_DIR_RE = re.compile(r"^\s*[-*]?\s*log_dir\s*:\s*(.+?)\s*$", re.MULTILINE)
 
-
-def parse_log_dir(text):
-    """Return the log_dir value from user.md contents, or None if absent."""
-    m = _LOG_DIR_RE.search(text)
+def parse_key(text, key):
+    """Return the value of `key` from user.md contents, or None if absent."""
+    m = re.search(rf"^\s*[-*]?\s*{re.escape(key)}\s*:\s*(.+?)\s*$", text, re.MULTILINE)
     return m.group(1).strip() if m else None
 
 
-def read_log_dir(config_path):
-    """Read the log_dir path from the user.md at config_path.
+def read_key(config_path, key, example):
+    """Read `key` from the user.md at config_path.
 
     Raises SystemExit with a clear message if the file or the key is missing."""
     path = Path(config_path)
     if not path.exists():
         raise SystemExit(
             f"missing {path} — create it with a line:\n"
-            f"  log_dir: /path/to/your/activity/log")
-    value = parse_log_dir(path.read_text(encoding="utf-8"))
+            f"  {key}: {example}")
+    value = parse_key(path.read_text(encoding="utf-8"), key)
     if not value:
         raise SystemExit(
-            f"no 'log_dir:' line in {path} — add e.g.\n"
-            f"  log_dir: /path/to/your/activity/log")
+            f"no '{key}:' line in {path} — add e.g.\n"
+            f"  {key}: {example}")
     return value
+
+
+def parse_log_dir(text):
+    """Return the log_dir value from user.md contents, or None if absent."""
+    return parse_key(text, "log_dir")
+
+
+def read_log_dir(config_path):
+    """Read the log_dir path from the user.md at config_path."""
+    return read_key(config_path, "log_dir", "/path/to/your/activity/log")
+
+
+def read_gym_prefix(config_path):
+    """Read the gym-file prefix (e.g. `gym-week`) from the user.md at config_path."""
+    return read_key(config_path, "gym_prefix", "gym-week")

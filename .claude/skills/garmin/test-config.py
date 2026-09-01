@@ -56,6 +56,38 @@ def test_read_log_dir_empty_value_exits():
         except SystemExit:
             pass
 
+def test_parse_key_reads_any_key():
+    assert cfg.parse_key("- gym_prefix: gym-week\n", "gym_prefix") == "gym-week"
+
+
+def test_parse_key_missing_key():
+    assert cfg.parse_key("- log_dir: /a/b\n", "gym_prefix") is None
+
+
+def test_parse_key_picks_the_named_key_only():
+    text = "- log_dir: /a/b\n- gym_prefix: strength-week\n- language: English\n"
+    assert cfg.parse_key(text, "gym_prefix") == "strength-week"
+
+
+def test_read_gym_prefix_happy_path():
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "user.md")
+        with open(p, "w") as f:
+            f.write("- log_dir: /tmp/log\n- gym_prefix: gym-week\n")
+        assert cfg.read_gym_prefix(p) == "gym-week"
+
+
+def test_read_gym_prefix_missing_key_exits():
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "user.md")
+        with open(p, "w") as f:
+            f.write("- log_dir: /tmp/log\n")
+        try:
+            cfg.read_gym_prefix(p)
+            assert False, "expected SystemExit for a missing gym_prefix"
+        except SystemExit:
+            pass
+
 
 if __name__ == "__main__":
     test_parse_log_dir_bulleted()
@@ -65,4 +97,9 @@ if __name__ == "__main__":
     test_read_log_dir_missing_file_exits()
     test_read_log_dir_happy_path()
     test_read_log_dir_empty_value_exits()
+    test_parse_key_reads_any_key()
+    test_parse_key_missing_key()
+    test_parse_key_picks_the_named_key_only()
+    test_read_gym_prefix_happy_path()
+    test_read_gym_prefix_missing_key_exits()
     print("OK")
