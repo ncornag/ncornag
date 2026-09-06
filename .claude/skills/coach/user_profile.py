@@ -65,6 +65,12 @@ def read_profile(config_path):
         plan_start = datetime.strptime(need("plan_start"), "%Y-%m-%d").date()
     except ValueError:
         raise SystemExit(f"{path}: plan_start must be YYYY-MM-DD")
+    closed_through = _value(text, "closed_through")
+    if closed_through is not None:
+        try:
+            closed_through = int(closed_through)
+        except ValueError:
+            raise SystemExit(f"{path}: closed_through must be a week number")
     return {
         "plan_file": need("plan_file"),
         "gym_prefix": need("gym_prefix"),
@@ -72,4 +78,5 @@ def read_profile(config_path):
         "hilly_elev": int(need("hilly_elev")),
         "zone_cutoffs": cutoffs,
         "plan": plan,
+        "closed_through": closed_through,
     }

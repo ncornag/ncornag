@@ -154,13 +154,23 @@ def week_complete_early(w):
     return planned.issubset(set(w.get("logged_days") or []))
 
 
-def resolve_current_week(weeks, calendar_cw):
-    """Advance the calendar's current week past any week whose sessions are all
-    logged. Returns the calendar week unchanged when today is outside the plan
-    or the current week still has sessions left to do."""
+def resolve_current_week(weeks, calendar_cw, closed_through=None):
+    """Advance the calendar's current week past every week that is finished.
+
+    A week is finished either because the athlete declared it closed
+    (profile `closed_through`) or because all its planned sessions are logged.
+    The declaration is needed as well as the logs: a week the athlete ends with
+    a session deliberately dropped — heat, illness, travel — never has a full
+    day grid, so `week_complete_early` alone would keep calling it current
+    after both coach and athlete agree it is over.
+
+    Returns the calendar week unchanged when today is outside the plan or the
+    current week still has sessions left to do."""
     if not calendar_cw:
         return calendar_cw
     cw = calendar_cw
+    if closed_through:
+        cw = max(cw, min(closed_through + 1, TOTAL_WEEKS))
     while cw < TOTAL_WEEKS and week_complete_early(weeks[cw - 1]):
         cw += 1
     return cw
@@ -830,11 +840,12 @@ def main():
     for w in weeks:
         w["gym_file"] = gym_files.get(w["week"])
     calendar_cw = week_of(today)
-    cw = resolve_current_week(weeks, calendar_cw)
+    cw = resolve_current_week(weeks, calendar_cw, prof["closed_through"])
     if cw:
         # Re-derive each week's status from the effective current week, so a
-        # week whose sessions are all logged flips to 'done' and the next week
-        # becomes 'current' even before the calendar week ends.
+        # week that is finished — all sessions logged, or declared closed —
+        # flips to 'done' and the next week becomes 'current' even before the
+        # calendar week ends.
         for w in weeks:
             w["status"] = ("done" if w["week"] < cw
                            else "current" if w["week"] == cw else "upcoming")

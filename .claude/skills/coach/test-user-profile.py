@@ -48,6 +48,35 @@ def test_read_profile_happy_path():
         assert prof["plan"] == [(25, 0), (17, 30), (42.5, 3808)]
 
 
+def test_read_profile_closed_through_absent_is_none():
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "user.md")
+        with open(p, "w") as f:
+            f.write(FULL)
+        assert up.read_profile(p)["closed_through"] is None
+
+
+def test_read_profile_closed_through_parsed():
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "user.md")
+        with open(p, "w") as f:
+            f.write(FULL + "\n- closed_through: 17\n")
+        assert up.read_profile(p)["closed_through"] == 17
+
+
+def test_read_profile_closed_through_non_numeric_exits():
+    with tempfile.TemporaryDirectory() as d:
+        p = os.path.join(d, "user.md")
+        with open(p, "w") as f:
+            f.write(FULL + "\n- closed_through: soon\n")
+        try:
+            up.read_profile(p)
+        except SystemExit as e:
+            assert "closed_through" in str(e)
+        else:
+            raise AssertionError("expected SystemExit")
+
+
 def test_read_profile_missing_file_exits():
     with tempfile.TemporaryDirectory() as d:
         try:
@@ -88,6 +117,9 @@ if __name__ == "__main__":
     test_parse_plan_preserves_int_and_float()
     test_parse_plan_sorts_by_week()
     test_read_profile_happy_path()
+    test_read_profile_closed_through_absent_is_none()
+    test_read_profile_closed_through_parsed()
+    test_read_profile_closed_through_non_numeric_exits()
     test_read_profile_missing_file_exits()
     test_read_profile_missing_plan_exits()
     test_read_profile_missing_zones_exits()

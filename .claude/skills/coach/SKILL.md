@@ -111,6 +111,18 @@ athlete finishes a week's sessions, `current_week` (and each week's `status`)
 moves on to the next week even before the calendar week ends. `calendar_week` is
 the raw date-based week, kept for reference.
 
+**When the athlete says a week is finished, write it down — `closed_through`.**
+A week ended with a session deliberately dropped (heat, illness, travel) never
+has a full day grid, so the rule above can never advance past it and the plan
+would keep badging it **Current** after you and the athlete have agreed it is
+closed. The profile's optional `closed_through: <N>` (in `running/data/user.md`,
+under Training plan) is the athlete's declaration: every week ≤ N is `done`, and
+`current_week` starts at `N + 1`. **Raise it in step B1 whenever the athlete
+declares a week over** — then re-run the engine and take every status from the
+fresh JSON. Never fix this by hand-editing a badge in the plan file: the next
+sync reverts it, and `current_gym_file`, the editable `current+1…+3` window and
+the Garmin push would all stay a week behind. Never lower it.
+
 **`polarized_time` is the honest split.** `polarized` / `zone_km` classify each
 run by its *average* HR, which mislabels variable trail runs as all-Z2.
 `polarized_time` and `zone_seconds` are computed from real time-in-zone (the
