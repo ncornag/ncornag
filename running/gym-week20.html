@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Week 20 — Peak Block</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏃%3C/text%3E%3C/svg%3E">
+  <script>(function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { } })()</script>
+  <link rel="stylesheet" href="theme.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+    :root {
+      /* Bridge theme.css tokens → local aliases */
+      --bg: var(--bg-page);
+      --surface: var(--bg-card);
+      --surface2: var(--bg-sunken);
+      --border: var(--border-soft);
+      --text: var(--text-strong);
+      --muted: var(--text-muted);
+    }
+
+    :root[data-theme="light"] {
+      --gym: #7040d0;
+      --gym-bg: #f3eeff;
+      --gym-tint: #f8f5ff;
+      --gym-border: #7040d033;
+      --warn: #b02040;
+      --warn-bg: #fdf2f2;
+      --good: #1a9e63;
+      --good-bg: #e8f5ef;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .06);
+      --shadow-strong: 0 2px 8px rgba(112, 64, 208, .1);
+    }
+
+    :root[data-theme="dark"] {
+      --gym: #9b6dff;
+      --gym-bg: #1a1225;
+      --gym-tint: #181028;
+      --gym-border: #9b6dff44;
+      --warn: #e04060;
+      --warn-bg: #2a0d14;
+      --good: #2ecc8a;
+      --good-bg: #0d1f17;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .3);
+      --shadow-strong: 0 2px 12px rgba(155, 109, 255, .15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem 1.2rem 4rem;
+      font-size: 112%;
+      transition: background .2s, color .2s;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--gym);
+      color: var(--gym);
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 2rem;
+      max-width: 1100px;
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 5rem);
+      letter-spacing: .04em;
+      line-height: .92;
+      color: var(--text);
+    }
+
+    .title span {
+      color: var(--gym);
+    }
+
+    .subtitle {
+      margin-top: .5rem;
+      font-size: .8rem;
+      letter-spacing: .14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1rem;
+    }
+
+    .stat-pill {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .35rem .7rem;
+      font-size: .68rem;
+      letter-spacing: .06em;
+      color: var(--muted);
+    }
+
+    .stat-pill strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .stat-pill.hi {
+      border-color: var(--gym-border);
+      background: var(--gym-bg);
+    }
+
+    .stat-pill.hi strong {
+      color: var(--gym);
+    }
+
+    /* Warmup card */
+    .warmup-card {
+      background: var(--gym-bg);
+      border: 1px solid var(--gym-border);
+      border-left: 3px solid var(--gym);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      margin: 1.5rem 0 2rem;
+      max-width: 1100px;
+    }
+
+    .warmup-label {
+      font-size: .65rem;
+      letter-spacing: .15em;
+      color: var(--gym);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: .4rem;
+    }
+
+    .warmup-body {
+      font-size: .82rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: .74rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 2rem 0 .8rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Exercise grid */
+    .exercises {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: .9rem;
+      margin-bottom: 2rem;
+    }
+
+    .exercise {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.2rem 1rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .exercise::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--gym);
+    }
+
+    .exercise:hover {
+      border-color: var(--gym-border);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .ex-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .7rem;
+      margin-bottom: .8rem;
+      gap: .8rem;
+    }
+
+    .ex-num-name {
+      display: flex;
+      gap: .6rem;
+      align-items: baseline;
+    }
+
+    .ex-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gym);
+      line-height: 1;
+    }
+
+    .ex-name {
+      font-size: .92rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+      padding-top: .2rem;
+    }
+
+    .ex-load {
+      display: inline-block;
+      margin-top: .35rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--gym);
+      background: var(--gym-bg);
+      border: 1px solid var(--gym-border);
+      border-radius: 3px;
+      padding: .14rem .42rem;
+      white-space: nowrap;
+    }
+
+    .ex-load.bw {
+      color: var(--muted);
+      background: transparent;
+      border-color: var(--border);
+    }
+
+    .ex-sets {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: var(--gym);
+      white-space: nowrap;
+      letter-spacing: .03em;
+      padding-top: .25rem;
+    }
+
+    .ex-label {
+      font-size: .58rem;
+      letter-spacing: .14em;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: .8rem;
+      margin-bottom: .35rem;
+    }
+
+    .ex-label:first-of-type {
+      margin-top: 0;
+    }
+
+    ul.cues {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul.cues li {
+      font-size: .72rem;
+      line-height: 1.45;
+      padding-left: .85rem;
+      position: relative;
+      margin-bottom: .15rem;
+      color: var(--text);
+    }
+
+    ul.cues li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      top: .05rem;
+      color: var(--gym);
+      font-size: .65rem;
+    }
+
+    ul.cues li strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .ex-watch {
+      background: var(--warn-bg);
+      border-left: 2px solid var(--warn);
+      padding: .5rem .7rem;
+      font-size: .66rem;
+      line-height: 1.4;
+      border-radius: 3px;
+      margin-top: auto;
+      color: var(--text);
+    }
+
+    .ex-watch strong {
+      color: var(--warn);
+      font-weight: 600;
+    }
+
+    .ex-media {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      margin-bottom: .7rem;
+    }
+
+    .ex-target {
+      font-size: .62rem;
+      letter-spacing: .04em;
+      color: var(--muted);
+      margin-bottom: .6rem;
+    }
+
+    .ex-media.ex-media-approx {
+      border-style: dashed;
+      opacity: .85;
+    }
+
+    .ex-approx-note {
+      font-size: .58rem;
+      line-height: 1.4;
+      letter-spacing: .02em;
+      color: var(--warn);
+      font-style: italic;
+      margin: -.4rem 0 .6rem;
+    }
+
+    .media-attribution {
+      font-size: .58rem;
+      color: var(--muted);
+      text-align: right;
+      margin: -1rem 0 1rem;
+    }
+
+    /* Footer */
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 720px) {
+      .footer {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .footer-card.expected {
+      border-left: 3px solid var(--good);
+    }
+
+    .footer-card.warn {
+      border-left: 3px solid var(--warn);
+    }
+
+    .footer-title {
+      font-size: .62rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: .6rem;
+    }
+
+    .footer-card.expected .footer-title {
+      color: var(--good);
+    }
+
+    .footer-card.warn .footer-title {
+      color: var(--warn);
+    }
+
+    .footer-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-list li {
+      font-size: .72rem;
+      line-height: 1.5;
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: .25rem;
+      color: var(--text);
+    }
+
+    .footer-card.expected .footer-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--good);
+      font-weight: 700;
+    }
+
+    .footer-card.warn .footer-list li::before {
+      content: '⚠';
+      position: absolute;
+      left: 0;
+      color: var(--warn);
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="index.html" style="display:inline-block;margin-bottom:1rem;font-size:.7rem;letter-spacing:.1em;color:var(--muted);text-decoration:none">‹ Running</a>
+  <button class="theme-toggle" onclick="toggleTheme()"><span class="sun">☀</span><span class="moon">☾</span></button>
+
+  <header>
+    <div class="title">GYM<br>WEEK <span>20</span></div>
+    <div class="subtitle">Peak Block · Biggest Mountain Day · Nico</div>
+    <div class="stats-row">
+      <div class="stat-pill">Frequency <strong>2× / week</strong></div>
+      <div class="stat-pill">Days <strong>Mon + Wed</strong></div>
+      <div class="stat-pill">Duration <strong>~45 min</strong></div>
+      <div class="stat-pill hi">When <strong>After running</strong></div>
+      <div class="stat-pill">Sets <strong>3 per exercise</strong></div>
+      <div class="stat-pill">Rest <strong>90s between sets</strong></div>
+    </div>
+  </header>
+
+  <div class="warmup-card">
+    <div class="warmup-label">⚡ Warm-up · 5 min</div>
+    <div class="warmup-body">
+      Easy bike or jog 5 min → 10 leg swings each direction per leg → 10 bodyweight squats →
+      <strong>banded lateral walk (exercise 1)</strong> as activation.
+      <strong>Two full sessions, Monday and Wednesday — the same grid done twice.</strong> Monday stacks after the
+      easy 8 km, Wednesday after the 6 km recovery: <strong>run first, lift after</strong>. <strong>This week is
+      bigger than week 18 by both measures — 69 km and 2,600 m</strong>, and Saturday is the biggest mountain day
+      of the whole cycle. So, again, <strong>not one number on this page goes up.</strong> Every load has held
+      since week 14 and holds again here. Week 18 still had one progression left in it (the step-up box back to
+      full height); <strong>week 20 has none</strong> — the running is taking all of the stress, and from here the
+      gym's only job is to keep the joints in line underneath it.
+    </div>
+  </div>
+
+  <div class="warmup-card">
+    <div class="warmup-label">🗓 Wednesday · the second session, and why Friday is rest</div>
+    <div class="warmup-body">
+      This week carried only one gym day and now carries two, which is the standing rule — and moving the second
+      one onto Wednesday's recovery run frees the back half: <strong>Wednesday 6 km recovery + gym → Thursday
+      7 km / 400 m of descents → Friday full rest → Saturday 28 km / 2,000 m.</strong> The last lift sits three
+      days out from the mountain, with nothing but rest between Thursday's descents and Saturday — the same shape
+      that worked in week 18. Everything still depends on you <strong>lifting exactly what is written and not one
+      set more</strong>: a Wednesday that runs long still taxes <strong>2,400 m of descending</strong> spread over
+      Thursday and Saturday, the most of any week so far. <strong>If anything feels off on Wednesday, cut a set —
+      never add one.</strong>
+    </div>
+  </div>
+
+  <div class="section-label">Exercises · Monday + Wednesday</div>
+
+  <div class="exercises">
+    <!-- 1 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">1</div>
+          <div class="ex-name">Banded<br>Lateral Walk<br><span class="ex-load">band · ankles</span></div>
+        </div>
+        <div class="ex-sets">3 × 15<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">steps /
+            side</span></div>
+      </div>
+      <img class="ex-media ex-media-approx" src="assets/exercises/banded-lateral-walk.gif" alt="Resistance Band Seated Hip Abduction — closest available reference, not an exact match" loading="lazy">
+      <div class="ex-approx-note">Approximate reference (seated band hip abduction) — same muscle and same band resistance, but yours is standing and walking, which loads the stance leg as well</div>
+      <div class="ex-target">Target: abductors</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Band <strong>just above the knees</strong>, hands on hips</li>
+        <li>Quarter-squat, chest up, feet pointing straight ahead</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li>Step sideways with control, keeping constant tension on the band</li>
+        <li><strong>Resist the trailing leg back in</strong> — don't let it snap across</li>
+        <li>Small steps, stay low, no torso lean over the stance leg</li>
+        <li><strong>Week 20: band at the ankles, 3 × 15 steps per side</strong> — unchanged, and this is the week
+          it pays for itself. <strong>2,400 m of descending across Thursday and Saturday</strong> is the single
+          largest downhill load of the block so far, and a tired glute medius is what lets the knee fall inward on
+          hour five of it. Four minutes, done properly, both sessions</li>
+        <li><strong>It's first on purpose</strong> — this is warm-up activation, not a lift; go straight from here
+          into the split squat</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> feet turning outward · knees caving inward · standing up out of the
+        quarter-squat. If the knees collapse, the band is too strong — go lighter</div>
+    </div>
+
+  
+
+    <!-- 2 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">2</div>
+          <div class="ex-name">Bulgarian<br>Split Squat<br><span class="ex-load">12 kg</span></div>
+        </div>
+        <div class="ex-sets">3 × 10<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            leg</span></div>
+      </div>
+      <img class="ex-media ex-media-approx" src="assets/exercises/bulgarian-split-squat.gif" alt="Dumbbell Single Leg Split Squat — closest available reference, not an exact match" loading="lazy">
+      <div class="ex-approx-note">Approximate reference (dumbbell single-leg split squat) — this dataset has no Bulgarian split squat; the pattern is close, the setup differs</div>
+      <div class="ex-target">Target: quads</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Back foot on the bench, laces down</li>
+        <li>Front foot forward — knee doesn't pass the toes</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li>Lower until the thigh is ≈ parallel to the floor</li>
+        <li>Torso slightly leaned forward</li>
+        <li>Push through the whole foot, mainly the heel</li>
+        <li><strong>Week 20: 12 kg × 10 reps, lowering in 4 seconds</strong> — both held, nothing new. 12 kg is your
+          ceiling for single-leg work: the next kettlebell is 20 kg, a 67% jump, which is not a progression but an
+          injury. <strong>Going into the biggest mountain day of the cycle, the slow lowering is all the extra you
+          need</strong> — it is the exact quality 2,000 m of descent asks for</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> knee caving inward · weight on the back leg · front foot too close.
+        Reps 9 and 10 are where form breaks — stop the set rather than finish it badly</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">3</div>
+          <div class="ex-name">Single-Leg<br>Calf Raise<br><span class="ex-load bw">bodyweight</span></div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            leg</span></div>
+      </div>
+      <img class="ex-media" src="assets/exercises/single-leg-calf-raise.gif" alt="Single-Leg Calf Raise demo" loading="lazy">
+      <div class="ex-target">Target: calves</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Ball of the foot on the edge of a step, heel in the air</li>
+        <li>Hold something for balance, not to support your weight</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li>Rise all the way up, squeeze at the top for 1 sec</li>
+        <li><strong>Lower in 4 seconds</strong> — slow eccentric</li>
+        <li>Heel below the step for full range of motion</li>
+        <li><strong>Week 20: bodyweight with the 4s eccentric</strong> — held. Your calves and
+          Achilles are about to absorb 2,400 m of braking between Thursday and Saturday, which is far more eccentric
+          work than any bell can give them. <strong>The gym's job this week is to keep the tissue used to the
+          movement, not to fatigue it</strong> — the slow lowering does that on its own. Added load is still not
+          the next step; more reps is</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> lowering too fast — brake more than you think you need to. Any
+        Achilles soreness lasting past 48h → cut the volume for the week</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">4</div>
+          <div class="ex-name">Single-Leg<br>Glute Bridge<br><span class="ex-load">12 kg</span></div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            leg</span></div>
+      </div>
+      <img class="ex-media" src="assets/exercises/single-leg-glute-bridge.gif" alt="Single-Leg Glute Bridge demo" loading="lazy">
+      <div class="ex-target">Target: glutes</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Lying on your back, one knee bent, heel close to your glutes</li>
+        <li>The other leg straight or with the knee pulled to your chest</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li><strong>Week 20: 12 kg, hold 3 sec at the top</strong> — held, and 12 kg is the ceiling here too.
+          Strong glutes are what stop your quads doing all the braking on a long descent. With 2,000 m of it
+          coming on Saturday, <strong>this is the most race-specific exercise on the page</strong> — do not rush
+          the hold</li>
+        <li>Drive through the heel of the supporting leg, raise your hip</li>
+        <li>Hips level — don't let the free side drop</li>
+        <li>Squeeze the glute, hold 2 sec at the top</li>
+        <li>Ribs down — don't arch your lower back</li>
+        <li>If the weight breaks hip level, drop back to 6 kg — form rules</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> the free-side hip drops or rotates → shorten the range and level
+        out before continuing. Drive from the glute, never the lower back</div>
+    </div>
+
+    <!-- 5 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">5</div>
+          <div class="ex-name">Dead<br>Bug<br><span class="ex-load bw">bodyweight</span></div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            side</span></div>
+      </div>
+      <img class="ex-media" src="assets/exercises/dead-bug.gif" alt="Dead Bug demo" loading="lazy">
+      <div class="ex-target">Target: abs</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Lying on your back, arms straight up toward the ceiling</li>
+        <li>Knees at 90° over your hips (tabletop)</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li><strong>Lower back pressed to the floor</strong> — the key point</li>
+        <li>Slowly extend the opposite arm + leg</li>
+        <li>Without touching the floor, return, switch sides</li>
+        <li>Flat back &gt; range of motion</li>
+        <li><strong>Week 20: 4 sec per rep.</strong> Unchanged, still bodyweight. This one has never taken load and
+          never will — it is a control drill, and it progresses through tempo and a longer lever. On a 69 km week
+          it is also the cheapest thing here: two minutes, no fatigue cost</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> this is anti-extension control, not strength — adding weight
+        recruits the psoas and arches your back. Back arching as you extend the leg → reduce the range</div>
+    </div>
+
+    <!-- 6 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">6</div>
+          <div class="ex-name">Side<br>Plank<br><span class="ex-load bw">bodyweight</span></div>
+        </div>
+        <div class="ex-sets">3 × 40s<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            side</span></div>
+      </div>
+      <img class="ex-media ex-media-approx" src="assets/exercises/side-plank.gif" alt="Bodyweight Incline Side Plank — closest available reference, not an exact match" loading="lazy">
+      <div class="ex-approx-note">Approximate reference (incline side plank variant) — this dataset has no plain side-plank hold</div>
+      <div class="ex-target">Target: abs</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Side plank on your forearm</li>
+        <li>Body in a straight line from head to feet</li>
+        <li>Hips stacked, not rotated or dropped</li>
+        <li>Bottom leg on the floor, top leg stacked on top</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li>Contract your obliques and core, keep a straight line</li>
+        <li>Breathe, don't hold your breath</li>
+        <li><strong>Week 20: 40 sec</strong> — held. The clock is the only thing that progresses here, and the week
+          of the biggest mountain day is not where you move it</li>
+        <li>Cut the time short if your hips drop — form &gt; duration</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> hips dropping or rotating — cut the time before your form breaks</div>
+    </div>
+
+    <!-- 7 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">7</div>
+          <div class="ex-name">High Step-up<br>+ Eccentric Descent<br><span class="ex-load bw">bodyweight</span></div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            leg</span></div>
+      </div>
+      <img class="ex-media ex-media-approx" src="assets/exercises/high-step-up-eccentric-descent.gif" alt="Dumbbell Step-up — closest available reference, not an exact match" loading="lazy">
+      <div class="ex-approx-note">Approximate reference (dumbbell step-up) — shows the step-up pattern only; doesn't capture the box height or slow eccentric descent that define this exercise</div>
+      <div class="ex-target">Target: glutes</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Use the jump box — height at mid-shin / knee</li>
+        <li>Whole foot planted on top, not just the toes</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li><strong>Step up</strong> driving through the heel of the top leg, no push-off from the bottom leg</li>
+        <li><strong>Drive the knee up</strong> — mimics the power-hike motion on a climb</li>
+        <li>Knee tracking over the foot — not caving inward</li>
+        <li><strong>Lower in 4 seconds</strong> — the slow eccentric preps your quads for trail descents</li>
+        <li><strong>Week 20: bodyweight, box at your full step</strong> — the height won in week 18 is held, not
+          raised; height is this movement's progression, never load, and this is not the week to spend it. It is
+          still the closest thing on this page to Saturday itself: <strong>2,000 m of controlled lowering, one leg
+          at a time.</strong> Take the full 4 seconds down on every rep; if the last set gets sloppy, stop it there
+          rather than finish it badly</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> the value is in the slow descent and the higher box, not stepping
+        up fast. Knee pain → lower the height or reduce the range</div>
+    </div>
+
+    <!-- 8 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">8</div>
+          <div class="ex-name">One-Arm<br>Bent-Over Row<br><span class="ex-load">12 kg</span></div>
+        </div>
+        <div class="ex-sets">3 × 12<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            arm</span></div>
+      </div>
+      <img class="ex-media" src="assets/exercises/one-arm-bent-over-row.gif" alt="One-Arm Bent-Over Row demo" loading="lazy">
+      <div class="ex-target">Target: upper back</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Hinge at the hips, flat back, soft knees</li>
+        <li>Free hand on a bench or your thigh for support</li>
+        <li>Kettlebell hangs straight down from the working arm</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li>Pull the kettlebell to your hip, elbow close to the body</li>
+        <li>Squeeze the shoulder blade at the top</li>
+        <li>Lower under control, don't let it drop</li>
+        <li><strong>Week 20: 12 kg × 12 reps</strong> — held. Your back does no braking on a descent, so this is the
+          one movement a peak week does not need to protect — but it is also not the week to test a new load with
+          a 28 km / 2,000 m Saturday three days out. It stays at 12 kg because that is the heaviest single bell you
+          can row cleanly; when 12 × 12 becomes genuinely easy, the next step is <strong>both bells together,
+          18 kg</strong> — not the 20 kg on its own</li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> twisting the torso to help the pull, or rounding the lower back —
+        the hinge holds, only the arm moves</div>
+    </div>
+
+    <!-- 9 -->
+    <div class="exercise">
+      <div class="ex-header">
+        <div class="ex-num-name">
+          <div class="ex-num">9</div>
+          <div class="ex-name">Calf Raise<br>Bent-Knee<br><span class="ex-load bw">bodyweight</span></div>
+        </div>
+        <div class="ex-sets">3 × 8<br><span
+            style="font-size:.6rem;letter-spacing:.08em;font-family:'DM Mono',monospace;color:var(--muted);">/
+            leg</span></div>
+      </div>
+      <img class="ex-media ex-media-approx" src="assets/exercises/calf-raise-bent-knee.gif" alt="Barbell Seated Calf Raise — closest available reference, not an exact match" loading="lazy">
+      <div class="ex-approx-note">Approximate reference (seated calf raise) — same bent-knee/soleus mechanism, different setup (seated vs. standing on a step)</div>
+      <div class="ex-target">Target: calves</div>
+
+      <div class="ex-label">Position</div>
+      <ul class="cues">
+        <li>Ball of the foot on the edge of a step, same setup as the straight-leg version</li>
+        <li>Knees bent ~30–40° throughout — this is what shifts the load to the soleus</li>
+      </ul>
+
+      <div class="ex-label">Execution</div>
+      <ul class="cues">
+        <li>Rise all the way up, squeeze at the top for 1 sec</li>
+        <li><strong>Lower in 3 seconds</strong> — slow eccentric, same cue as the straight-leg version</li>
+        <li><strong>Week 20: bodyweight</strong> — held, provided the knee has been staying bent through all three sets.
+          The soleus is the muscle that fatigues last and quietly on long descents — and Saturday is now the longest
+          descent of the block. <strong>The position is doing its job; adding load three days out would only borrow from
+          Saturday</strong></li>
+      </ul>
+
+      <div class="ex-watch"><strong>Watch:</strong> letting the knee straighten mid-set — that shifts the work back to
+        the gastrocnemius and defeats the point of this variant</div>
+    </div>
+</div>
+
+  <div class="media-attribution">Exercise demo images © Gym visual — https://gymvisual.com/</div>
+
+  <div class="footer">
+    <div class="footer-card expected">
+      <div class="footer-title">✓ Expected this week</div>
+      <ul class="footer-list">
+        <li>Two full sessions, Monday and Wednesday — each stacks after that day's easy run, run first, lift after</li>
+        <li><strong>69 km and 2,600 m, and the biggest mountain day of the cycle. Not one load on this page goes
+          up.</strong> The running is taking all the stress; the gym holds the line</li>
+        <li><strong>There is no progression this week — none.</strong> Week 18 spent the last one (step-up box back
+          to full height); everything here simply repeats it</li>
+        <li>12 kg is the ceiling for single-leg work — the next bell is 20 kg, a 67% jump. Progress through reps
+          and tempo instead</li>
+        <li><strong>Friday is a full rest day</strong> — Thursday's 7 km / 400 m of descents is the last load
+          before Saturday's 28 km / 2,000 m, the single-day ceiling. Lift exactly what is written, then stop</li>
+        <li>Sunday's 10 km / 200 m back-to-back stays easy, capped at 151</li>
+      </ul>
+    </div>
+    <div class="footer-card warn">
+      <div class="footer-title">⚠ Warning signs · stop and reassess</div>
+      <ul class="footer-list">
+        <li>Sharp pain (vs. muscle burn) anywhere</li>
+        <li>Lower-back pain after dead bugs / bridges → poor activation, don't add load</li>
+        <li>Knee pain in the split squat or step-up → check alignment or lower height/load</li>
+        <li>Achilles discomfort &gt; 48h → reduce calf-raise volume</li>
+        <li>Quads still sore on Wednesday → cut a set and lower the box; do not push through it into Thursday</li>
+        <li>Legs not right on Thursday → shorten Thursday's descents first, then Saturday's route; don't cancel either</li>
+        <li>Tuesday's 3 × 10 min at Z4 sits between the two gym days — if it left the quads flat, Wednesday loses a
+          set before it loses the session</li>
+        <li>Anything sharp in the knees on the descent → walk the rest of it; that is the injury this whole
+          programme exists to prevent</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('theme', html.dataset.theme); } catch (e) { }
+    }
+  </script>
+</body>
+
+</html>
