@@ -100,6 +100,12 @@ than that in one day.
 
 - plan_start: 2026-05-11
 - hilly_elev: 50
+- closed_through: 17
+
+The last week the athlete has declared finished. Any week at or below this number is
+`done` and never `current`, whatever the calendar says and whatever is missing from its
+day grid — a week ended with a session deliberately dropped (heat, illness, travel) can
+never complete on its own. Raise it when the athlete says a week is over; never lower it.
 
 | week | km | elev |
 | 1 | 25 | 0 |
