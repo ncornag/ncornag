@@ -100,7 +100,7 @@ than that in one day.
 
 - plan_start: 2026-05-11
 - hilly_elev: 50
-- closed_through: 17
+- closed_through: 19
 
 The last week the athlete has declared finished. Any week at or below this number is
 `done` and never `current`, whatever the calendar says and whatever is missing from its
