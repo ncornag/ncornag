@@ -85,14 +85,20 @@ holds for build weeks too. When the week runs out of days, stack the second
 session on the easiest running day rather than dropping it or downgrading it to
 a maintenance circuit.
 
-- day_cap_km: ~25 (±3 km route tolerance)
-- day_cap_elev: 1800 m D+; 2000 m only on the two peak Saturdays (weeks 20–21)
+- day_cap_km: ~22 on mountain days, 25 absolute ceiling (±3 km route tolerance below it, never above 25)
+- day_cap_elev: 1800 m D+, no exception
 
-Single-day caps, set by the athlete (2026-08-30): vert is the controlled variable and
-the cap is firm; distance is route noise — he runs the loops that exist, so ±3 km
-around the target is fine. Extra weekly load goes into stacking Fri/Sat/Sun, never
-into a longer single day. Not needed for the race and he is not ready to run more
-than that in one day.
+Single-day caps, set by the athlete (2026-08-30, tightened 2026-09-21): vert is the
+controlled variable and the cap is firm; distance is route noise — he runs the loops
+that exist, so ±3 km around the target is fine. Extra weekly load goes into stacking
+Fri/Sat/Sun, never into a longer single day. Not needed for the race and he is not
+ready to run more than that in one day.
+
+On 2026-09-21 he rejected the 28 km and 30 km Saturdays outright ("28/30 Km seems too
+much for me in a single run for a 42Km race") and set the peak weekend shape himself:
+**Saturday 20–22 km / +1500, Sunday 18 km / +1000**. The 2000 m peak-Saturday exception
+is retired with them — it existed only for those two days. Big weekends are now built
+as a genuine back-to-back, not one long day plus a token Sunday.
 
 (The plan is polarized ~80% easy / ~20% hard, minimal Z3. Vert specificity, power-hike practice, eccentric descents, back-to-back long days.)
 

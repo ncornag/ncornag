@@ -3056,20 +3056,21 @@
     <div class="week-header" onclick="toggle('w20')">
       <div class="week-num">20</div>
       <div class="week-summary">
-        <div class="week-title">Biggest Mountain Day <span class="current-badge">Current</span></div>
-        <div class="week-date">Sep 21–27 · 28km/2000m</div>
+        <div class="week-title">Biggest Mountain Weekend <span class="current-badge">Current</span> <span class="adjusted">adjusted</span></div>
+        <div class="week-date">Sep 21–27 · 22km/1500m + 18km/1000m</div>
       </div>
-      <div class="week-stats">
-        <div class="week-km">69km</div>
-        <div class="week-elev">2600m</div>
+      <div class="week-stats" data-plan-km="69" data-plan-elev="2600">
+        <div class="week-km">71km</div>
+        <div class="week-elev">2500m</div>
       </div>
       <div class="chevron">▼</div>
     </div>
     <div class="week-body">
       <!-- sync:days:w20 -->
       <div class="days">
-        <div class="day z2">
+        <div class="day z2 logged">
           <div class="day-label">Mon</div>
+          <div class="day-done-dot">✓</div>
           <div class="day-icon">🏃</div>
           <div class="day-km">8km</div>
           <div class="day-type">Z2 + Gym A</div>
@@ -3086,12 +3087,11 @@
           <div class="day-km">6km</div>
           <div class="day-type">Rec + Gym B</div>
         </div>
-        <div class="day trail-hike">
+        <div class="day z2">
           <div class="day-label">Thu</div>
-          <div class="day-icon">⛰</div>
+          <div class="day-icon">🏃</div>
           <div class="day-km">7km</div>
-          <div class="day-elev">400m</div>
-          <div class="day-type">Descents</div>
+          <div class="day-type">Z2 flat</div>
         </div>
         <div class="day rest">
           <div class="day-label">Fri</div>
@@ -3102,37 +3102,50 @@
         <div class="day trail-hike">
           <div class="day-label">Sat</div>
           <div class="day-icon">⛰</div>
-          <div class="day-km">28km</div>
-          <div class="day-elev">2000m</div>
+          <div class="day-km">22km</div>
+          <div class="day-elev">1500m</div>
           <div class="day-type">Long mtn</div>
         </div>
         <div class="day trail-z2">
           <div class="day-label">Sun</div>
           <div class="day-icon">⛰</div>
-          <div class="day-km">10km</div>
-          <div class="day-elev">200m</div>
-          <div class="day-type">B2B</div>
+          <div class="day-km">18km</div>
+          <div class="day-elev">1000m</div>
+          <div class="day-type">B2B long</div>
         </div>
       </div>
       <!-- /sync:days:w20 -->
-      <div class="week-notes"><strong>Z4 session:</strong> 2km WU → 3×10min @ 163–173 bpm w/ 3min easy jog between → 2km CD. Sustained blocks now. Keep it well clear of Saturday. <strong>Cap at 173</strong> — above that is Z5 and costs you Saturday. <strong>The biggest mountain day of the cycle:</strong> 28km/2000m at 71m/km — matches the Dements vert ratio, and 2000m is the single-day ceiling. Full kit: poles, vest, 40–60 g carbs/h. <strong>Both gym sessions
+      <div class="week-notes"><strong>Z4 session:</strong> 2km WU → 3×10min @ 163–173 bpm w/ 3min easy jog between → 2km CD. Sustained blocks now. Keep it well clear of Saturday. <strong>Cap at 173</strong> — above that is Z5 and costs you Saturday. <strong>The biggest mountain weekend of the cycle, run as a back-to-back:</strong>
+        22km/1500m on Saturday and 18km/1000m on Sunday — 40km and 2500m over two days, more total vert than the
+        single 28km/2000m day it replaces, with neither day above the 1800m single-day ceiling. Score Saturday in
+        <strong>hours, not kilometres</strong>: at your hiking pace 22km/1500m is a ~5 hour day, and if the route
+        comes in short you walk the extra time. Full kit on both days: poles, vest, 40–60 g carbs/h. <strong>Both gym sessions
         stay in</strong> — Gym A after Monday’s 8km, Gym B stacked on Wednesday’s recovery run
-        (<a href="gym-week20.html">gym-week20.html</a>). Thursday is the
-        <strong>descent primer</strong> — easy climbs, a few focused downhills, nothing that costs Saturday — and
-        <strong>Friday is a full rest day</strong>, so nothing sits between you and the biggest mountain day of the
-        cycle. Check decoupling: second-half drift under ~5–7% = durability on track.</div>
+        (<a href="gym-week20.html">gym-week20.html</a>). Thursday is now <strong>7km flat and easy</strong> — the
+        descent primer is gone, because Sunday carries 1000m of descending and a separate downhill session would only
+        arrive at Saturday already cooked — and <strong>Friday is a full rest day</strong>. Check decoupling on
+        Saturday: second-half drift under ~5–7% = durability on track.</div>
+      <!-- sync:actuals:w20 -->
+      <div class="actuals">
+        <div class="actuals-head"><span class="actuals-title">Logged</span><span class="actuals-sum">1 run · 8.1 km · 30 m D+</span></div>
+        <div class="act-row act-head"><span class="act-when">Day</span><span class="act-ico"></span><span class="act-km">Dist</span><span class="act-vert">Asc</span><span class="act-hr">HR</span><span class="act-zone">Zone</span><span class="act-pace">Pace</span><span class="act-cal">Cal</span><span class="act-maxhr">Max</span><span class="act-cad">Cad</span><span class="act-stride">Stride</span><span class="act-vratio">V.Ratio</span><span class="act-vosc">V.Osc</span><span class="act-gct">GCT</span><span class="act-temp">Temp</span></div>
+        <div class="act-row"><span class="act-when">Mon 21</span><span class="act-ico">🏃</span><span class="act-km">8.1 km</span><span class="act-vert">30 m</span><span class="act-hr">145</span><span class="act-zone z2">Z2</span><span class="act-pace">6:27/km</span><span class="act-cal">517</span><span class="act-maxhr">157</span><span class="act-cad gz-green">166 spm</span><span class="act-stride">933 mm</span><span class="act-vratio gz-orange">10.1%</span><span class="act-vosc gz-green">96.5 mm</span><span class="act-gct gz-green">268 ms</span><span class="act-temp">28°</span></div>
+        <div class="act-zonebar" title="Z1 4m · Z2 41m · Z3 7m"><span class="zbar"><span class="zseg z1" style="flex-grow:243"></span><span class="zseg z2" style="flex-grow:2451"></span><span class="zseg z3" style="flex-grow:448"></span></span><span class="zb-txt">Z1&nbsp;4 · Z2&nbsp;41 · Z3&nbsp;7&nbsp;min</span></div>
+      </div>
+      <!-- /sync:actuals:w20 -->
       <!-- sync:coach:w20 -->
-      <div class="coach" data-hash="nodata">
+      <div class="coach" data-hash="5e821683a8ed">
         <div class="coach-head">🧭 Coach</div>
         <div class="coach-body">
-          <p><strong>The biggest mountain day of the cycle — 28 km / 2000 m on Saturday, at the single-day ceiling — and you arrive at it fresh</strong>: week 19's Saturday was eight minutes faster than the same-size day in week 14, on three fewer beats. <strong>The one thing to watch is Sunday</strong>: the back-to-back has not been run for three weeks (heat once, choice twice), and 10 km easy on legs emptied by 2000 m of descending is the most Dements-specific session left in the plan — run it, capped at 151. <strong>Both gym sessions go in</strong> — week 19 logged one.</p>
-          <p><strong>Change applied to weeks 22 and 23:</strong> each carried a single light “Maint” gym day, against your standing two-a-week rule. In both, Gym A now follows Monday's easy run and Gym B stacks on Wednesday's recovery run; the strides run moves from Friday to Thursday and <strong>Friday becomes a full rest day</strong> before the long Saturday — the same shape as weeks 18 and 20. Both weeks are unchanged in size: 65 km / 2200 m and 48 km / 1400 m.</p>
-          <p><strong>Mon</strong> — 8 km easy, Z2 (135–151 bpm), plus Gym A — full session (gym-week20.html).</p>
+          <p><strong>The 28 km / 2000 m Saturday is gone — you were right to push back, and the weekend that replaces it is a harder, more useful one</strong>: 22 km / 1500 m on Saturday, 18 km / 1000 m on Sunday, <strong>40 km and 2500 m over two days</strong> against 38 km and 2200 m for the old single day plus its token Sunday. Monday opened the week honestly — 8.09 km at 145 avg, 6:27/km, <strong>HRE 935</strong>, right on the best flat runs of the block. <strong>Sunday is now the session of the week, and it is the one you have skipped four weeks running</strong> — heat in 17, choice in 18, 19 and 20; this time it is not optional.</p>
+          <p><strong>Change applied to this week and week 21:</strong> both peak Saturdays come down to <strong>22 km / 1500 m</strong> and both Sundays go up to <strong>18 km / 1000 m</strong>, so no day sits above the 1800 m ceiling and the 2000 m peak-Saturday exception is retired. This week <strong>Thursday drops its 400 m descent primer and becomes 7 km flat</strong> — Sunday now carries 1000 m of descending, and a separate downhill session on Thursday only gets you to Saturday already cooked. Week 20 is 71 km / 2500 m (was 69 / 2600); week 21 is 71 km / 2900 m with Friday trimmed to 8 km / 400 m, so the Fri–Sat–Sun stack lands on its 2900 m baseline exactly.</p>
+          <p><strong>Mon</strong> — 8 km easy, Z2 (135–151 bpm), plus Gym A — full session (gym-week20.html) — done.</p>
           <p><strong>Tue</strong> — 10 km total: 2 km warm-up, then <strong>3 × 10 min at Z4 (163–173 bpm)</strong> with 3 min easy jog between, 2 km cool-down. Sustained blocks, not surges — cap at 173.</p>
           <p><strong>Wed</strong> — 6 km recovery, Z2 (135–151 bpm), plus Gym B — full session (gym-week20.html).</p>
-          <p><strong>Thu</strong> — 7 km trail, 400 m D+, Z2 (135–151 bpm) on the climbs; descent primer — a few focused downhills, quiet feet, short quick steps, nothing that costs Saturday.</p>
-          <p><strong>Sat</strong> — 28 km long mountain day, 2000 m D+ (71 m/km), all-day Z2 effort (135–151 bpm), power-hike every sustained climb. Poles, vest, 40–60 g carbs/h.</p>
-          <p><strong>Sun</strong> — 10 km back-to-back easy trail, 200 m D+, Z2 (135–151 bpm), capped at 151 on tired legs.</p>
+          <p><strong>Thu</strong> — 7 km easy on the flat, Z2 (135–151 bpm). No hills, no descents — this is a leg-turnover day before the weekend, nothing more.</p>
+          <p><strong>Fri</strong> — full rest.</p>
+          <p><strong>Sat</strong> — 22 km long mountain day, 1500 m D+ (68 m/km), all-day Z2 effort (135–151 bpm), power-hike every sustained climb. <strong>Score it in hours, not kilometres</strong> — at your hiking pace this is about 5 hours; if the route comes up short, walk the extra time. Poles, vest, 40–60 g carbs/h.</p>
+          <p><strong>Sun</strong> — 18 km back-to-back, 1000 m D+ (56 m/km), on Saturday's legs. Z2 (135–151 bpm), <strong>capped at 151</strong> — hike the climbs early rather than chase them, and ride the descents with quiet, short, quick steps. Same kit and same fuelling as Saturday; this is the last third of the Dements, rehearsed.</p>
         </div>
       </div>
       <!-- /sync:coach:w20 -->
@@ -3144,10 +3157,10 @@
       <div class="week-num">21</div>
       <div class="week-summary">
         <div class="week-title">PEAK WEEK 🏔 <span class="adjusted">adjusted</span></div>
-        <div class="week-date">Sep 28–Oct 4 · 30km/2000m</div>
+        <div class="week-date">Sep 28–Oct 4 · 22km/1500m + 18km/1000m</div>
       </div>
-      <div class="week-stats">
-        <div class="week-km">75km</div>
+      <div class="week-stats" data-plan-km="75" data-plan-elev="2900">
+        <div class="week-km">71km</div>
         <div class="week-elev">2900m</div>
       </div>
       <div class="chevron">▼</div>
@@ -3182,30 +3195,33 @@
         <div class="day trail-hike">
           <div class="day-label">Fri</div>
           <div class="day-icon">⛰</div>
-          <div class="day-km">10km</div>
-          <div class="day-elev">700m</div>
+          <div class="day-km">8km</div>
+          <div class="day-elev">400m</div>
           <div class="day-type">Easy</div>
         </div>
         <div class="day trail-hike">
           <div class="day-label">Sat</div>
           <div class="day-icon">⛰</div>
-          <div class="day-km">30km</div>
-          <div class="day-elev">2000m</div>
+          <div class="day-km">22km</div>
+          <div class="day-elev">1500m</div>
           <div class="day-type">PEAK LONG</div>
         </div>
         <div class="day trail-z2">
           <div class="day-label">Sun</div>
           <div class="day-icon">⛰</div>
-          <div class="day-km">12km</div>
-          <div class="day-elev">200m</div>
-          <div class="day-type">B2B</div>
+          <div class="day-km">18km</div>
+          <div class="day-elev">1000m</div>
+          <div class="day-type">B2B long</div>
         </div>
       </div>
       <!-- /sync:days:w21 -->
-      <div class="week-notes"><strong>Z4 session:</strong> 2km WU → 2×15min @ 163–173 bpm w/ 3min easy jog between → 2km CD. The longest blocks of the plan — closest thing to a sustained race climb. Quality, not quantity, in the biggest week. <strong>Cap at 173</strong> — above that is Z5 and costs you Saturday. <strong>Biggest training week.</strong> 30km/2000m — <strong>Saturday capped at the 2000m single-day
-        ceiling</strong> (was 2500m), the 500m moved onto Friday (700m) and Sunday (200m): the same 2900m week
-        spread over three days instead of one. If possible, do this on Serra d'Espadà itself. Gear, fuel and
-        pacing exactly as on the other big Saturdays. <strong>Both gym sessions stay in at maintenance
+      <div class="week-notes"><strong>Z4 session:</strong> 2km WU → 2×15min @ 163–173 bpm w/ 3min easy jog between → 2km CD. The longest blocks of the plan — closest thing to a sustained race climb. Quality, not quantity, in the biggest week. <strong>Cap at 173</strong> — above that is Z5 and costs you Saturday. <strong>Biggest training week, and the peak is a three-day stack rather than one huge day.</strong>
+        Friday 8km/400m, Saturday 22km/1500m, Sunday 18km/1000m — <strong>48km and 2900m across Fri–Sun</strong>,
+        the same 2900m the week always carried, with no single day above the 1800m ceiling. The 30km/2000m
+        Saturday is gone: for a 42.5km race the useful stimulus is climbing and descending on legs that are
+        already tired, not one longer run. Sunday is the session that matters — the last third of the Dements is
+        run on exactly those legs. If possible, do Saturday on Serra d'Espadà itself. Gear, fuel and
+        pacing exactly as on the other big Saturdays, both weekend days. <strong>Both gym sessions stay in at maintenance
         load</strong> — Gym A after Monday’s 7km, Gym B stacked on Wednesday’s recovery run
         (<a href="gym-week21.html">gym-week21.html</a>) — which frees <strong>Thursday as a full rest day</strong>
         ahead of the Fri–Sat–Sun stack. Frequency never deloads; the load does.</div>
@@ -3643,7 +3659,8 @@
       16: { km: 50.7, elev: 1545 },
       17: { km: 30.4, elev: 863 },
       18: { km: 50.5, elev: 1979 },
-      19: { km: 30.9, elev: 1054 }
+      19: { km: 30.9, elev: 1054 },
+      20: { km: 8.1, elev: 30 }
     };
 
     weeks.forEach((w, i) => {
@@ -3758,7 +3775,8 @@
       {"label": "Sat 12", "week": 18, "hre": 1935, "color": "#3a7bd5", "flagged": true, "flag": "1536 m D+ · 27°"},
       {"label": "Mon 14", "week": 19, "hre": 927, "color": "#2ecc8a", "flagged": false, "flag": "7 m D+ · 28°"},
       {"label": "Thu 17", "week": 19, "hre": 994, "color": "#2ecc8a", "flagged": false, "flag": "8 m D+ · 29°"},
-      {"label": "Sat 19", "week": 19, "hre": 1436, "color": "#2ecc8a", "flagged": true, "flag": "1039 m D+ · 25°"}
+      {"label": "Sat 19", "week": 19, "hre": 1436, "color": "#2ecc8a", "flagged": true, "flag": "1039 m D+ · 25°"},
+      {"label": "Mon 21", "week": 20, "hre": 935, "color": "#2ecc8a", "flagged": false, "flag": "30 m D+ · 28°"}
     ];
 
     (() => {
