@@ -425,9 +425,17 @@ def build_csvs(start: date, end: date) -> None:
     """Rebuild running/data/YYYY-MM.csv from the log folders.
 
     .fit is authoritative; a .tcx is read only when its .fit sibling is absent
-    (phone-recorded activities Garmin exports as GPX, never FIT)."""
+    (phone-recorded activities Garmin exports as GPX, never FIT) and no other
+    file already produced an activity with the same start time (cloud-sync
+    conflict copies such as "..._Running 2.tcx").
+
+    Each CSV holds a whole month, so the rebuild starts on the first of the
+    start month: a mid-month --start would otherwise drop that month's
+    earlier activities."""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    start = start.replace(day=1)
     rows_by_month: dict[str, list] = defaultdict(list)
+    seen_starts: set[str] = set()
     fname_re = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-\d{2}-\d{2}_.+\.(fit|tcx)$",
                           re.IGNORECASE)
 
@@ -446,8 +454,14 @@ def build_csvs(start: date, end: date) -> None:
                 row = tcx_to_row(src)
             else:
                 row = fit_to_row(src)
-            if row:
-                rows_by_month[f"{m[1]}-{m[2]}"].append((src.name, row))
+            if not row:
+                continue
+            started = str(row.get("start_time") or "")
+            if started and started in seen_starts:
+                print(f"  skip {src.name}: duplicate of an activity already read")
+                continue
+            seen_starts.add(started)
+            rows_by_month[f"{m[1]}-{m[2]}"].append((src.name, row))
 
     for month, items in sorted(rows_by_month.items()):
         items.sort(key=lambda t: t[0])        # filenames sort chronologically
