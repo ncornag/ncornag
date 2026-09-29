@@ -100,6 +100,12 @@ much for me in a single run for a 42Km race") and set the peak weekend shape him
 is retired with them — it existed only for those two days. Big weekends are now built
 as a genuine back-to-back, not one long day plus a token Sunday.
 
+On 2026-09-28 that back-to-back was retired: six weekends in a row without the Sunday
+(W15–W20), and he named **motivation** as the reason for every gap in W20. W21 became a
+reset week (34 km / 1000 m) and W22 keeps a single long day (Sat 25 km / 1800 m, Sunday
+rest). From here, big weekends are **one long day, Sunday off** — do not re-programme a
+Sunday back-to-back without asking him first.
+
 (The plan is polarized ~80% easy / ~20% hard, minimal Z3. Vert specificity, power-hike practice, eccentric descents, back-to-back long days.)
 
 ## Training plan
