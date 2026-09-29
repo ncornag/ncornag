@@ -703,7 +703,7 @@ HRE_ZONE_COLOR = {
 
 # SVG scatter + trend for Heart Rate Efficiency (avg HR × pace = beats/km;
 # lower is better). One dot per run, colored by HR zone; runs that are hilly
-# or hot get a ring marker and are dropped from the least-squares trend so the
+# or hot get a ring marker and are dropped from the smoothed trend curve so the
 # fitness signal stays readable as the plan adds vert. Emitted whole between
 # the `// sync:hre` delimiters for deterministic, zero-diff re-runs. The data
 # array is the only part that changes run to run; the render code is constant.
@@ -728,18 +728,32 @@ HRE_RENDER = r"""
       const px = i => padL + (n <= 1 ? (W - padL - padR) / 2 : (i / (n - 1)) * (W - padL - padR));
       const py = v => padT + (1 - (v - yLo) / (yHi - yLo)) * (H - padT - padB);
 
-      // Least-squares trend over flat + cool runs only (fitness signal).
+      // Smoothed trend over flat + cool runs only (fitness signal): a local
+      // linear regression with Gaussian weights evaluated at every run, so the
+      // curve bends with the build instead of forcing one straight slope.
       const fit = hreRuns.map((r, i) => ({ i, r })).filter(o => !o.r.flagged);
       let trend = '';
       if (fit.length >= 2) {
-        const mx = fit.reduce((s, o) => s + o.i, 0) / fit.length;
-        const my = fit.reduce((s, o) => s + o.r.hre, 0) / fit.length;
-        let num = 0, den = 0;
-        fit.forEach(o => { num += (o.i - mx) * (o.r.hre - my); den += (o.i - mx) ** 2; });
-        const slope = den ? num / den : 0;
-        const b = my - slope * mx;
-        const x1 = 0, x2 = n - 1;
-        trend = `<line x1="${px(x1).toFixed(1)}" y1="${py(slope * x1 + b).toFixed(1)}" x2="${px(x2).toFixed(1)}" y2="${py(slope * x2 + b).toFixed(1)}" stroke="#9b6dff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85"/>`;
+        const bw = Math.max(3, n * 0.08);
+        const at = x => {
+          let sw = 0, sx = 0, sy = 0, sxx = 0, sxy = 0;
+          fit.forEach(o => {
+            const w = Math.exp(-0.5 * ((o.i - x) / bw) ** 2);
+            sw += w; sx += w * o.i; sy += w * o.r.hre; sxx += w * o.i * o.i; sxy += w * o.i * o.r.hre;
+          });
+          const mx = sx / sw, my = sy / sw, den = sxx / sw - mx * mx;
+          return den > 1e-9 ? my + ((sxy / sw - mx * my) / den) * (x - mx) : my;
+        };
+        const pts = xs.map(x => [px(x), py(at(x))]);
+        // Catmull-Rom through the evaluated points, as cubic Béziers.
+        let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+        for (let k = 0; k < pts.length - 1; k++) {
+          const p0 = pts[k - 1] || pts[k], p1 = pts[k], p2 = pts[k + 1], p3 = pts[k + 2] || p2;
+          const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+          const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+          d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+        }
+        trend = `<path d="${d}" fill="none" stroke="#9b6dff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85"/>`;
       }
 
       // Y gridlines + labels.

@@ -329,7 +329,7 @@ entry's `reco` / `peak` / `race` / `color` / `km` / `elev`.
 
 Replace everything between `// sync:hre` and `// /sync:hre` with the engine's
 `hre_js` value. This redraws the HRE scatter — one dot per run (beats/km = avg
-HR × pace, lower is better), colored by HR zone, with a dashed trend line fit
+HR × pace, lower is better), colored by HR zone, with a dashed smoothed trend curve fit
 over flat runs only and a ring on hilly runs (≥30 m D+, excluded from the
 trend; heat is the athlete's baseline so it is shown in the tooltip but not
 flagged). Deterministic — zero diff when data is unchanged. The static
